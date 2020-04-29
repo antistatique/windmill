@@ -34,7 +34,7 @@ Ils ont plusieurs Sheet qui permettent de gérer, la rentrée des heures dans la
   
   - Voici une petit image illustrant ce que je viens d'expliquer 
   
-    ![windmill](images/windmill.png)
+    ![windmill](images/windmill/windmill.png)
   
 - Ce schéma se répète jusuqu'à arriver à vendredi 
 - À la fin de chaque semaine il y a le décompte du nombres d'heures effectués sur la semaine 
@@ -45,5 +45,5 @@ Ils ont plusieurs Sheet qui permettent de gérer, la rentrée des heures dans la
   
   - Example, si le smiley du-dessus s'affiche, il faut donner une raison à ce qui s'est passé durant la semaine
   
-  ![semaine_valide](images/semaine_valide.png)
+  ![semaine_valide](images/windmill/semaine_valide.png)
 - Il y a ensuite d'autres cases après mais elles ne me seront pas utiles, pour ce travail de diplôme
