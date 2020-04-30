@@ -8,6 +8,7 @@ Ils ont plusieurs Sheet qui permettent de gérer, la rentrée des heures dans la
   - La date du début de semaine 
   - Le numéro de la semaine 
   - Le prénom du collaborateur 
+  
 - les huit prochaines colonnes contiennent  
   - Un émoji définissant le type de jour que c'est 
     - 🇨🇭→ indique que c'est un jour férié 
@@ -37,13 +38,25 @@ Ils ont plusieurs Sheet qui permettent de gérer, la rentrée des heures dans la
     ![windmill](images/windmill/windmill.png)
   
 - Ce schéma se répète jusuqu'à arriver à vendredi 
+
 - À la fin de chaque semaine il y a le décompte du nombres d'heures effectués sur la semaine 
+
 - Et la case suivante le nombre d'heures attendues pour la semaine 
+
 - Dans la case d'arpès il y a un smiley (🤔) qui s'affiche s'il y a une différence de deux heures entre les deux case précédentes 
+
 - Si le smiley s'affiche, il est demandé aux collaborateurs de donner la raison de cette différence 
+
 - La case suivante, elle aussi peut contenir un smiley (⚠️) si la semaine n'est pas valide
   
   - Example, si le smiley du-dessus s'affiche, il faut donner une raison à ce qui s'est passé durant la semaine
   
   ![semaine_valide](images/windmill/semaine_valide.png)
+  
 - Il y a ensuite d'autres cases après mais elles ne me seront pas utiles, pour ce travail de diplôme
+
+
+
+### Problème
+
+Le problème que j'ai en ce moment, c'est avec les données qui me sont envoyées depuis la `spreadsheet`. Ces données ne sont associées avec une `clé -> valeur`. Je reçois toutes les données par ligne ou par colonne, au choix, mais je n'ai pas encore trouvé le moyen d'atribuer les données aux clés.
