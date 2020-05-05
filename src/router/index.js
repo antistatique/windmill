@@ -23,6 +23,10 @@ Vue.use(VueRouter)
     meta: {
       requiresAuth: true
     }
+  },
+  { 
+    path: '/', 
+    redirect: '/login' 
   }
 ]
 
