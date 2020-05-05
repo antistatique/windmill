@@ -20,5 +20,11 @@ npm run build
 npm run lint
 ```
 
+### Copy the file .env.example et update the values 
+```
+cp .env.example .env
+```
+- After that, change the `xxxxx` by the right values
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
