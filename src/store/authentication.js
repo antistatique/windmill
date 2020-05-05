@@ -5,17 +5,14 @@ export default {
   namespaced: true,
   state: {
     signedIn: false,
-    profile: null,
     loading: false,
     clientId: process.env.VUE_APP_CLIENT_ID,
-    spreadsheetId: process.env.VUE_APP_SPREADSHEET_ID,
     scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email",
     GoogleAuth: false
   },
   getters: {
     loggedIn: state => state.signedIn,
     isLoading: state => state.loading,
-    profileGet: state => state.profile
   },
   mutations: {
     signIn(state) {
@@ -23,7 +20,6 @@ export default {
     },
     signOut(state) {
       state.signedIn = false;
-      state.profile = null;
     }
   },
   actions: {
@@ -36,11 +32,7 @@ export default {
               discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
               scope: state.scope,
             }).then(() => {
-              if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                commit('signIn')
-              } else {
-                commit('signOut')
-              }
+              gapi.auth2.getAuthInstance().isSignedIn.get() ? commit('signIn') : commit('signOut');
               resolve();
             });
           }
@@ -77,10 +69,8 @@ export default {
     signIn({ dispatch, commit }) {
       console.log('signing in...');
       dispatch('initGapi').then(() => {
-        gapi.auth2.getAuthInstance().signIn().then(response => {
+        gapi.auth2.getAuthInstance().signIn().then(() => {
           commit('signIn');
-        }).catch(err => {
-          commit('signOut');
         })
       });
     },
