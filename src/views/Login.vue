@@ -1,9 +1,12 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
 
-    <button v-if="!loggedIn" v-on:click="login()">connexion</button>
-    <button v-else v-on:click="logout()">déconnexion</button>
+    <div class="centered">
+      <h1 style="padding-bottom: 40px;">Windmill</h1>
+      <p><button v-on:click="loggedIn ? logout() : login()" class="btn btn-primary">{{loggedIn ? 'Déconnexion' : 'Connexion avec Google'}}</button></p>
+      <p>Utilisez votre compte Google Antistatique</p>
+    </div>
+
   </div>
 </template>
 
@@ -19,16 +22,13 @@ export default {
   props: ['loading'],
   computed: {
     ...mapActions('authentication', [
-      'initGapi'
+      'isSignedIn'
     ]),
     ...mapGetters('authentication', [
       'loggedIn'
-    ])
+    ]),
   },
-  methods: {
-    ...mapGetters('authentication', [
-      'loggedIn'
-    ]),
+    methods: {
     ...mapActions('authentication', [
       'signIn',
       'signOut',
@@ -43,3 +43,13 @@ export default {
   }
 };
 </script>
+
+<style>
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+</style>

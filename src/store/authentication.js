@@ -1,5 +1,6 @@
 /* global gapi */
 /* eslint-disable */
+import router from '../router/index'
 
 export default {
   namespaced: true,
@@ -32,7 +33,6 @@ export default {
               discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
               scope: state.scope,
             }).then(() => {
-              gapi.auth2.getAuthInstance().isSignedIn.get() ? commit('signIn') : commit('signOut');
               resolve();
             });
           }
@@ -71,6 +71,7 @@ export default {
       dispatch('initGapi').then(() => {
         gapi.auth2.getAuthInstance().signIn().then(() => {
           commit('signIn');
+          router.push('/home')
         })
       });
     },
