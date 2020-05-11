@@ -9,18 +9,22 @@ export default {
     loading: false,
     clientId: process.env.VUE_APP_CLIENT_ID,
     scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email",
-    GoogleAuth: false
+    profile: null
   },
   getters: {
     loggedIn: state => state.signedIn,
-    isLoading: state => state.loading,
+    profile: state => state.profile
   },
   mutations: {
-    signIn(state) {
+    signIn(state, profile) {
       state.signedIn = true;
+      if (profile) {
+        state.profile = profile;
+      }
     },
     signOut(state) {
       state.signedIn = false;
+      state.profile = null;
     }
   },
   actions: {
@@ -33,7 +37,13 @@ export default {
               discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
               scope: state.scope,
             }).then(() => {
-              resolve();
+              gapi.client
+                .load(
+                  "https://sheets.googleapis.com/$discovery/rest?version=v4"
+                )
+                .then(() => {
+                  resolve();
+                });
             });
           }
         });
@@ -65,12 +75,13 @@ export default {
           }
         })
       })
-    },
+    },    
     signIn({ dispatch, commit }) {
       console.log('signing in...');
       dispatch('initGapi').then(() => {
-        gapi.auth2.getAuthInstance().signIn().then(() => {
-          commit('signIn');
+        gapi.auth2.getAuthInstance().signIn().then((user) => {
+          commit('signIn', user.Pt)
+          dispatch('authorization/sheetQuery', null, {root: true})
           router.push('/home')
         })
       });
