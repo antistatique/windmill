@@ -19,7 +19,6 @@ export default {
   data() {
     return {};
   },
-  props: ['loading'],
   computed: {
     ...mapActions('authentication', [
       'isSignedIn'
@@ -28,7 +27,7 @@ export default {
       'loggedIn'
     ]),
   },
-    methods: {
+  methods: {
     ...mapActions('authentication', [
       'signIn',
       'signOut',
