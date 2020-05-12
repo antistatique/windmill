@@ -157,7 +157,7 @@ export default {
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
-      this.lines = this.tableData[47]
+      this.lines = this.tableData.slice(-1)[0]
     ]
   }
 }
