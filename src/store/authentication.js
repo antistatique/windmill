@@ -81,7 +81,7 @@ export default {
       dispatch('initGapi').then(() => {
         gapi.auth2.getAuthInstance().signIn().then((user) => {
           commit('signIn', user.Pt)
-          dispatch('authorization/sheetQuery', null, {root: true})
+          dispatch('authorization/getSheet', null, {root: true})
           router.push('/home')
         })
       });

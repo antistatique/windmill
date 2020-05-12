@@ -21,7 +21,7 @@ export default {
     },
   },
   actions: {
-    sheetQuery({
+    getSheet({
       state,
       commit
     }) {
@@ -55,7 +55,7 @@ export default {
         }
       });
     },
-    updateSheet({ state, commit }, payload) {
+    updateSheet({ state, commit, dispatch }, payload) {
       console.log(payload)
       var values = [
         [
@@ -73,6 +73,7 @@ export default {
       }).then((response) => {
         var result = response.result;
         console.log(`${result.updatedCells} cells updated.`);
+        dispatch('getSheet')
       });
     }
   }
