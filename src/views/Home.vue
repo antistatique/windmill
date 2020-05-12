@@ -80,31 +80,31 @@ export default {
         amBegin: 'Y',
         amBeginIndex: (8+16),
         amEnd: 'Z',
-        amEndIndex: (8+16),
+        amEndIndex: (9+16),
         pmBegin: 'AA',
-        pmBeginIndex: (8+16),
+        pmBeginIndex: (10+16),
         pmEnd: 'AB',
-        pmEndIndex: (8+16),
+        pmEndIndex: (11+16),
       },
       Thursday: {
         amBegin: 'AG',
         amBeginIndex: (8+24),
         amEnd: 'AH',
-        amEndIndex: (8+24),
+        amEndIndex: (9+24),
         pmBegin: 'AI',
-        pmBeginIndex: (8+24),
+        pmBeginIndex: (10+24),
         pmEnd: 'AJ',
-        pmEndIndex: (8+24),
+        pmEndIndex: (11+24),
       },
       Friday: {
         amBegin: 'AO',
         amBeginIndex: (8+32),
         amEnd: 'AP',
-        amEndIndex: (8+32),
+        amEndIndex: (9+32),
         pmBegin: 'AQ',
-        pmBeginIndex: (8+32),
+        pmBeginIndex: (10+32),
         pmEnd: 'AR',
-        pmEndIndex: (8+32),
+        pmEndIndex: (11+32),
       }
     }
   }),
@@ -113,6 +113,13 @@ export default {
       'getSheet',
       'updateSheet'
     ]),
+    changeDay(changedDay) {
+      this.amBegin = this.tableData[this.days[changedDay].amBeginIndex]
+      this.amEnd = this.tableData[this.days[changedDay].amEndIndex]
+      this.pmBegin = this.tableData[this.days[changedDay].pmBeginIndex]
+      this.pmEnd = this.tableData[this.days[changedDay].pmEndIndex]
+      this.currentDay = changedDay
+    },
     sendAmBegin(amBegin){
       let payload = {
         'value': amBegin,
