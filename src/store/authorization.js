@@ -26,7 +26,7 @@ export default {
       commit
     }) {
       var ranges = [
-        "saisie-2020!A1:AV"
+        "saisie-2020!A1:AW"
       ];
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
