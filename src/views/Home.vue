@@ -10,12 +10,12 @@
           <tr>
             <td>Début</td>
             <td>
-              <input type="time" v-model="amBegin" v-on:keyup.enter="sendAmBegin(amBegin)">
+              <input type="time" v-model="amBegin" @blur="sendAmBegin(amBegin)">
             </td>
           </tr>
           <tr>
             <td>Fin</td>
-            <td><input type="time" v-model="amEnd" v-on:keyup.enter="sendAmEnd(amEnd)"></td>
+            <td><input type="time" v-model="amEnd" @blur="sendAmEnd(amEnd)"></td>
           </tr>
         </tbody>
       </table>
@@ -29,12 +29,12 @@
           <tr>
             <td>Début</td>
             <td>
-              <input type="time" v-model="pmBegin" v-on:keyup.enter="sendPmBegin(pmBegin)">
+              <input type="time" v-model="pmBegin" @blur="sendPmBegin(pmBegin)">
             </td>
           </tr>
           <tr>
             <td>Fin</td>
-            <td><input type="time" v-model="pmEnd" v-on:keyup.enter="sendPmEnd(pmEnd)"></td>
+            <td><input type="time" v-model="pmEnd" @blur="sendPmEnd(pmEnd)"></td>
           </tr>
         </tbody>
       </table>
@@ -158,8 +158,8 @@ export default {
     ])
   },
   mounted() {
-    this.currentDay = moment().format('dddd')
     return [
+      this.currentDay = moment().format('dddd'),
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
