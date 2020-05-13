@@ -20,9 +20,6 @@ export default {
     return {};
   },
   computed: {
-    ...mapActions('authentication', [
-      'isSignedIn'
-    ]),
     ...mapGetters('authentication', [
       'loggedIn'
     ]),
