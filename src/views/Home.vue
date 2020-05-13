@@ -112,14 +112,12 @@ export default {
   methods: {
     ...mapActions('authorization', [
       'travelWeek',
-      'updateSheet'
+      'updateSheet',
+      'batchUpdateSheet'
     ]),
     changeDay(changedDay) {
-      this.amBegin = this.tableData[this.days[changedDay].amBeginIndex]
-      this.amEnd = this.tableData[this.days[changedDay].amEndIndex]
-      this.pmBegin = this.tableData[this.days[changedDay].pmBeginIndex]
-      this.pmEnd = this.tableData[this.days[changedDay].pmEndIndex]
       this.currentDay = changedDay
+      this.setVar()
     },
     changeWeek(nbWeek) {
       this.week = this.week+(nbWeek)
@@ -137,6 +135,15 @@ export default {
     subtractHour(hour, minute) {
       this.pmEnd = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
       this.sendPmEnd(this.pmEnd)
+    },
+    clear() {
+      let payload = {
+        'value': "",
+        'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+      }
+      this.batchUpdateSheet(payload).then(() => {
+        this.setVar()
+      })
     },
     sendAmBegin(amBegin){
       let payload = {

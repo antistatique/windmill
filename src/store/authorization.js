@@ -82,6 +82,25 @@ export default {
         dispatch('getSheet')
       });
     },
+    batchUpdateSheet({ state, dispatch }, payload) {
+      var values = [
+        ["", "", "", ""]
+      ];
+      var body = [
+        {
+          range: 'saisie-2020!' + payload.ranges,
+          values: values
+        }
+      ];
+      gapi.client.sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId: state.spreadsheetId,
+        valueInputOption: 'USER_ENTERED',
+        data: body
+      }).then(() => {
+        console.log('cells updated');
+        dispatch('getSheet')
+      });
+    },
     travelWeek({ state, commit, dispatch }, payload) {
       state.mainTableData.find(element => {
         if (element[1] == payload.value) {
