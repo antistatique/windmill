@@ -55,6 +55,7 @@ export default {
     pmEnd : null,
     lines: null,
     currentDay: null,
+    week: null,
     days: {
       Monday: {
         amBegin: 'I',
@@ -110,7 +111,7 @@ export default {
   }),
   methods: {
     ...mapActions('authorization', [
-      'getSheet',
+      'travelWeek',
       'updateSheet'
     ]),
     changeDay(changedDay) {
@@ -119,6 +120,15 @@ export default {
       this.pmBegin = this.tableData[this.days[changedDay].pmBeginIndex]
       this.pmEnd = this.tableData[this.days[changedDay].pmEndIndex]
       this.currentDay = changedDay
+    },
+    changeWeek(nbWeek) {
+      this.week = this.week+(nbWeek)
+      let payload = {
+        'value': this.week,
+      }
+      this.travelWeek(payload).then(() => {
+        this.setVar()
+      })
     },
     sendAmBegin(amBegin){
       let payload = {
@@ -152,6 +162,14 @@ export default {
       }
       this.updateSheet(payload)
     },
+    setVar() {
+      this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
+      this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
+      this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
+      this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
+      this.lines = this.tableData.slice(-1)[0]
+    }
+  },
   computed: {
     ...mapGetters('authorization', [
       'tableData'
@@ -159,12 +177,9 @@ export default {
   },
   mounted() {
     return [
+      this.week = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
-      this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
-      this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
-      this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
-      this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
-      this.lines = this.tableData.slice(-1)[0]
+      this.setVar()
     ]
   }
 }
