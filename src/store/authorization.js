@@ -10,6 +10,7 @@ export default {
     mainTableData: null,
     dataFiltered: null,
     loading: false,
+    redirect: false
   },
   getters: {
     tableData: state => state.dataFiltered,
@@ -20,6 +21,7 @@ export default {
     },
     assignDataFiltered(state, payload) {
       state.dataFiltered = payload;
+      state.redirect = true
     },
     loading(state, loadingState) {
       state.logging = loadingState;
@@ -51,8 +53,8 @@ export default {
         commit('assignTableData', array);
         array.find(element => {
           if (element[1] == moment().isoWeek()) {
+            if(state.redirect == false) router.push('/home')
             commit('assignDataFiltered', element);
-            router.push('/home')
             return true;
           }
         })
