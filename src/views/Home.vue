@@ -130,6 +130,14 @@ export default {
         this.setVar()
       })
     },
+    addHour(hour, minute) {
+      this.pmEnd = moment(this.pmEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
+      this.sendPmEnd(this.pmEnd)
+    },
+    subtractHour(hour, minute) {
+      this.pmEnd = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
+      this.sendPmEnd(this.pmEnd)
+    },
     sendAmBegin(amBegin){
       let payload = {
         'value': amBegin,
