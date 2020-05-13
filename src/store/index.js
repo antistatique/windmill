@@ -22,7 +22,7 @@ export default new Vuex.Store({
     createPersistedState({
       paths: [
         'authentication.profile',
-        'authentication.loggedIn',
+        'authentication.signedIn',
         'authorization.mainTableData',
         'authorization.dataFiltered'
       ]
