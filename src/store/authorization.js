@@ -7,14 +7,18 @@ export default {
   state: {
     spreadsheetId: process.env.VUE_APP_SPREADSHEET_ID,
     mainTableData: null,
+    dataFiltered: null,
     loading: false,
   },
   getters: {
-    tableData: state => state.mainTableData,
+    tableData: state => state.dataFiltered,
   },
   mutations: {
     assignTableData(state, tableData) {
       state.mainTableData = tableData;
+    },
+    assignDataFiltered(state, payload) {
+      state.dataFiltered = payload;
     },
     loading(state, loadingState) {
       state.logging = loadingState;
@@ -32,7 +36,7 @@ export default {
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
-        console.log(response.result)
+        console.log('Data loaded')
         var array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
@@ -43,10 +47,10 @@ export default {
             }
           }
         })
-        console.log(array)
+        commit('assignTableData', array);
         array.find(element => {
           if (element[1] == moment().isoWeek()) {
-            commit('assignTableData', element);
+            commit('assignDataFiltered', element);
             return true;
           }
         })
@@ -75,6 +79,14 @@ export default {
         console.log(`${result.updatedCells} cells updated.`);
         dispatch('getSheet')
       });
+    },
+    travelWeek({ state, commit, dispatch }, payload) {
+      state.mainTableData.find(element => {
+        if (element[1] == payload.value) {
+          commit('assignDataFiltered', element);
+          return true;
+        }
+      })
     }
   }
 };
