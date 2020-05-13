@@ -1,6 +1,5 @@
 /* global gapi */
 /* eslint-disable */
-import router from '../router/index'
 
 export default {
   namespaced: true,
@@ -82,7 +81,6 @@ export default {
         gapi.auth2.getAuthInstance().signIn().then((user) => {
           commit('signIn', user.Pt)
           dispatch('authorization/getSheet', null, {root: true})
-          router.push('/home')
         })
       });
     },

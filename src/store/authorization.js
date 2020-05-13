@@ -1,6 +1,7 @@
 /* global gapi */
 /* eslint-disable */
 import * as moment from 'moment'
+import router from '../router/index'
 
 export default {
   namespaced: true,
@@ -51,6 +52,7 @@ export default {
         array.find(element => {
           if (element[1] == moment().isoWeek()) {
             commit('assignDataFiltered', element);
+            router.push('/home')
             return true;
           }
         })
