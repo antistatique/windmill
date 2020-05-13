@@ -41,7 +41,7 @@ export default {
         response.result.values.forEach((element, index) => {
           if(index > 0){
             if (element[3] == 'gilles@antistatique.net') {
-              // dire pourquoi le + 1
+              // index + 1 give the right line in the spreadsheet
               element.push((index+1))
               array.push(element)
             }
