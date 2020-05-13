@@ -141,32 +141,28 @@ export default {
     sendAmBegin(amBegin){
       let payload = {
         'value': amBegin,
-        'column': this.days[this.currentDay].amBegin,
-        'lines': this.lines
+        'ranges': this.days[this.currentDay].amBegin + this.lines
       }
       this.updateSheet(payload)
     },
     sendAmEnd(amEnd){
       let payload = {
         'value': amEnd,
-        'column': this.days[this.currentDay].amEnd,
-        'lines': this.lines
+        'ranges': this.days[this.currentDay].amEnd + this.lines
       }
       this.updateSheet(payload)
     },
     sendPmBegin(pmBegin){
       let payload = {
         'value': pmBegin,
-        'column': this.days[this.currentDay].pmBegin,
-        'lines': this.lines
+        'ranges': this.days[this.currentDay].pmBegin + this.lines
       }
       this.updateSheet(payload)
     },
     sendPmEnd(pmEnd){
       let payload = {
         'value': pmEnd,
-        'column': this.days[this.currentDay].pmEnd,
-        'lines': this.lines
+        'ranges': this.days[this.currentDay].pmEnd + this.lines
       }
       this.updateSheet(payload)
     },

@@ -73,7 +73,7 @@ export default {
       };
       gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: state.spreadsheetId,
-        range: 'saisie-2020!' + payload.column + payload.lines,
+        range: 'saisie-2020!' + payload.ranges,
         valueInputOption: 'USER_ENTERED',
         resource: body
       }).then((response) => {
