@@ -81,6 +81,7 @@ export default {
         gapi.auth2.getAuthInstance().signIn().then((user) => {
           commit('signIn', user.Pt)
           dispatch('authorization/getSheet', null, {root: true})
+          dispatch('dashboard/getDashboardSheet', null, {root: true})
         })
       });
     },
