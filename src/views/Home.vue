@@ -1,6 +1,11 @@
 <template>
    <div class="home">
-      <table class=" table-data entry-hours">
+      <button class="btn btn-primary" v-on:click="changeDay('Monday')">Lundi</button>
+      <button class="btn btn-primary" v-on:click="changeDay('Tuesday')">Mardi</button>
+      <button class="btn btn-primary" v-on:click="changeDay('Wednesday')">Mercredi</button>
+      <button class="btn btn-primary" v-on:click="changeDay('Thursday')">Jeudi</button>
+      <button class="btn btn-primary" v-on:click="changeDay('Friday')">Vendredi</button>
+      <table>
         <thead>
           <tr>
             <th colspan="2">Matin</th>
@@ -19,7 +24,7 @@
           </tr>
         </tbody>
       </table>
-      <table class=" table-data entry-hours">
+      <table>
         <thead>
           <tr>
             <th colspan="2">Après-midi</th>
@@ -38,6 +43,30 @@
           </tr>
         </tbody>
       </table>
+    <button class="btn btn-primary" v-on:click="changeWeek(-1)">gauche (-)</button>
+    <button class="btn btn-primary" v-on:click="changeWeek(1)">droite (+)</button>
+    
+    <button class="btn btn-primary" v-show="this.tableData.length > 47">test</button><br>
+
+    <button class="btn btn-primary" v-on:click="addHour(0, 15)">15'</button>
+    <button class="btn btn-primary" v-on:click="subtractHour(0, 15)">-15'</button><br>
+
+    <button class="btn btn-primary" v-on:click="addHour(0, 30)">30'</button>
+    <button class="btn btn-primary" v-on:click="subtractHour(0, 30)">-30'</button><br>
+
+    <button class="btn btn-primary" v-on:click="addHour(0, 45)">45'</button>
+    <button class="btn btn-primary" v-on:click="subtractHour(0, 45)">-45'</button><br>
+
+    <button class="btn btn-primary" v-on:click="addHour(1, 0)">1h</button>
+    <button class="btn btn-primary" v-on:click="subtractHour(1, 0)">-1h</button><br>
+
+    <button class="btn btn-primary" v-on:click="addHour(2, 15)">2h15</button>
+    <button class="btn btn-primary" v-on:click="subtractHour(2, 15)">-2h15</button><br><br>
+
+
+    <button class="btn btn-primary" v-on:click="clear()">Clear</button>
+
+  </div> 
 
 </template>
 
