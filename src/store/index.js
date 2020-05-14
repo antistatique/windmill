@@ -26,7 +26,8 @@ export default new Vuex.Store({
         'authentication.profile',
         'authentication.signedIn',
         'authorization.mainTableData',
-        'authorization.dataFiltered'
+        'authorization.dataFiltered',
+        'dashboard.filteredDataDashboard'
       ]
     })
   ]
