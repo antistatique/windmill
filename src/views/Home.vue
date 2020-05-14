@@ -1,5 +1,38 @@
 <template>
    <div class="home">
+      <div class="wrap-status" v-if="this.tableData[46] == '🤔' && this.tableData[48] == '⚠️'">
+        <div>
+          <span class="hours">{{ this.tableData[46] }}</span>
+          <div class="denominator"><span class="numerator">34</span>/ 33.6</div>
+        </div>
+          <!-- Button trigger modal -->
+          <b-button v-b-modal.modal-scoped variant="primary">Launch demo modal</b-button>
+      </div>
+      <div class="wrap-status" v-else>
+          <!-- Button trigger modal -->
+          <b-button v-b-modal.modal-scoped variant="primary">Modifier la justification</b-button>
+      </div>
+      
+      <b-modal id="modal-scoped">
+        <template v-slot:modal-header>
+          <h5>Justification des heurs</h5>
+        </template>
+
+        <template v-slot:default>
+          <textarea v-model="description"></textarea>
+        </template>
+
+        <template v-slot:modal-footer="{ ok, cancel }">
+          <!-- Emulate built in modal footer ok and cancel button actions -->
+          <b-button size="sm" variant="success" @click="sendDecription(); ok();">
+            Valider
+          </b-button>
+          <b-button size="sm" variant="danger" @click="cancel()">
+            Abandonner
+          </b-button>
+        </template>
+      </b-modal>
+
       <button class="btn btn-primary" v-on:click="changeDay('Monday')">Lundi</button>
       <button class="btn btn-primary" v-on:click="changeDay('Tuesday')">Mardi</button>
       <button class="btn btn-primary" v-on:click="changeDay('Wednesday')">Mercredi</button>
@@ -85,6 +118,7 @@ export default {
     lines: null,
     currentDay: null,
     week: null,
+    description: null,
     days: {
       Monday: {
         amBegin: 'I',
@@ -144,6 +178,13 @@ export default {
       'updateSheet',
       'batchUpdateSheet'
     ]),
+    sendDecription() {
+      let payload = {
+        'value': this.description,
+        'ranges': 'AV' + this.lines
+      }
+      this.updateSheet(payload)
+    },
     changeDay(changedDay) {
       this.currentDay = changedDay
       this.setVar()
@@ -171,7 +212,10 @@ export default {
         'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
       }
       this.batchUpdateSheet(payload).then(() => {
-        this.setVar()
+        this.amBegin = ""
+        this.amEnd = ""
+        this.pmBegin = ""
+        this.pmEnd = ""
       })
     },
     sendAmBegin(amBegin){
@@ -208,6 +252,7 @@ export default {
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
       this.lines = this.tableData.slice(-1)[0]
+      if(this.tableData[46] == '🤔') this.description = this.tableData[47]
     }
   },
   computed: {
