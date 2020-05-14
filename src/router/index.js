@@ -3,6 +3,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard.vue'
 import store from "../store";
 
 Vue.use(VueRouter)
@@ -20,6 +21,14 @@ Vue.use(VueRouter)
     path: '/home',
     name: 'Home',
     component: Home,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
     meta: {
       requiresAuth: true
     }
