@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import authentication from './authentication';
 import authorization from './authorization';
+import dashboard from './dashboard';
 import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex)
@@ -16,7 +17,8 @@ export default new Vuex.Store({
   },
   modules: {
     authentication,
-    authorization
+    authorization,
+    dashboard
   },
   plugins: [
     createPersistedState({
