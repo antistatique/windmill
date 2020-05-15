@@ -1,99 +1,136 @@
 <template>
    <div class="home">
-      <div class="wrap-status" v-if="this.tableData[46] == '🤔' && this.tableData[48] == '⚠️'">
+    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="d-flex justify-content-around" style="margin-top: 3%; margin-bottom: 3%">
         <div>
-          <span class="hours">{{ this.tableData[46] }}</span>
-          <div class="denominator"><span class="numerator">34</span>/ 33.6</div>
+          <button class="btn" v-show="week > 1" v-on:click="changeWeek(-1)">
+            <BIconArrowLeft/>
+          </button>
         </div>
-          <!-- Button trigger modal -->
-          <b-button v-b-modal.modal-scoped variant="primary">Launch demo modal</b-button>
+        <div>
+          <div>{{ monthYear }}</div>
+          <div>Semaine {{ week }}</div>
+        </div>
+        <div>
+          <button class="btn" v-show="week < 52" v-on:click="changeWeek(1)">
+            <BIconArrowRight/>
+          </button>
+        </div>
       </div>
-      <div class="wrap-status" v-else>
-          <!-- Button trigger modal -->
-          <b-button v-b-modal.modal-scoped variant="primary">Modifier la justification</b-button>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12" style="margin-bottom: 3%; background-color: #edf0f3">
+      <div class="d-flex justify-content-around align-items-center" v-if="this.tableData[46] == '🤔' && this.tableData[48] == '⚠️'">
+        <div>
+          <div>Heures 🤔</div>
+          <div><b style="font-size: 20px">{{ this.tableData[44] }}</b> / {{ this.tableData[45] }}</div>
+        </div>
+        <div>
+          <b-button v-b-modal.modal-scoped class="btn-costum">Justifier les heures</b-button>
+        </div>
       </div>
-      
-      <b-modal id="modal-scoped">
-        <template v-slot:modal-header>
-          <h5>Justification des heurs</h5>
-        </template>
+      <!-- I put the padding-bottom to 6px, like this there is not difference between the two blocks -->
+      <div class="d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 6px" v-else>
+        <b-button v-b-modal.modal-scoped class="btn-costum">Modifier la justification</b-button>
+      </div>  
+    </div>
 
-        <template v-slot:default>
-          <textarea v-model="description"></textarea>
-        </template>
+    <b-modal id="modal-scoped" class="modal">
+      <template v-slot:modal-header="{ cancel }">
+        <h5>Justification des heures</h5>
+        <button type="button" class="close">
+          <span aria-hidden="true" @click="cancel()">&times;</span>
+        </button>
+      </template>
 
-        <template v-slot:modal-footer="{ ok, cancel }">
-          <!-- Emulate built in modal footer ok and cancel button actions -->
-          <b-button size="sm" variant="success" @click="sendDecription(); ok();">
-            Valider
-          </b-button>
-          <b-button size="sm" variant="danger" @click="cancel()">
-            Abandonner
-          </b-button>
-        </template>
-      </b-modal>
+      <template v-slot:default>
+        <textarea v-model="description" class="form-control" style="min-width: 100%"></textarea>
+      </template>
 
-      <button class="btn btn-primary" v-on:click="changeDay('Monday')">Lundi</button>
-      <button class="btn btn-primary" v-on:click="changeDay('Tuesday')">Mardi</button>
-      <button class="btn btn-primary" v-on:click="changeDay('Wednesday')">Mercredi</button>
-      <button class="btn btn-primary" v-on:click="changeDay('Thursday')">Jeudi</button>
-      <button class="btn btn-primary" v-on:click="changeDay('Friday')">Vendredi</button>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">Matin</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Début</td>
-            <td>
-              <input type="time" v-model="amBegin" @blur="sendAmBegin(amBegin)">
-            </td>
-          </tr>
-          <tr>
-            <td>Fin</td>
-            <td><input type="time" v-model="amEnd" @blur="sendAmEnd(amEnd)"></td>
-          </tr>
-        </tbody>
-      </table>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">Après-midi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Début</td>
-            <td>
-              <input type="time" v-model="pmBegin" @blur="sendPmBegin(pmBegin)">
-            </td>
-          </tr>
-          <tr>
-            <td>Fin</td>
-            <td><input type="time" v-model="pmEnd" @blur="sendPmEnd(pmEnd)"></td>
-          </tr>
-        </tbody>
-      </table>
-    <button class="btn btn-primary" v-on:click="changeWeek(-1)">gauche (-)</button>
-    <button class="btn btn-primary" v-on:click="changeWeek(1)">droite (+)</button>
-    
-    <button class="btn btn-primary" v-show="this.tableData.length > 47">test</button><br>
+      <template v-slot:modal-footer="{ ok }">
+        <b-button size="sm" class="btn-costum" @click="sendDecription(); ok();">
+          Valider
+        </b-button>
+      </template>
+    </b-modal>
 
-    <button class="btn btn-primary" v-on:click="addHour(0, 15)">15'</button>
-    <button class="btn btn-primary" v-on:click="subtractHour(0, 15)">-15'</button><br>
+    <div class="d-flex justify-content-center justify-content-around">
+      <button class="btn" v-on:click="changeDay('Monday')">
+        {{ this.tableData[4] }} <br>
+        Lun <br>
+        {{ dayMonday }} <br>
+        {{ this.tableData[7] }}
+      </button>
+      <button class="btn" v-on:click="changeDay('Tuesday')">
+        {{ this.tableData[4+8] }} <br>
+        Mar <br>
+        {{ dayTuesday }} <br>
+        {{ this.tableData[7+8] }}
+      </button>
+      <button class="btn" v-on:click="changeDay('Wednesday')">
+        {{ this.tableData[4+16] }} <br>
+        Mer <br>
+        {{ dayWednesday }} <br>
+        {{ this.tableData[7+16] }}
+      </button>
+      <button class="btn" v-on:click="changeDay('Thursday')">
+        {{ this.tableData[4+24] }} <br>
+        Jeu <br>
+        {{ dayThursday }} <br>
+        {{ this.tableData[7+24] }}
+      </button>
+      <button class="btn" v-on:click="changeDay('Friday')">
+        {{ this.tableData[4+32] }} <br>
+        Ven <br>
+        {{ dayFriday }} <br>
+        {{ this.tableData[7+32] }}
+      </button>
+    </div>
 
-    <button class="btn btn-primary" v-on:click="addHour(0, 30)">30'</button>
-    <button class="btn btn-primary" v-on:click="subtractHour(0, 30)">-30'</button><br>
+    <div style="margin-top: 3%;">
+      <div class="form-row">
+        <div class="col-md-12">
+          <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
+          
+          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+            <label for="amBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
+            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
+              <input type="time" class="form-control" v-model="amBegin" style="text-align: center" @blur="sendAmBegin(amBegin)" id="amBegin">
+            </div>
+          </div>
+          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+            <label for="amEnd" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Fin</label>
+            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
+              <input type="time" class="form-control absolute-center" style="text-align: center" v-model="amEnd" @blur="sendAmEnd(amEnd)" id="amEnd">
+            </div>
+          </div>
 
-    <button class="btn btn-primary" v-on:click="addHour(0, 45)">45'</button>
-    <button class="btn btn-primary" v-on:click="subtractHour(0, 45)">-45'</button><br>
+        </div>
+        <div class="col-md-12">
+          <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
+          
+          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+            <label for="pmBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
+            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
+              <input type="time" class="form-control" style="text-align: center" v-model="pmBegin" @blur="sendPmBegin(pmBegin)" id="pmBegin">
+            </div>
+          </div>
+          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+            <label for="amEnd" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Fin</label>
+            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
+              <input type="time" class="form-control" style="text-align: center" v-model="pmEnd" @blur="sendPmEnd(pmEnd)" id="pmEnd">
+            </div>
+          </div>
 
-    <button class="btn btn-primary" v-on:click="addHour(1, 0)">1h</button>
-    <button class="btn btn-primary" v-on:click="subtractHour(1, 0)">-1h</button><br>
+        </div>
+      </div>
+    </div>
+
     <div class="form-group col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-between">
       <b-button v-b-modal.setLocalStorage class="btn btn-costum">Horaire habituel</b-button>
+      <b-button v-b-modal.addHours class="btn btn-costum">+</b-button>
+      <b-button v-b-modal.substractHours class="btn btn-costum">-</b-button>
+      <button class="btn" style="background-color: #faddea" v-on:click="clear()"><BIconTrash style="color: #e30074"/></button>
     </div>
 
     <b-modal id="setLocalStorage" class="modal">
@@ -152,7 +189,81 @@
       </template>
     </b-modal>
 
-    <button class="btn btn-primary" v-on:click="clear()">Clear</button>
+    <b-modal id="addHours" class="modal">
+      <template v-slot:modal-header="{ cancel }">
+        <h5>Ajouter du temps</h5>
+        <button type="button" class="close">
+          <span aria-hidden="true" @click="cancel()">&times;</span>
+        </button>
+      </template>
+
+      <template v-slot:default>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="addHour(0, 15)">15'</button>
+          <button class="btn" v-on:click="addHour(0, 30)">30'</button>
+          <button class="btn" v-on:click="addHour(0, 45)">45'</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="addHour(1, 0)">1h</button>
+          <button class="btn" v-on:click="addHour(1, 15)">1h15</button>
+          <button class="btn" v-on:click="addHour(1, 30)">1h30</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="addHour(1, 45)">1h45</button>
+          <button class="btn" v-on:click="addHour(2, 0)">2h</button>
+          <button class="btn" v-on:click="addHour(2, 15)">2h15</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="addHour(2, 30)">2h30</button>
+          <button class="btn" v-on:click="addHour(2, 45)">2h45</button>
+          <button class="btn" v-on:click="addHour(3, 0)">3h</button>
+        </div>
+      </template>
+
+      <template v-slot:modal-footer="{ close }">
+        <b-button size="sm" class="btn-costum" @click="close();">
+          Fermer
+        </b-button>
+      </template>
+    </b-modal>
+
+    <b-modal id="substractHours" class="modal">
+      <template v-slot:modal-header="{ cancel }">
+        <h5>Enlever du temps</h5>
+        <button type="button" class="close">
+          <span aria-hidden="true" @click="cancel()">&times;</span>
+        </button>
+      </template>
+
+      <template v-slot:default>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="subtractHour(0, 15)">15'</button>
+          <button class="btn" v-on:click="subtractHour(0, 30)">30'</button>
+          <button class="btn" v-on:click="subtractHour(0, 45)">45'</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="subtractHour(1, 0)">1h</button>
+          <button class="btn" v-on:click="subtractHour(1, 15)">1h15</button>
+          <button class="btn" v-on:click="subtractHour(1, 30)">1h30</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="subtractHour(1, 45)">1h45</button>
+          <button class="btn" v-on:click="subtractHour(2, 0)">2h</button>
+          <button class="btn" v-on:click="subtractHour(2, 15)">2h15</button>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
+          <button class="btn" v-on:click="subtractHour(2, 30)">2h30</button>
+          <button class="btn" v-on:click="subtractHour(2, 45)">2h45</button>
+          <button class="btn" v-on:click="subtractHour(3, 0)">3h</button>
+        </div>
+      </template>
+
+      <template v-slot:modal-footer="{ close }">
+        <b-button size="sm" class="btn-costum" @click="close();">
+          Fermer
+        </b-button>
+      </template>
+    </b-modal>
 
   </div> 
 
@@ -162,9 +273,15 @@
 /* eslint-disable */
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment'
+import { BIconArrowLeft, BIconArrowRight, BIconTrash } from 'bootstrap-vue'
 
 export default {
   name: 'Home',
+  components: {
+    BIconArrowLeft, 
+    BIconArrowRight,
+    BIconTrash
+  },
   data: () => ({
     amBegin : null,
     amEnd : null,
@@ -178,6 +295,13 @@ export default {
     currentDay: null,
     week: null,
     description: null,
+    monthYear: null,
+    dayMonday: null,
+    dayTuesday: null,
+    dayWednesday: null,
+    dayThursday: null,
+    dayFriday: null,
+    storage: null,
     days: {
       Monday: {
         amBegin: 'I',
@@ -197,7 +321,7 @@ export default {
         pmBegin: 'S',
         pmBeginIndex: (10+8),
         pmEnd: 'T',
-        pmEndIndex: (11+8),
+        pmEndIndex: (11+8)
       },
       Wednesday: {
         amBegin: 'Y',
@@ -207,7 +331,7 @@ export default {
         pmBegin: 'AA',
         pmBeginIndex: (10+16),
         pmEnd: 'AB',
-        pmEndIndex: (11+16),
+        pmEndIndex: (11+16)
       },
       Thursday: {
         amBegin: 'AG',
@@ -217,7 +341,7 @@ export default {
         pmBegin: 'AI',
         pmBeginIndex: (10+24),
         pmEnd: 'AJ',
-        pmEndIndex: (11+24),
+        pmEndIndex: (11+24)
       },
       Friday: {
         amBegin: 'AO',
@@ -227,7 +351,7 @@ export default {
         pmBegin: 'AQ',
         pmBeginIndex: (10+32),
         pmEnd: 'AR',
-        pmEndIndex: (11+32),
+        pmEndIndex: (11+32)
       }
     }
   }),
@@ -334,7 +458,13 @@ export default {
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
-      this.lines = this.tableData.slice(-1)[0]
+      this.lines = this.tableData.slice(-1)[0],
+      this.monthYear = moment(this.tableData[0], 'YYYY-MM-DD', 'Fr', true).format('MMMM YYYY').toUpperCase(),
+      this.dayMonday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).format('DD'),
+      this.dayTuesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(1, 'd').format('DD'),
+      this.dayWednesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(2, 'd').format('DD'),
+      this.dayThursday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(3, 'd').format('DD'),
+      this.dayFriday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(4, 'd').format('DD')
       if(this.tableData[46] == '🤔') this.description = this.tableData[47]
     }
   },
@@ -356,3 +486,18 @@ export default {
   }
 }
 </script>
+
+<style>
+  .btn.btn-costum {
+    font-size: 16px;
+    background-color: #e30074;
+    color: white;
+    border-color: #edf0f3;
+  }
+  .btn.btn-costum:hover {
+    font-size: 16px;
+    background-color: #e30074;
+    color: white;
+    border-color: #edf0f3;
+  }
+</style>
