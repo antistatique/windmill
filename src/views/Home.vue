@@ -474,11 +474,13 @@ export default {
     ])
   },
   mounted() {
+    if(localStorage.getItem('hoursPlanified') != null) {
+      this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
+      this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
+      this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
+      this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
+    }
     return [
-      this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin,
-      this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd,
-      this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin,
-      this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd,
       this.week = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
       this.setVar()
