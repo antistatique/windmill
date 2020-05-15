@@ -197,26 +197,26 @@
         </button>
       </template>
 
-      <template v-slot:default>
+      <template v-slot:default="{ ok }">
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(0, 15)">15'</button>
-          <button class="btn" v-on:click="addHour(0, 30)">30'</button>
-          <button class="btn" v-on:click="addHour(0, 45)">45'</button>
+          <button class="btn" v-on:click="addHour(0, 15); ok()">15'</button>
+          <button class="btn" v-on:click="addHour(0, 30); ok()">30'</button>
+          <button class="btn" v-on:click="addHour(0, 45); ok()">45'</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(1, 0)">1h</button>
-          <button class="btn" v-on:click="addHour(1, 15)">1h15</button>
-          <button class="btn" v-on:click="addHour(1, 30)">1h30</button>
+          <button class="btn" v-on:click="addHour(1, 0); ok()">1h</button>
+          <button class="btn" v-on:click="addHour(1, 15); ok()">1h15</button>
+          <button class="btn" v-on:click="addHour(1, 30); ok()">1h30</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(1, 45)">1h45</button>
-          <button class="btn" v-on:click="addHour(2, 0)">2h</button>
-          <button class="btn" v-on:click="addHour(2, 15)">2h15</button>
+          <button class="btn" v-on:click="addHour(1, 45); ok()">1h45</button>
+          <button class="btn" v-on:click="addHour(2, 0); ok()">2h</button>
+          <button class="btn" v-on:click="addHour(2, 15); ok()">2h15</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(2, 30)">2h30</button>
-          <button class="btn" v-on:click="addHour(2, 45)">2h45</button>
-          <button class="btn" v-on:click="addHour(3, 0)">3h</button>
+          <button class="btn" v-on:click="addHour(2, 30); ok()">2h30</button>
+          <button class="btn" v-on:click="addHour(2, 45); ok()">2h45</button>
+          <button class="btn" v-on:click="addHour(3, 0); ok()">3h</button>
         </div>
       </template>
 
@@ -235,26 +235,26 @@
         </button>
       </template>
 
-      <template v-slot:default>
+      <template v-slot:default="{ ok }">
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(0, 15)">15'</button>
-          <button class="btn" v-on:click="subtractHour(0, 30)">30'</button>
-          <button class="btn" v-on:click="subtractHour(0, 45)">45'</button>
+          <button class="btn" v-on:click="subtractHour(0, 15); ok()">15'</button>
+          <button class="btn" v-on:click="subtractHour(0, 30); ok()">30'</button>
+          <button class="btn" v-on:click="subtractHour(0, 45); ok()">45'</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(1, 0)">1h</button>
-          <button class="btn" v-on:click="subtractHour(1, 15)">1h15</button>
-          <button class="btn" v-on:click="subtractHour(1, 30)">1h30</button>
+          <button class="btn" v-on:click="subtractHour(1, 0); ok()">1h</button>
+          <button class="btn" v-on:click="subtractHour(1, 15); ok()">1h15</button>
+          <button class="btn" v-on:click="subtractHour(1, 30); ok()">1h30</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(1, 45)">1h45</button>
-          <button class="btn" v-on:click="subtractHour(2, 0)">2h</button>
-          <button class="btn" v-on:click="subtractHour(2, 15)">2h15</button>
+          <button class="btn" v-on:click="subtractHour(1, 45); ok()">1h45</button>
+          <button class="btn" v-on:click="subtractHour(2, 0); ok()">2h</button>
+          <button class="btn" v-on:click="subtractHour(2, 15); ok()">2h15</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(2, 30)">2h30</button>
-          <button class="btn" v-on:click="subtractHour(2, 45)">2h45</button>
-          <button class="btn" v-on:click="subtractHour(3, 0)">3h</button>
+          <button class="btn" v-on:click="subtractHour(2, 30); ok()">2h30</button>
+          <button class="btn" v-on:click="subtractHour(2, 45); ok()">2h45</button>
+          <button class="btn" v-on:click="subtractHour(3, 0); ok()">3h</button>
         </div>
       </template>
 
