@@ -28,13 +28,8 @@ export default {
     },
   },
   actions: {
-    getSheet({
-      state,
-      commit
-    }) {
-      var ranges = [
-        "saisie-2020!A1:AW"
-      ];
+    getSheet({ state, commit }) {
+      var ranges = [ "saisie-2020!A1:AW" ];
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
@@ -85,9 +80,8 @@ export default {
       });
     },
     batchUpdateSheet({ state, dispatch }, payload) {
-      var values = [
-        ["", "", "", ""]
-      ];
+      var values;
+      payload.value == "" ? values = [["", "", "", ""]] : values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
       var body = [
         {
           range: 'saisie-2020!' + payload.ranges,
