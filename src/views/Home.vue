@@ -92,10 +92,65 @@
 
     <button class="btn btn-primary" v-on:click="addHour(1, 0)">1h</button>
     <button class="btn btn-primary" v-on:click="subtractHour(1, 0)">-1h</button><br>
+    <div class="form-group col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-between">
+      <b-button v-b-modal.setLocalStorage class="btn btn-costum">Horaire habituel</b-button>
+    </div>
 
-    <button class="btn btn-primary" v-on:click="addHour(2, 15)">2h15</button>
-    <button class="btn btn-primary" v-on:click="subtractHour(2, 15)">-2h15</button><br><br>
+    <b-modal id="setLocalStorage" class="modal">
+      <template v-slot:modal-header="{ cancel }">
+        <h5>Définition de l'horaire habituel</h5>
+        <button type="button" class="close">
+          <span aria-hidden="true" @click="cancel()">&times;</span>
+        </button>
+      </template>
 
+      <template v-slot:default>
+        <div style="margin-top: 3%;">
+          <div class="form-row">
+            <div class="col-md-12">
+              <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
+              
+              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+                <label for="amBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
+                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
+                  <input type="time" class="form-control" v-model="localAmBegin" style="text-align: center" id="amBegin">
+                </div>
+              </div>
+              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+                <label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
+                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
+                  <input type="time" class="form-control absolute-center" style="text-align: center" v-model="localAmEnd" id="amEnd">
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-12">
+              <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
+              
+              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+                <label for="pmBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
+                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
+                  <input type="time" class="form-control" style="text-align: center" v-model="localPmBegin" id="pmBegin">
+                </div>
+              </div>
+              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
+                <label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
+                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
+                  <input type="time" class="form-control" style="text-align: center" v-model="localPmEnd" id="pmEnd">
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template v-slot:modal-footer="{ ok }">
+        <b-button size="sm" class="btn-costum" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd); ok();">
+          Enregistrer
+        </b-button>
+      </template>
+    </b-modal>
 
     <button class="btn btn-primary" v-on:click="clear()">Clear</button>
 
@@ -115,6 +170,10 @@ export default {
     amEnd : null,
     pmBegin : null,
     pmEnd : null,
+    localAmBegin : null,
+    localAmEnd : null,
+    localPmBegin : null,
+    localPmEnd : null,
     lines: null,
     currentDay: null,
     week: null,
@@ -173,6 +232,30 @@ export default {
     }
   }),
   methods: {
+    storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
+      localStorage.setItem('hoursPlanified', JSON.stringify({
+        amBegin: amBegin,
+        amEnd: amEnd,
+        pmBegin: pmBegin,
+        pmEnd: pmEnd,
+      }))
+
+      let payload = {
+        'value': {
+          amBegin,
+          amEnd,
+          pmBegin,
+          pmEnd,
+        },
+        'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+      }
+      this.batchUpdateSheet(payload).then(() => {
+        this.amBegin = amBegin,
+        this.amEnd = amEnd,
+        this.pmBegin = pmBegin,
+        this.pmEnd = pmEnd
+      })
+    },
     ...mapActions('authorization', [
       'travelWeek',
       'updateSheet',
@@ -262,6 +345,10 @@ export default {
   },
   mounted() {
     return [
+      this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin,
+      this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd,
+      this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin,
+      this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd,
       this.week = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
       this.setVar()
