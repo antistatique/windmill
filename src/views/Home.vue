@@ -90,7 +90,7 @@
     <div style="margin-top: 3%;">
       <div class="form-row">
         <div class="col-md-12">
-          <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
+          <label class="col-form-label d-flex justify-content-start border" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
           
           <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
             <label for="amBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
@@ -107,7 +107,7 @@
 
         </div>
         <div class="col-md-12">
-          <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
+          <label class="col-form-label d-flex justify-content-start border" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
           
           <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
             <label for="pmBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
@@ -356,6 +356,11 @@ export default {
       }
     }
   }),
+  beforeCreate() {
+    this.$store.dispatch('authorization/getSheet').then(() => {
+      this.setVar()
+    })
+  },
   methods: {
     storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
       localStorage.setItem('hoursPlanified', JSON.stringify({
@@ -374,12 +379,11 @@ export default {
         },
         'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
       }
-      this.batchUpdateSheet(payload).then(() => {
-        this.amBegin = amBegin,
-        this.amEnd = amEnd,
-        this.pmBegin = pmBegin,
-        this.pmEnd = pmEnd
-      })
+      this.batchUpdateSheet(payload)
+      this.amBegin = amBegin,
+      this.amEnd = amEnd,
+      this.pmBegin = pmBegin,
+      this.pmEnd = pmEnd
     },
     ...mapActions('authorization', [
       'travelWeek',
@@ -402,6 +406,7 @@ export default {
       let payload = {
         'value': this.week,
       }
+      this.$store.state['authorization'].week = this.week
       this.travelWeek(payload).then(() => {
         this.setVar()
       })
@@ -493,7 +498,6 @@ export default {
     return [
       this.week = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
-      this.setVar()
     ]
   }
 }
@@ -511,5 +515,9 @@ export default {
     background-color: #e30074;
     color: white;
     border-color: #edf0f3;
+  }
+
+  .border {
+    border-radius: 10px;
   }
 </style>
