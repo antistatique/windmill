@@ -1,7 +1,6 @@
 /* global gapi */
 /* eslint-disable */
 import * as moment from 'moment'
-import router from '../router/index'
 
 export default {
   namespaced: true,
@@ -10,7 +9,8 @@ export default {
     mainTableData: null,
     dataFiltered: null,
     loading: false,
-    redirect: false
+    currentYear: moment().year(),
+    week: moment().isoWeek()
   },
   getters: {
     tableData: state => state.dataFiltered,
@@ -28,9 +28,9 @@ export default {
     },
   },
   actions: {
-    getSheet({ state, commit }) {
-      var ranges = [ "saisie-2020!A1:AW" ];
-      gapi.client.sheets.spreadsheets.values.get({
+    async getSheet({ state, commit }) {
+      var ranges = [ `saisie-${state.currentYear}!A1:AW` ];
+      await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
@@ -38,7 +38,7 @@ export default {
         var array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
-            if (element[3] == 'gilles@antistatique.net') {
+            if (element[3] == 'arthur@antistatique.net') {
               // index + 1 give the right line in the spreadsheet
               element.push((index+1))
               array.push(element)
@@ -47,8 +47,7 @@ export default {
         })
         commit('assignTableData', array);
         array.find(element => {
-          if (element[1] == moment().isoWeek()) {
-            if(state.redirect == false) router.push('/home')
+          if (element[1] == state.week) {
             commit('assignDataFiltered', element);
             return true;
           }
@@ -70,7 +69,7 @@ export default {
       };
       gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: state.spreadsheetId,
-        range: 'saisie-2020!' + payload.ranges,
+        range: `saisie-${state.currentYear}!${payload.ranges}`,
         valueInputOption: 'USER_ENTERED',
         resource: body
       }).then((response) => {
@@ -84,7 +83,7 @@ export default {
       payload.value == "" ? values = [["", "", "", ""]] : values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
       var body = [
         {
-          range: 'saisie-2020!' + payload.ranges,
+          range: `saisie-${state.currentYear}!${payload.ranges}`,
           values: values
         }
       ];
