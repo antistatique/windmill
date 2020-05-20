@@ -25,9 +25,9 @@ export default new Vuex.Store({
       paths: [
         'authentication.profile',
         'authentication.signedIn',
-        'authorization.mainTableData',
-        'authorization.dataFiltered',
-        'dashboard.filteredDataDashboard'
+        // 'authorization.mainTableData',
+        // 'authorization.dataFiltered',
+        // 'dashboard.filteredDataDashboard'
       ]
     })
   ]
