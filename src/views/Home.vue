@@ -12,15 +12,15 @@
           <div>Semaine {{ week }}</div>
         </div>
         <div>
-          <button class="btn" v-show="week < 52" v-on:click="changeWeek(1)">
+          <button class="btn" v-show="week < 53" v-on:click="changeWeek(1)">
             <BIconArrowRight/>
           </button>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12" style="margin-bottom: 3%; background-color: #edf0f3">
-      <div class="d-flex justify-content-around align-items-center" v-if="this.tableData[46] == '🤔' && this.tableData[48] == '⚠️'">
+    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 border" style="margin-bottom: 3%; background-color: #edf0f3;">
+      <div class="d-flex justify-content-around align-items-center" v-if="smileyMan == '🤔' && smileyDanger == '⚠️'">
         <div>
           <div>Heures 🤔</div>
           <div><b style="font-size: 20px">{{ this.tableData[44] }}</b> / {{ this.tableData[45] }}</div>
@@ -301,7 +301,8 @@ export default {
     dayWednesday: null,
     dayThursday: null,
     dayFriday: null,
-    storage: null,
+    smileyMan: null,
+    smileyDanger: null,
     days: {
       Monday: {
         amBegin: 'I',
@@ -465,6 +466,15 @@ export default {
       this.dayWednesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(2, 'd').format('DD'),
       this.dayThursday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(3, 'd').format('DD'),
       this.dayFriday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(4, 'd').format('DD')
+      if (this.tableData[46] == '🤔' && this.tableData[48] == '⚠️') {
+        this.smileyMan = this.tableData[46]
+        this.smileyDanger = this.tableData[48]
+      }
+      else
+      {
+        this.smileyMan = null
+        this.smileyDanger = null
+      }
       if(this.tableData[46] == '🤔') this.description = this.tableData[47]
     }
   },
