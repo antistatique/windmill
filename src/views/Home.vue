@@ -127,7 +127,8 @@
     </div>
 
     <div class="form-group col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-between">
-      <b-button v-b-modal.setLocalStorage class="btn btn-costum">Horaire habituel</b-button>
+      <b-button v-b-modal.setLocalStorage class="btn btn-costum" v-if="localAmBegin == null">Horaire habituel</b-button>
+      <button class="btn btn-costum" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
       <b-button v-b-modal.addHours class="btn btn-costum">+</b-button>
       <b-button v-b-modal.substractHours class="btn btn-costum">-</b-button>
       <button class="btn" style="background-color: #faddea" v-on:click="clear()"><BIconTrash style="color: #e30074"/></button>
