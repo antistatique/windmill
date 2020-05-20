@@ -1,11 +1,13 @@
 /* global gapi */
 /* eslint-disable */
+import * as moment from 'moment'
 
 export default {
   namespaced: true,
   state: {
     spreadsheetId: process.env.VUE_APP_SPREADSHEET_ID,
     filteredDataDashboard: null,
+    currentYear: moment().year(),
   },
   getters: {
     getDataDashboard: state => state.filteredDataDashboard,
@@ -16,9 +18,9 @@ export default {
     }
   },
   actions: {
-    getDashboardSheet({ state, commit }) {
-      var ranges = [ "résumé-2020!A1:M" ];
-      gapi.client.sheets.spreadsheets.values.get({
+    async getDashboardSheet({ state, commit }) {
+      var ranges = [ `résumé-${state.currentYear}!A1:M` ];
+      await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
