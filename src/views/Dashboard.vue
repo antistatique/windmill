@@ -103,78 +103,94 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment'
+	/* eslint-disable */
+	import { mapActions, mapGetters } from 'vuex';
+	import moment from 'moment'
+	import { BIconBoxArrowRight } from 'bootstrap-vue'
+	import ErrorPage from '../components/errorPage'
+	import router from '../router/index'
 
-export default {
-  name: 'dashboard',
-  data: () => ({
-		result: {
-			firstname: "",
-			diffValid: "",
-			offDay: "",
-			formationDay: "",
-			moneyFormation: "",
-			sickDay: "",
-			overtimeRecup: "",
-			percentageWork: "",
-			overtimeHours: "",
-			budgetOffDay: "",
-			soldeYearEarlier: "",
-			rowSheetYearEarlier: "",
-			takeDayCurrentYear: "",
-			localAmBegin : null,
-			localAmEnd : null,
-			localPmBegin : null,
-			localPmEnd : null,
+	export default {
+		name: 'dashboard',
+		components: {
+			ErrorPage,
+			BIconBoxArrowRight
 		},
-		currentYear: moment().year(),
-		yearEarlier: null
-	}),
-	beforeCreate() {
-		this.$store.dispatch('dashboard/getDashboardSheet').then(() => {
-      this.setVar()
-    })
-	},
-  methods: {
-		storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
-      localStorage.setItem('hoursPlanified', JSON.stringify({
-        amBegin: amBegin,
-        amEnd: amEnd,
-        pmBegin: pmBegin,
-        pmEnd: pmEnd,
-      }))
-    },
-    setVar() {
-			this.result.firstname = this.getDataDashboard[0]
-			this.result.diffValid = this.getDataDashboard[1]
-			this.result.offDay = this.getDataDashboard[2]
-			this.result.formationDay = this.getDataDashboard[3]
-			this.result.moneyFormation = this.getDataDashboard[4]
-			this.result.sickDay = this.getDataDashboard[5]
-			this.result.overtimeRecup = this.getDataDashboard[6]
-			this.result.percentageWork = this.getDataDashboard[7]
-			this.result.overtimeHours = this.getDataDashboard[8]
-			this.result.budgetOffDay = this.getDataDashboard[9]
-			this.result.soldeYearEarlier = this.getDataDashboard[10]
-			this.result.rowSheetYearEarlier = this.getDataDashboard[11]
-			this.result.takeDayCurrentYear = this.getDataDashboard[12]
+		data: () => ({
+			dataLoaded: null,
+			result: {
+				firstname: "",
+				diffValid: "",
+				offDay: "",
+				formationDay: "",
+				moneyFormation: "",
+				sickDay: "",
+				overtimeRecup: "",
+				percentageWork: "",
+				overtimeHours: "",
+				budgetOffDay: "",
+				soldeYearEarlier: "",
+				rowSheetYearEarlier: "",
+				takeDayCurrentYear: "",
+				localAmBegin : null,
+				localAmEnd : null,
+				localPmBegin : null,
+				localPmEnd : null,
+			},
+			currentYear: moment().year(),
+			yearEarlier: null
+		}),
+		beforeCreate() {
+			this.$store.dispatch('dashboard/getDashboardSheet').then(() => {
+				this.$store.getters['dashboard/getDataDashboard'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
+				this.setVar()
+			})
+		},
+		methods: {
+			storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
+				localStorage.setItem('hoursPlanified', JSON.stringify({
+					amBegin: amBegin,
+					amEnd: amEnd,
+					pmBegin: pmBegin,
+					pmEnd: pmEnd,
+				}))
+			},
+			setVar() {
+				this.result.firstname = this.getDataDashboard[0]
+				this.result.diffValid = this.getDataDashboard[1]
+				this.result.offDay = this.getDataDashboard[2]
+				this.result.formationDay = this.getDataDashboard[3]
+				this.result.moneyFormation = this.getDataDashboard[4]
+				this.result.sickDay = this.getDataDashboard[5]
+				this.result.overtimeRecup = this.getDataDashboard[6]
+				this.result.percentageWork = this.getDataDashboard[7]
+				this.result.overtimeHours = this.getDataDashboard[8]
+				this.result.budgetOffDay = this.getDataDashboard[9]
+				this.result.soldeYearEarlier = this.getDataDashboard[10]
+				this.result.rowSheetYearEarlier = this.getDataDashboard[11]
+				this.result.takeDayCurrentYear = this.getDataDashboard[12]
+			},
+			...mapActions('authentication', [
+				'signOut',
+			]),
+			logout() {
+				this.signOut();
+				router.push('/login')
+			}
+		},
+		computed: {
+			...mapGetters('dashboard', [
+				'getDataDashboard'
+			])
+		},
+		mounted() {
+			if(localStorage.getItem('hoursPlanified') != null) {
+				this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
+				this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
+				this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
+				this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
+			}
+			this.yearEarlier = moment(this.currentYear, 'YYYY').subtract(1, 'y').format('YYYY')
 		}
-	},
-  computed: {
-    ...mapGetters('dashboard', [
-      'getDataDashboard'
-    ])
-  },
-  mounted() {
-		if(localStorage.getItem('hoursPlanified') != null) {
-      this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
-      this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
-      this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
-      this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
-    }
-		this.yearEarlier = moment(this.currentYear, 'YYYY').subtract(1, 'y').format('YYYY')
-  }
-}
+	}
 </script>
