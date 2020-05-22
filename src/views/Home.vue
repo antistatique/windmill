@@ -1,38 +1,140 @@
 <template>
-   <div class="home">
-    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12">
-      <div class="d-flex justify-content-around" style="margin-top: 3%; margin-bottom: 3%">
-        <div>
-          <button class="btn" v-show="week > 1" v-on:click="changeWeek(-1)">
-            <BIconArrowLeft/>
-          </button>
-        </div>
-        <div>
-          <div>{{ monthYear }}</div>
-          <div>Semaine {{ week }}</div>
-        </div>
-        <div>
-          <button class="btn" v-show="week < 53" v-on:click="changeWeek(1)">
-            <BIconArrowRight/>
-          </button>
-        </div>
-      </div>
-    </div>
+  <div v-if="dataLoaded == false" class="home">
+		<ErrorPage/>
+  </div>
+  <div v-else class="home">
 
-    <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 border" style="margin-bottom: 3%; background-color: #edf0f3;">
-      <div class="d-flex justify-content-around align-items-center" v-if="smileyMan == '🤔' && smileyDanger == '⚠️'">
+    <div class="stamp-hours">
+
+      <!-- Navigations weeks -->
+      <div class="header-calendar">
+        <button class="btn" v-show="week > 1" v-on:click="changeWeek(-1)">
+          <BIconArrowLeft class="icon icon-arrow-left"/>
+        </button>
         <div>
-          <div>Heures 🤔</div>
-          <div><b style="font-size: 20px">{{ this.tableData[44] }}</b> / {{ this.tableData[45] }}</div>
+          <div class="month">{{ monthYear }}</div>
+          <div class="week">Semaine {{ week }}</div>
         </div>
+        <button class="btn" v-show="week < 53" v-on:click="changeWeek(1)">
+          <BIconArrowRight class="icon icon-arrow-right"/>
+        </button>
+      </div>
+
+      <!-- Justification hours -->
+      <div class="wrap-status">
         <div>
-          <b-button v-b-modal.modal-scoped class="btn-costum">Justifier les heures</b-button>
+          <span class="hours">Heures 🤔</span>
+          <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
+        </div>
+        <button v-b-modal.modal-scoped class="button button-primary" v-if="smileyMan == '🤔' && smileyDanger == '⚠️'">Justifier les heures</button>
+        <button v-b-modal.modal-scoped class="button button-primary" v-else>Modifier la justification</button>
+      </div>
+
+      <!-- Part days -->
+      <div class="calendar">
+        <div class="date" :class="this.currentDay == 'Monday' ? 'selected' : ''" v-on:click="changeDay('Monday')">
+          <span>{{ this.tableData[4] }}</span>
+          <span class="week">Lun</span>
+          <span class="day">{{ dayMonday }}</span>
+          <span class="time">{{ this.tableData[7] }}</span>
+        </div>
+        <div class="date" :class="this.currentDay == 'Tuesday' ? 'selected' : ''" v-on:click="changeDay('Tuesday')">
+          <span>{{ this.tableData[4+8] }}</span>
+          <span class="week">Mar</span>
+          <span class="day">{{ dayTuesday }}</span>
+          <span class="time">{{ this.tableData[7+8] }}</span>
+        </div>
+        <div class="date" :class="this.currentDay == 'Wednesday' ? 'selected' : ''" v-on:click="changeDay('Wednesday')">
+          <span>{{ this.tableData[4+16] }}</span>
+          <span class="week">Mer</span>
+          <span class="day">{{ dayWednesday }}</span>
+          <span class="time extra-hours">{{ this.tableData[7+16] }}</span>
+        </div>
+        <div class="date" :class="this.currentDay == 'Thursday' ? 'selected' : ''" v-on:click="changeDay('Thursday')">
+          <span>{{ this.tableData[4+24] }}</span>
+          <span class="week">Jeu</span>
+          <span class="day">{{ dayThursday }}</span>
+          <span class="time">{{ this.tableData[7+24] }}</span>
+        </div>
+        <div class="date" :class="this.currentDay == 'Friday' ? 'selected' : ''" v-on:click="changeDay('Friday')">
+          <span>{{ this.tableData[4+32] }}</span>
+          <span class="week">Ven</span>
+          <span class="day">{{ dayFriday }}</span>
+          <span class="time">{{ this.tableData[7+32] }}</span>
         </div>
       </div>
-      <!-- I put the padding-bottom to 6px, like this there is not difference between the two blocks -->
-      <div class="d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 6px" v-else>
-        <b-button v-b-modal.modal-scoped class="btn-costum">Modifier la justification</b-button>
-      </div>  
+
+      <!-- Part hours -->
+      <table class="table-data entry-hours">
+        <thead>
+          <tr>
+            <th colspan="2">Matin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Début</td>
+            <td>
+              <button class="button button-secondary" v-on:click="sendAmBegin()" :class="amBegin == '' ? 'd-inline' : 'd-none'">
+                <BIconClock class="icon icon-chrono"/>
+              </button>
+              <input type="time" class="form-control-custom" v-model="amBegin" @blur="sendAmBegin(amBegin)" id="amBegin">
+            </td>
+          </tr>
+          <tr>
+            <td>Fin</td>
+            <td>
+              <button class="button button-secondary" v-on:click="sendAmEnd()" :class="amBegin != '' && amEnd == '' ? 'd-inline' : 'd-none'">
+                <BIconClock style="icon icon-chrono"/>
+              </button>
+              <input type="time" class="form-control-custom" v-model="amEnd" @blur="sendAmEnd(amEnd)" id="amEnd">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Part hours -->  
+      <table class="table-data entry-hours">
+        <thead>
+          <tr>
+            <th colspan="2">Après-midi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Début</td>
+            <td>
+              <button class="button button-secondary" v-on:click="sendPmBegin()" :class="amBegin != '' && amEnd != '' && pmBegin == '' ? 'd-inline' : 'd-none'">
+                <BIconClock class="icon icon-chrono"/>
+              </button> 
+              <input type="time" class="form-control-custom" v-model="pmBegin" @blur="sendPmBegin(pmBegin)" id="pmBegin">
+            </td>
+          </tr>
+          <tr>
+            <td>Fin</td>
+            <td>
+              <button class="button button-secondary" v-on:click="sendPmEnd()" :class="amBegin != '' && amEnd != '' && pmBegin != ''&& pmEnd == '' ? 'd-inline' : 'd-none'">
+                <BIconClock class="icon icon-chrono"/>
+              </button>  
+              <input type="time" class="form-control-custom" v-model="pmEnd" @blur="sendPmEnd(pmEnd)" id="pmEnd">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Buttons control -->
+      <div class="buttons-row">
+        <button v-b-modal.setLocalStorage class="button button-primary" v-if="localAmBegin == null">Horaire habituel</button>
+        <button class="button button-primary" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
+        <button v-b-modal.addHours class="button button-primary">
+          +
+        </button>
+        <button v-b-modal.substractHours class="button button-primary">
+          -
+        </button>
+        <button class="button button-secondary" v-on:click="clear()"><BIconTrash class="icon icon-trash"/></button>
+      </div>
+
     </div>
 
     <b-modal id="modal-scoped" class="modal">
@@ -54,86 +156,6 @@
       </template>
     </b-modal>
 
-    <div class="d-flex justify-content-center justify-content-around">
-      <button class="btn" v-on:click="changeDay('Monday')">
-        {{ this.tableData[4] }} <br>
-        Lun <br>
-        {{ dayMonday }} <br>
-        {{ this.tableData[7] }}
-      </button>
-      <button class="btn" v-on:click="changeDay('Tuesday')">
-        {{ this.tableData[4+8] }} <br>
-        Mar <br>
-        {{ dayTuesday }} <br>
-        {{ this.tableData[7+8] }}
-      </button>
-      <button class="btn" v-on:click="changeDay('Wednesday')">
-        {{ this.tableData[4+16] }} <br>
-        Mer <br>
-        {{ dayWednesday }} <br>
-        {{ this.tableData[7+16] }}
-      </button>
-      <button class="btn" v-on:click="changeDay('Thursday')">
-        {{ this.tableData[4+24] }} <br>
-        Jeu <br>
-        {{ dayThursday }} <br>
-        {{ this.tableData[7+24] }}
-      </button>
-      <button class="btn" v-on:click="changeDay('Friday')">
-        {{ this.tableData[4+32] }} <br>
-        Ven <br>
-        {{ dayFriday }} <br>
-        {{ this.tableData[7+32] }}
-      </button>
-    </div>
-
-    <div style="margin-top: 3%;">
-      <div class="form-row">
-        <div class="col-md-12">
-          <label class="col-form-label d-flex justify-content-start border" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
-          
-          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-            <label for="amBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
-            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
-              <input type="time" class="form-control" v-model="amBegin" style="text-align: center" @blur="sendAmBegin(amBegin)" id="amBegin">
-            </div>
-          </div>
-          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-            <label for="amEnd" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Fin</label>
-            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
-              <input type="time" class="form-control absolute-center" style="text-align: center" v-model="amEnd" @blur="sendAmEnd(amEnd)" id="amEnd">
-            </div>
-          </div>
-
-        </div>
-        <div class="col-md-12">
-          <label class="col-form-label d-flex justify-content-start border" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
-          
-          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-            <label for="pmBegin" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Début</label>
-            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
-              <input type="time" class="form-control" style="text-align: center" v-model="pmBegin" @blur="sendPmBegin(pmBegin)" id="pmBegin">
-            </div>
-          </div>
-          <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-            <label for="amEnd" class="col-7 col-sm-9 col-md-9 col-md-9 col-lg-9 col-xl-9 col-form-label d-flex justify-content-start">Fin</label>
-            <div class="col-5 col-sm-3 col-md-3 col-md-3 col-lg-3 col-xl-3">
-              <input type="time" class="form-control" style="text-align: center" v-model="pmEnd" @blur="sendPmEnd(pmEnd)" id="pmEnd">
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-between">
-      <b-button v-b-modal.setLocalStorage class="btn btn-costum" v-if="localAmBegin == null">Horaire habituel</b-button>
-      <button class="btn btn-costum" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
-      <b-button v-b-modal.addHours class="btn btn-costum">+</b-button>
-      <b-button v-b-modal.substractHours class="btn btn-costum">-</b-button>
-      <button class="btn" style="background-color: #faddea" v-on:click="clear()"><BIconTrash style="color: #e30074"/></button>
-    </div>
-
     <b-modal id="setLocalStorage" class="modal">
       <template v-slot:modal-header="{ cancel }">
         <h5>Définition de l'horaire habituel</h5>
@@ -144,6 +166,7 @@
 
       <template v-slot:default>
         <div style="margin-top: 3%;">
+					<p>Ce modal sert uniquement à sauvegarder l'horaire choisi</p>
           <div class="form-row">
             <div class="col-md-12">
               <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
@@ -274,14 +297,17 @@
 /* eslint-disable */
 import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment'
-import { BIconArrowLeft, BIconArrowRight, BIconTrash } from 'bootstrap-vue'
+import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue'
+import ErrorPage from '../components/errorPage'
 
 export default {
   name: 'Home',
   components: {
     BIconArrowLeft, 
     BIconArrowRight,
-    BIconTrash
+    BIconTrash,
+    BIconClock,
+    ErrorPage
   },
   data: () => ({
     amBegin : null,
@@ -304,6 +330,7 @@ export default {
     dayFriday: null,
     smileyMan: null,
     smileyDanger: null,
+    dataLoaded: null,
     days: {
       Monday: {
         amBegin: 'I',
@@ -359,6 +386,7 @@ export default {
   }),
   beforeCreate() {
     this.$store.dispatch('authorization/getSheet').then(() => {
+      this.$store.getters['authorization/tableData'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
       this.setVar()
     })
   },
@@ -433,32 +461,40 @@ export default {
       })
     },
     sendAmBegin(amBegin){
+      amBegin == undefined ? amBegin = moment().format('HH:mm') : null
       let payload = {
         'value': amBegin,
         'ranges': this.days[this.currentDay].amBegin + this.lines
       }
       this.updateSheet(payload)
+      this.amBegin = amBegin
     },
     sendAmEnd(amEnd){
+      amEnd == undefined ? amEnd = moment().format('HH:mm') : null
       let payload = {
         'value': amEnd,
         'ranges': this.days[this.currentDay].amEnd + this.lines
       }
       this.updateSheet(payload)
+      this.amEnd = amEnd
     },
     sendPmBegin(pmBegin){
+      pmBegin == undefined ? pmBegin = moment().format('HH:mm') : null
       let payload = {
         'value': pmBegin,
         'ranges': this.days[this.currentDay].pmBegin + this.lines
       }
       this.updateSheet(payload)
+      this.pmBegin = pmBegin
     },
     sendPmEnd(pmEnd){
+      pmEnd == undefined ? pmEnd = moment().format('HH:mm') : null
       let payload = {
         'value': pmEnd,
         'ranges': this.days[this.currentDay].pmEnd + this.lines
       }
       this.updateSheet(payload)
+      this.pmEnd = pmEnd
     },
     setVar() {
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
@@ -476,8 +512,7 @@ export default {
         this.smileyMan = this.tableData[46]
         this.smileyDanger = this.tableData[48]
       }
-      else
-      {
+      else {
         this.smileyMan = null
         this.smileyDanger = null
       }
@@ -490,7 +525,7 @@ export default {
     ])
   },
   mounted() {
-    if(localStorage.getItem('hoursPlanified') != null) {
+    if(localStorage.getItem('hoursPlanified') != null){
       this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
       this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
       this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
@@ -517,8 +552,275 @@ export default {
     color: white;
     border-color: #edf0f3;
   }
-
   .border {
     border-radius: 10px;
   }
+  .stamp-hours {
+    margin: 1rem;
+  }
+  .header-calendar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .wrap-status {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: .5rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    background-color: #eff4fa;
+  }
+  .calendar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+  .table-data {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    border-spacing: 2px;
+    border-color: grey;
+  }
+  .buttons-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .header-calendar .icon {
+    color: #c4cad0;
+  }
+  .icon, .icon svg {
+    width: 1em;
+    height: 1em;
+  }
+  .icon {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-item-align: center;
+    align-self: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    top: .11em;
+    font-size: 1rem;
+    color: inherit;
+  }
+  .header-calendar .month {
+    font-size: .625rem;
+    font-weight: 400;
+    text-align: center;
+  }
+  .header-calendar .week {
+    font-size: .875rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .header-calendar .icon {
+    color: #c4cad0;
+  }
+  .icon, .icon svg {
+    width: 1em;
+    height: 1em;
+  }
+  .icon {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-item-align: center;
+    align-self: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+    top: .11em;
+    font-size: 1rem;
+    color: inherit;
+  }
+  .header-calendar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .stamp-hours {
+    margin: 1rem;
+  }
+  .wrap-status .hours {
+    font-size: .75rem;
+  }
+  .wrap-status .denominator {
+    font-weight: 600;
+  }
+  .wrap-status .numerator {
+    font-size: 1.3125rem;
+    font-weight: 600;
+  }
+  .button.button-primary {
+    padding: 1rem;
+    background-color: #e30074;
+    font-size: 1rem;
+    color: #fff;
+    -webkit-transition: background .2s;
+    transition: background .2s;
+  }
+  .button {
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button {
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    background-color: buttonface;
+    box-sizing: border-box;
+    margin: 0em;
+    font: 400 11px system-ui;
+    padding: 1px 7px 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+    border-image: initial;
+  }
+  .calendar .date {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+  .date {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .5rem;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    font-weight: 400;
+  }
+  .date .week {
+    color: #8a9198;
+  }
+  .date .day {
+    color: #000032;
+  }
+  .date .time {
+    font-size: .8rem;
+  }
+  .calendar .date {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+  .date.selected {
+    border: 1px solid #e30074;
+  }
+  .entry-hours thead th {
+    font-size: .875rem;
+  }
+  .table-data thead th {
+    margin-bottom: .5rem;
+    border-radius: 4px;
+    padding: .125rem .5rem;
+    line-height: 1.5rem;
+    color: #000032;
+    background-color: #edf0f3;
+    text-align: left;
+  }
+  .table-data tbody tr {
+    border-bottom: 1px solid #dbe1e7;
+  }
+  .entry-hours tbody td {
+    padding: 1rem .5rem;
+  }
+  .table-data tbody td:last-of-type {
+    text-align: right;
+  }
+  .entry-hours tbody td {
+    padding: 1rem .5rem;
+  }
+  .entry-hours tbody tr:last-of-type {
+    border-bottom: 0;
+  }
+  .table-data tbody tr {
+    border-bottom: 1px solid #dbe1e7;
+  }
+  .buttons-row button:first-child {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
+  .buttons-row button {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 3.15rem;
+    flex: 0 0 3.15rem;
+    margin-right: .5rem;
+  }
+  .button {
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .buttons-row button:last-of-type {
+    margin-right: 0;
+  }
+  .entry-hours .button.button-secondary {
+    padding: .3125rem;
+    margin-right: 1.5rem;
+  }
+  .button.button-secondary {
+    padding: 1rem;
+    color: #e30074;
+    background-color: #faddea;
+  }
+  .form-control-custom {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 70%;
+    text-align: center;
+    color: #495057;
+    padding: 0.375rem 0.75rem;
+  }
+
 </style>
