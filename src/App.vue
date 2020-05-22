@@ -1,14 +1,12 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/home">Home</router-link> 
-    </div>
+  <div id="app" class="container-fluid">
+    <Navbar/>
     <router-view/>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 import Navbar from './components/navbar'
 export default {
   components: {
