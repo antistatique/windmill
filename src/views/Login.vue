@@ -3,7 +3,9 @@
 
     <div class="centered">
       <h1 style="padding-bottom: 40px;">Windmill</h1>
-      <p><button v-on:click="loggedIn ? logout() : login()" class="btn btn-primary">{{loggedIn ? 'Déconnexion' : 'Connexion avec Google'}}</button></p>
+
+      <p><button v-on:click="loggedIn ? logout() : login()" class="button button-primary">{{loggedIn ? 'Déconnexion' : 'Connexion avec Google'}}</button></p>
+      <!-- <p><button v-on:click="loggedIn ? logout() : login()" class="btn btn-primary">{{loggedIn ? 'Déconnexion' : 'Connexion avec Google'}}</button></p> -->
       <p>Utilisez votre compte Google Antistatique</p>
     </div>
 
