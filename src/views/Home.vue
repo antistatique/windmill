@@ -26,8 +26,7 @@
           <span class="hours">Heures 🤔</span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
-        <button v-b-modal.modal-scoped class="button button-primary" v-if="smileyMan == '🤔' && smileyDanger == '⚠️'">Justifier les heures</button>
-        <button v-b-modal.modal-scoped class="button button-primary" v-else>Modifier la justification</button>
+        <button v-b-modal.modal-scoped class="button button-primary">Justifier les heures</button>
       </div>
 
       <!-- Part days -->
@@ -221,33 +220,33 @@
         </button>
       </template>
 
-      <template v-slot:default="{ ok }">
+      <template v-slot:default="{ ok }"> 
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(0, 15); ok()">15'</button>
-          <button class="btn" v-on:click="addHour(0, 30); ok()">30'</button>
-          <button class="btn" v-on:click="addHour(0, 45); ok()">45'</button>
+          <button class="button button-number" v-on:click="addHour(0, 15); ok()">15'</button>
+          <button class="button button-number" v-on:click="addHour(0, 30); ok()">30'</button>
+          <button class="button button-number" v-on:click="addHour(0, 45); ok()">45'</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(1, 0); ok()">1h</button>
-          <button class="btn" v-on:click="addHour(1, 15); ok()">1h15</button>
-          <button class="btn" v-on:click="addHour(1, 30); ok()">1h30</button>
+          <button class="button button-number" v-on:click="addHour(1, 0); ok()">1h</button>
+          <button class="button button-number" v-on:click="addHour(1, 15); ok()">1h15</button>
+          <button class="button button-number" v-on:click="addHour(1, 30); ok()">1h30</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(1, 45); ok()">1h45</button>
-          <button class="btn" v-on:click="addHour(2, 0); ok()">2h</button>
-          <button class="btn" v-on:click="addHour(2, 15); ok()">2h15</button>
+          <button class="button button-number" v-on:click="addHour(1, 45); ok()">1h45</button>
+          <button class="button button-number" v-on:click="addHour(2, 0); ok()">2h</button>
+          <button class="button button-number" v-on:click="addHour(2, 15); ok()">2h15</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="addHour(2, 30); ok()">2h30</button>
-          <button class="btn" v-on:click="addHour(2, 45); ok()">2h45</button>
-          <button class="btn" v-on:click="addHour(3, 0); ok()">3h</button>
+          <button class="button button-number" v-on:click="addHour(2, 30); ok()">2h30</button>
+          <button class="button button-number" v-on:click="addHour(2, 45); ok()">2h45</button>
+          <button class="button button-number" v-on:click="addHour(3, 0); ok()">3h</button>
         </div>
       </template>
 
       <template v-slot:modal-footer="{ close }">
-        <b-button size="sm" class="btn-costum" @click="close();">
+        <button class="button button-validation" @click="close();">
           Fermer
-        </b-button>
+        </button>
       </template>
     </b-modal>
 
@@ -261,31 +260,31 @@
 
       <template v-slot:default="{ ok }">
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(0, 15); ok()">15'</button>
-          <button class="btn" v-on:click="subtractHour(0, 30); ok()">30'</button>
-          <button class="btn" v-on:click="subtractHour(0, 45); ok()">45'</button>
+          <button class="button button-number" v-on:click="subtractHour(0, 15); ok()">15'</button>
+          <button class="button button-number" v-on:click="subtractHour(0, 30); ok()">30'</button>
+          <button class="button button-number" v-on:click="subtractHour(0, 45); ok()">45'</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(1, 0); ok()">1h</button>
-          <button class="btn" v-on:click="subtractHour(1, 15); ok()">1h15</button>
-          <button class="btn" v-on:click="subtractHour(1, 30); ok()">1h30</button>
+          <button class="button button-number" v-on:click="subtractHour(1, 0); ok()">1h</button>
+          <button class="button button-number" v-on:click="subtractHour(1, 15); ok()">1h15</button>
+          <button class="button button-number" v-on:click="subtractHour(1, 30); ok()">1h30</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(1, 45); ok()">1h45</button>
-          <button class="btn" v-on:click="subtractHour(2, 0); ok()">2h</button>
-          <button class="btn" v-on:click="subtractHour(2, 15); ok()">2h15</button>
+          <button class="button button-number" v-on:click="subtractHour(1, 45); ok()">1h45</button>
+          <button class="button button-number" v-on:click="subtractHour(2, 0); ok()">2h</button>
+          <button class="button button-number" v-on:click="subtractHour(2, 15); ok()">2h15</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="btn" v-on:click="subtractHour(2, 30); ok()">2h30</button>
-          <button class="btn" v-on:click="subtractHour(2, 45); ok()">2h45</button>
-          <button class="btn" v-on:click="subtractHour(3, 0); ok()">3h</button>
+          <button class="button button-number" v-on:click="subtractHour(2, 30); ok()">2h30</button>
+          <button class="button button-number" v-on:click="subtractHour(2, 45); ok()">2h45</button>
+          <button class="button button-number" v-on:click="subtractHour(3, 0); ok()">3h</button>
         </div>
       </template>
 
       <template v-slot:modal-footer="{ close }">
-        <b-button size="sm" class="btn-costum" @click="close();">
+        <button class="button button-validation" @click="close();">
           Fermer
-        </b-button>
+        </button>
       </template>
     </b-modal>
 
@@ -516,7 +515,7 @@ export default {
         this.smileyMan = null
         this.smileyDanger = null
       }
-      if(this.tableData[46] == '🤔') this.description = this.tableData[47]
+      if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     }
   },
   computed: {
@@ -538,289 +537,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .btn.btn-costum {
-    font-size: 16px;
-    background-color: #e30074;
-    color: white;
-    border-color: #edf0f3;
-  }
-  .btn.btn-costum:hover {
-    font-size: 16px;
-    background-color: #e30074;
-    color: white;
-    border-color: #edf0f3;
-  }
-  .border {
-    border-radius: 10px;
-  }
-  .stamp-hours {
-    margin: 1rem;
-  }
-  .header-calendar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .wrap-status {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: .5rem;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-    background-color: #eff4fa;
-  }
-  .calendar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin-bottom: 1.5rem;
-  }
-  .table-data {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  table {
-    display: table;
-    border-collapse: separate;
-    box-sizing: border-box;
-    border-spacing: 2px;
-    border-color: grey;
-  }
-  .buttons-row {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-  }
-  .header-calendar .icon {
-    color: #c4cad0;
-  }
-  .icon, .icon svg {
-    width: 1em;
-    height: 1em;
-  }
-  .icon {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -ms-flex-item-align: center;
-    align-self: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    position: relative;
-    top: .11em;
-    font-size: 1rem;
-    color: inherit;
-  }
-  .header-calendar .month {
-    font-size: .625rem;
-    font-weight: 400;
-    text-align: center;
-  }
-  .header-calendar .week {
-    font-size: .875rem;
-    font-weight: 600;
-    text-align: center;
-  }
-  .header-calendar .icon {
-    color: #c4cad0;
-  }
-  .icon, .icon svg {
-    width: 1em;
-    height: 1em;
-  }
-  .icon {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -ms-flex-item-align: center;
-    align-self: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    position: relative;
-    top: .11em;
-    font-size: 1rem;
-    color: inherit;
-  }
-  .header-calendar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  .stamp-hours {
-    margin: 1rem;
-  }
-  .wrap-status .hours {
-    font-size: .75rem;
-  }
-  .wrap-status .denominator {
-    font-weight: 600;
-  }
-  .wrap-status .numerator {
-    font-size: 1.3125rem;
-    font-weight: 600;
-  }
-  .button.button-primary {
-    padding: 1rem;
-    background-color: #e30074;
-    font-size: 1rem;
-    color: #fff;
-    -webkit-transition: background .2s;
-    transition: background .2s;
-  }
-  .button {
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  button {
-    text-rendering: auto;
-    color: buttontext;
-    letter-spacing: normal;
-    word-spacing: normal;
-    text-transform: none;
-    text-indent: 0px;
-    text-shadow: none;
-    display: inline-block;
-    text-align: center;
-    align-items: flex-start;
-    cursor: default;
-    background-color: buttonface;
-    box-sizing: border-box;
-    margin: 0em;
-    font: 400 11px system-ui;
-    padding: 1px 7px 2px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
-    border-image: initial;
-  }
-  .calendar .date {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-  }
-  .date {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: .5rem;
-    border-radius: 3px;
-    border: 1px solid transparent;
-    font-weight: 400;
-  }
-  .date .week {
-    color: #8a9198;
-  }
-  .date .day {
-    color: #000032;
-  }
-  .date .time {
-    font-size: .8rem;
-  }
-  .calendar .date {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-  }
-  .date.selected {
-    border: 1px solid #e30074;
-  }
-  .entry-hours thead th {
-    font-size: .875rem;
-  }
-  .table-data thead th {
-    margin-bottom: .5rem;
-    border-radius: 4px;
-    padding: .125rem .5rem;
-    line-height: 1.5rem;
-    color: #000032;
-    background-color: #edf0f3;
-    text-align: left;
-  }
-  .table-data tbody tr {
-    border-bottom: 1px solid #dbe1e7;
-  }
-  .entry-hours tbody td {
-    padding: 1rem .5rem;
-  }
-  .table-data tbody td:last-of-type {
-    text-align: right;
-  }
-  .entry-hours tbody td {
-    padding: 1rem .5rem;
-  }
-  .entry-hours tbody tr:last-of-type {
-    border-bottom: 0;
-  }
-  .table-data tbody tr {
-    border-bottom: 1px solid #dbe1e7;
-  }
-  .buttons-row button:first-child {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-  }
-  .buttons-row button {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 3.15rem;
-    flex: 0 0 3.15rem;
-    margin-right: .5rem;
-  }
-  .button {
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .buttons-row button:last-of-type {
-    margin-right: 0;
-  }
-  .entry-hours .button.button-secondary {
-    padding: .3125rem;
-    margin-right: 1.5rem;
-  }
-  .button.button-secondary {
-    padding: 1rem;
-    color: #e30074;
-    background-color: #faddea;
-  }
-  .form-control-custom {
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    width: 70%;
-    text-align: center;
-    color: #495057;
-    padding: 0.375rem 0.75rem;
-  }
-
-</style>
