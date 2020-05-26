@@ -7,94 +7,128 @@ export default {
   namespaced: true,
   state: {
     signedIn: false,
+    profile: null,
     loading: false,
     clientId: process.env.VUE_APP_CLIENT_ID,
-    scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/userinfo.email",
-    profile: null
+    scope: "profile https://www.googleapis.com/auth/spreadsheets",
+    GoogleAuth: false
   },
   getters: {
     loggedIn: state => state.signedIn,
-    profile: state => state.profile
+    isLoading: state => state.loading,
+    profileGet: state => state.profile
   },
   mutations: {
     signIn(state, profile) {
       state.signedIn = true;
       if (profile) {
-        state.profile = profile;
+        state.profile = {
+          'firstname' : Object.values(profile)[2],
+          'lastname' : Object.values(profile)[3],
+          'email' : Object.values(profile)[5]
+        };
       }
+    },
+    loading(state, loadingState) {
+      state.logging = loadingState;
     },
     signOut(state) {
       state.signedIn = false;
+      state.loading = false;
       state.profile = null;
+    },
+    getAuthInstance(state, authInstance) {
+      if (!state.GoogleAuth) {
+        state.GoogleAuth = authInstance;
+      }
     }
   },
   actions: {
-    initGapi({ commit, state }) {
-      return new Promise((resolve, reject) => {
+    initGapi({ state, commit }) {
+      return new Promise(resolve => {
         gapi.load('auth2', {
           callback: () => {
             gapi.auth2.init({
-              client_id: state.clientId,
-              discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
-              scope: state.scope,
+                client_id: state.clientId,
+                discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
+                scope: state.scope
             }).then(() => {
               gapi.client
                 .load(
                   "https://sheets.googleapis.com/$discovery/rest?version=v4"
                 )
                 .then(() => {
+                  commit("getAuthInstance", gapi.auth2.getAuthInstance());
                   resolve();
                 });
             });
           }
         });
-      })
+      });
+    },
+    assignUser({ commit, state }, userData) {
+      let user = state.GoogleAuth.currentUser.get();
+      if (userData) {
+        user = userData;
+      }
+      if (user.getBasicProfile()) {
+        return commit("signIn", user.getBasicProfile());
+      }
     },
     isSignedIn({ dispatch, commit, state }) {
       return new Promise((resolve, reject) => {
-        dispatch('initGapi').then(() => {
-          var currentUser = null;
-          try { currentUser = gapi.auth2.getAuthInstance().isSignedIn.get(); }
-          catch (e) { resolve(false); }
-  
-          // not signed in - delete persisted user
-          if (!currentUser) {
-            commit('signOut');
-            resolve(false);
+        dispatch("initGapi").then(() => {
+          commit("getAuthInstance", gapi.auth2.getAuthInstance());
+          try {
+            if (state.GoogleAuth.isSignedIn.get() && state.profile) {
+              dispatch("assignUser").then(() => {
+                commit("signIn");
+              });
+            }
+            resolve(state.GoogleAuth.isSignedIn.get() && state.profile);
+          } catch (e) {
+            console.log(e);
+            reject(e);
           }
-          // persisted user id same with signed in google user's id
-          // if (state.profile && state.profile.google_id === currentUser.getId()) {
-          if (currentUser) {
-            commit('signIn');
-            resolve(true);
-          }
-          // persisted user id different with signed in google user's id
-          else {
-            dispatch('signOut').then(() => {
-              resolve(false);
-            })
-          }
-        })
-      })
-    },    
-    signIn({ dispatch, commit }) {
-      console.log('signing in...');
-      dispatch('initGapi').then(() => {
-        gapi.auth2.getAuthInstance().signIn().then((user) => {
-          commit('signIn', user.Pt)
-          router.push('/home')
-          // dispatch('authorization/getSheet', null, {root: true})
-          // dispatch('dashboard/getDashboardSheet', null, {root: true})
-        })
+        });
+      });
+    }, 
+    signIn({ dispatch, state }) {
+      console.log("signing in...");
+      return new Promise((resolve, reject) => {
+        dispatch("initGapi").then(async () => {
+          await state.GoogleAuth.signIn({scope: "profile email"}).then(response => {
+            if (response) {
+              dispatch("assignUser", response).then(() => {
+                router.push('/home')
+                resolve(true);
+              });
+            } else {
+              reject();
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            dispatch("signOut").then(() => {
+              reject();
+            });
+          });
+        });
       });
     },
-    signOut({ dispatch, commit }) {
-      console.log('signing out...');
-      dispatch('initGapi').then(() => {
-        gapi.auth2.getAuthInstance().signOut().then(() => {
-          commit('signOut');
-        })
-      })
-    },
+    signOut({ commit }) {
+      console.log("signing out...");
+      return new Promise(resolve => {
+        if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance()) {
+          gapi.auth2.getAuthInstance().signOut().then(() => {
+            commit("signOut");
+            resolve();
+          });
+        } else {
+          commit("signOut");
+          resolve();
+        }
+      });
+    }
   }
 };
