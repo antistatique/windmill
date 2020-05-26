@@ -1,6 +1,7 @@
 /* global gapi */
 /* eslint-disable */
 import * as moment from 'moment'
+import store from './index'
 
 export default {
   namespaced: true,
@@ -8,7 +9,6 @@ export default {
     spreadsheetId: process.env.VUE_APP_SPREADSHEET_ID,
     mainTableData: null,
     dataFiltered: null,
-    loading: false,
     currentYear: moment().year(),
     week: moment().isoWeek()
   },
@@ -23,9 +23,6 @@ export default {
       state.dataFiltered = payload;
       state.redirect = true
     },
-    loading(state, loadingState) {
-      state.logging = loadingState;
-    },
   },
   actions: {
     async getSheet({ state, commit }) {
@@ -38,7 +35,7 @@ export default {
         var array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
-            if (element[3] == 'arthur@antistatique.net') {
+            if (element[3] == store.state['authentication'].profile.email) {
               // index + 1 give the right line in the spreadsheet
               element.push((index+1))
               array.push(element)
