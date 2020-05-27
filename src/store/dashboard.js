@@ -1,6 +1,7 @@
 /* global gapi */
 /* eslint-disable */
 import * as moment from 'moment'
+import store from './index'
 
 export default {
   namespaced: true,
@@ -24,7 +25,6 @@ export default {
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
-				console.log(response.result)
         var array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
@@ -32,7 +32,7 @@ export default {
           }
         })
         array.find(element => {
-					if (element[0] == 'Guillaume') {
+					if (element[0] == store.state['authentication'].profile.firstname) {
 						commit('assignDashboardData', element);
 						return true 
 					}
