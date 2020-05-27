@@ -206,9 +206,9 @@
       </template>
 
       <template v-slot:modal-footer="{ ok }">
-        <b-button size="sm" class="btn-costum" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd); ok();">
+        <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd); ok();">
           Enregistrer
-        </b-button>
+        </button>
       </template>
     </b-modal>
 
