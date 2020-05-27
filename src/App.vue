@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app">
     <Navbar/>
     <router-view/>
   </div>
@@ -260,6 +260,10 @@ export default {
     text-align: center;
     color: #495057;
     padding: 0.375rem 0.75rem;
+  }
+  .form-control {
+    width: 70% !important;
+    text-align: center;
   }
   .button.button-number {
     padding-bottom: .5rem;
