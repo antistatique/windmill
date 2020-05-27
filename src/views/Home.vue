@@ -391,27 +391,30 @@ export default {
   },
   methods: {
     storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
-      localStorage.setItem('hoursPlanified', JSON.stringify({
-        amBegin: amBegin,
-        amEnd: amEnd,
-        pmBegin: pmBegin,
-        pmEnd: pmEnd,
-      }))
-
-      let payload = {
-        'value': {
-          amBegin,
-          amEnd,
-          pmBegin,
-          pmEnd,
-        },
-        'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+      if(amBegin != '' && amEnd != '' && pmBegin != '' && pmEnd != '') {
+        localStorage.setItem('hoursPlanified', JSON.stringify({
+          amBegin: amBegin,
+          amEnd: amEnd,
+          pmBegin: pmBegin,
+          pmEnd: pmEnd,
+        }))
+  
+        let payload = {
+          'value': {
+            amBegin,
+            amEnd,
+            pmBegin,
+            pmEnd,
+          },
+          'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+        }
+        
+        this.batchUpdateSheet(payload)
+        this.amBegin = amBegin,
+        this.amEnd = amEnd,
+        this.pmBegin = pmBegin,
+        this.pmEnd = pmEnd
       }
-      this.batchUpdateSheet(payload)
-      this.amBegin = amBegin,
-      this.amEnd = amEnd,
-      this.pmBegin = pmBegin,
-      this.pmEnd = pmEnd
     },
     ...mapActions('authorization', [
       'travelWeek',
