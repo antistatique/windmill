@@ -37,31 +37,31 @@
       <!-- Part days -->
       <div class="calendar">
         <div class="date" :class="this.currentDay == 'Monday' ? 'selected' : ''" v-on:click="changeDay('Monday')">
-          <span>{{ this.tableData[4] }}</span>
+          <span v-b-tooltip.hover :title="days.Monday.tooltip">{{ this.tableData[4] }}</span>
           <span class="week">Lun</span>
           <span class="day">{{ dayMonday }}</span>
           <span class="time">{{ this.tableData[7] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Tuesday' ? 'selected' : ''" v-on:click="changeDay('Tuesday')">
-          <span>{{ this.tableData[4+8] }}</span>
+          <span v-b-tooltip.hover :title="days.Tuesday.tooltip">{{ this.tableData[4+8] }}</span>
           <span class="week">Mar</span>
           <span class="day">{{ dayTuesday }}</span>
           <span class="time">{{ this.tableData[7+8] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Wednesday' ? 'selected' : ''" v-on:click="changeDay('Wednesday')">
-          <span>{{ this.tableData[4+16] }}</span>
+          <span v-b-tooltip.hover :title="days.Wednesday.tooltip">{{ this.tableData[4+16] }}</span>
           <span class="week">Mer</span>
           <span class="day">{{ dayWednesday }}</span>
           <span class="time extra-hours">{{ this.tableData[7+16] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Thursday' ? 'selected' : ''" v-on:click="changeDay('Thursday')">
-          <span>{{ this.tableData[4+24] }}</span>
+          <span v-b-tooltip.hover :title="days.Thursday.tooltip">{{ this.tableData[4+24] }}</span>
           <span class="week">Jeu</span>
           <span class="day">{{ dayThursday }}</span>
           <span class="time">{{ this.tableData[7+24] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Friday' ? 'selected' : ''" v-on:click="changeDay('Friday')">
-          <span>{{ this.tableData[4+32] }}</span>
+          <span v-b-tooltip.hover :title="days.Friday.tooltip">{{ this.tableData[4+32] }}</span>
           <span class="week">Ven</span>
           <span class="day">{{ dayFriday }}</span>
           <span class="time">{{ this.tableData[7+32] }}</span>
@@ -133,7 +133,6 @@
 
       <!-- Buttons control -->
       <div class="buttons-row">
-        <button class="button button-primary" @click="today()">Aujourd'hui</button>
         <button v-b-modal.setLocalStorage class="button button-primary" v-if="localAmBegin == null">Horaire habituel</button>
         <button class="button button-primary" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
         <button v-b-modal.addHours class="button button-primary">
@@ -359,6 +358,7 @@ export default {
         pmBeginIndex: 10,
         pmEnd: 'L',
         pmEndIndex: 11,
+        tooltip: null
       },
       Tuesday: {
         amBegin: 'Q',
@@ -368,7 +368,8 @@ export default {
         pmBegin: 'S',
         pmBeginIndex: (10+8),
         pmEnd: 'T',
-        pmEndIndex: (11+8)
+        pmEndIndex: (11+8),
+        tooltip: null
       },
       Wednesday: {
         amBegin: 'Y',
@@ -378,7 +379,8 @@ export default {
         pmBegin: 'AA',
         pmBeginIndex: (10+16),
         pmEnd: 'AB',
-        pmEndIndex: (11+16)
+        pmEndIndex: (11+16),
+        tooltip: null
       },
       Thursday: {
         amBegin: 'AG',
@@ -388,7 +390,8 @@ export default {
         pmBegin: 'AI',
         pmBeginIndex: (10+24),
         pmEnd: 'AJ',
-        pmEndIndex: (11+24)
+        pmEndIndex: (11+24),
+        tooltip: null
       },
       Friday: {
         amBegin: 'AO',
@@ -398,7 +401,8 @@ export default {
         pmBegin: 'AQ',
         pmBeginIndex: (10+32),
         pmEnd: 'AR',
-        pmEndIndex: (11+32)
+        pmEndIndex: (11+32),
+        tooltip: null
       }
     }
   }),
@@ -418,6 +422,10 @@ export default {
       this.travelWeek(payload).then(() => {
         this.setVar()
       })
+    },
+    tooltips(smiley) {
+      var data = {'🇨🇭': 'Jour férié', '💪': 'Jour de travail', '✈️': 'Jour de congé', '😷': 'Absence justifiée', '💤': 'Jour de repos', '⚖️': 'Reprise d\'heures supplémentaires', '🎓': 'Jour de formation'}
+      return data[smiley]
     },
     storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
       if(amBegin != '' && amEnd != '' && pmBegin != '' && pmEnd != '') {
@@ -539,6 +547,11 @@ export default {
       this.dayWednesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(2, 'd').format('DD'),
       this.dayThursday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(3, 'd').format('DD'),
       this.dayFriday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(4, 'd').format('DD')
+      this.days['Monday'].tooltip = this.tooltips(this.tableData[4])
+      this.days['Tuesday'].tooltip = this.tooltips(this.tableData[4+8])
+      this.days['Wednesday'].tooltip = this.tooltips(this.tableData[4+16])
+      this.days['Thursday'].tooltip = this.tooltips(this.tableData[4+24])
+      this.days['Friday'].tooltip = this.tooltips(this.tableData[4+32])
       if (this.tableData[46] == '🤔' && this.tableData[48] == '⚠️') {
         this.smileyMan = this.tableData[46]
         this.smileyDanger = this.tableData[48]
