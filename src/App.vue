@@ -211,6 +211,9 @@ export default {
   .date .time {
     font-size: .8rem;
   }
+  .date .extra-hours {
+    color: #e30074;
+  }
   .date.selected {
     border: 1px solid #e30074;
   }
