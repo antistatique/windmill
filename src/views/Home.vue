@@ -132,6 +132,7 @@
 
       <!-- Buttons control -->
       <div class="buttons-row">
+        <button class="button button-primary" @click="today()">Aujourd'hui</button>
         <button v-b-modal.setLocalStorage class="button button-primary" v-if="localAmBegin == null">Horaire habituel</button>
         <button class="button button-primary" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
         <button v-b-modal.addHours class="button button-primary">
@@ -406,6 +407,16 @@ export default {
     })
   },
   methods: {
+    today() {
+      this.week = moment().isoWeek()
+      this.currentDay = moment().format('dddd')
+      let payload = {
+        'value': this.week,
+      }
+      this.travelWeek(payload).then(() => {
+        this.setVar()
+      })
+    },
     storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
       if(amBegin != '' && amEnd != '' && pmBegin != '' && pmEnd != '') {
         localStorage.setItem('hoursPlanified', JSON.stringify({
