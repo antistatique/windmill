@@ -8,16 +8,20 @@
 
       <!-- Navigations weeks -->
       <div class="header-calendar">
-        <button class="btn" v-show="week > 1" v-on:click="changeWeek(-1)">
-          <BIconArrowLeft class="icon icon-arrow-left"/>
-        </button>
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-left" v-on:click="changeWeek(-1)">
+          <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
+            <path d="M16.25,23.25,5.53,12.53a.749.749,0,0,1,0-1.06L16.25.75" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+          </g>
+        </svg>
         <div>
           <div class="month">{{ monthYear }}</div>
           <div class="week">Semaine {{ week }}</div>
         </div>
-        <button class="btn" v-show="week < 53" v-on:click="changeWeek(1)">
-          <BIconArrowRight class="icon icon-arrow-right"/>
-        </button>
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right" v-on:click="changeWeek(1)">
+          <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
+            <path d="M5.5.75,16.22,11.47a.749.749,0,0,1,0,1.06L5.5,23.25" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+          </g>
+        </svg>
       </div>
 
       <!-- Justification hours -->
@@ -74,6 +78,11 @@
           <tr>
             <td>Début</td>
             <td class="form-inline">
+              <!-- <button class="button button-secondary" v-on:click="sendAmBegin()" :class="amBegin == '' ? '' : 'd-none'">
+                <svg class="icon icon-chrono" aria-hidden="true">
+                  <use :xlink:href="require('@/assets/sprite.svg')+info.icon"></use>
+                </svg>
+              </button> -->
               <button class="button button-secondary" v-on:click="sendAmBegin()" :class="amBegin == '' ? '' : 'd-none'">
                 <BIconClock class="icon icon-chrono"/>
               </button>
@@ -131,7 +140,14 @@
         <button v-b-modal.substractHours class="button button-primary">
           -
         </button>
-        <button class="button button-secondary" v-on:click="clear()"><BIconTrash class="icon icon-trash"/></button>
+        <button class="button button-secondary" v-on:click="clear()">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-trash" aria-hidden="true">
+            <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
+              <path d="M19.452,7.5H4.547a.5.5,0,0,0-.5.545L5.334,22.181A2,2,0,0,0,7.326,24h9.347a2,2,0,0,0,1.992-1.819L19.95,8.045a.5.5,0,0,0-.129-.382A.5.5,0,0,0,19.452,7.5Zm-9.2,13a.75.75,0,0,1-1.5,0v-9a.75.75,0,0,1,1.5,0Zm5,0a.75.75,0,0,1-1.5,0v-9a.75.75,0,0,1,1.5,0Z" fill="#e30074" stroke="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="0"></path>
+              <path d="M22,4H17.25A.25.25,0,0,1,17,3.75V2.5A2.5,2.5,0,0,0,14.5,0h-5A2.5,2.5,0,0,0,7,2.5V3.75A.25.25,0,0,1,6.75,4H2A1,1,0,0,0,2,6H22a1,1,0,0,0,0-2ZM9,3.75V2.5A.5.5,0,0,1,9.5,2h5a.5.5,0,0,1,.5.5V3.75a.25.25,0,0,1-.25.25H9.25A.25.25,0,0,1,9,3.75Z" fill="#e30074" stroke="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="0"></path>
+            </g>
+          </svg>
+        </button>
       </div>
 
     </div>
