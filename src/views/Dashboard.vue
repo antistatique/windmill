@@ -61,7 +61,7 @@
 						<td>{{ result.budgetOffDay }} j</td>
 					</tr>
 					<tr>
-						<td>Heures supplémentaires réucpérées</td>
+						<td>Heures supplémentaires récupérées</td>
 						<td>{{ result.overtimeRecup }}</td>
 					</tr>
 				</tbody>
