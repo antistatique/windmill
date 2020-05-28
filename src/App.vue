@@ -145,6 +145,13 @@ export default {
     -webkit-transition: background .2s;
     transition: background .2s;
   }
+  .button.button-tertiary {
+    background-color: #e30074;
+    font-size: 1rem;
+    color: #fff;
+    -webkit-transition: background .2s;
+    transition: background .2s;
+  }
   .button {
     border: none;
     border-radius: 4px;
@@ -231,8 +238,6 @@ export default {
     border-bottom: 0;
   }
   .buttons-row button:first-child {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
     flex-grow: 1;
     padding: 0px;
   }

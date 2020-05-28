@@ -16,6 +16,7 @@
         <div>
           <div class="month">{{ monthYear }}</div>
           <div class="week">Semaine {{ week }}</div>
+          <div v-show="currentWeek != week"><button class="button button-tertiary" @click="today()">Aujourd'hui</button></div>
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right" v-on:click="changeWeek(1)">
           <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
@@ -27,10 +28,10 @@
       <!-- Justification hours -->
       <div class="wrap-status">
         <div>
-          <span class="hours">Heures 🤔</span>
+          <span class="hours">Heures <span v-show="currentWeek >= week">🤔</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
-        <button v-b-modal.modal-scoped class="button button-primary">Justifier les heures</button>
+        <button v-b-modal.modal-scoped class="button button-primary" v-show="currentWeek >= week">Justifier les heures</button>
       </div>
 
       <!-- Part days -->
@@ -336,6 +337,7 @@ export default {
     localPmEnd : null,
     lines: null,
     currentDay: null,
+    currentWeek: null,
     week: null,
     description: null,
     monthYear: null,
@@ -562,6 +564,7 @@ export default {
     }
     return [
       this.week = moment().isoWeek(),
+      this.currentWeek = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
     ]
   }
