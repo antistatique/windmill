@@ -31,7 +31,7 @@
           <span class="hours">Heures <span v-show="currentWeek >= week">🤔</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
-        <button v-b-modal.modal-scoped class="button button-primary" v-show="currentWeek >= week">Justifier les heures</button>
+        <button v-on:click="toggleModaleJustifyHour" class="button button-primary" v-show="currentWeek >= week">Justifier les heures</button>
       </div>
 
       <!-- Part days -->
@@ -133,14 +133,10 @@
 
       <!-- Buttons control -->
       <div class="buttons-row">
-        <button v-b-modal.setLocalStorage class="button button-primary" v-if="localAmBegin == null">Horaire habituel</button>
+        <button class="button button-primary" v-if="localAmBegin == null" v-on:click="toggleModaleSetHour">Horaire habituel</button>
         <button class="button button-primary" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
-        <button v-b-modal.addHours class="button button-primary">
-          +
-        </button>
-        <button v-b-modal.substractHours class="button button-primary">
-          -
-        </button>
+        <button v-on:click="toggleModaleAddHour" class="button button-primary">+</button>
+        <button v-on:click="toggleModaleSubtractHour" class="button button-primary">-</button>
         <button class="button button-secondary" v-on:click="clear()">
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-trash" aria-hidden="true">
             <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
@@ -153,38 +149,34 @@
 
     </div>
 
-    <b-modal id="modal-scoped" class="modal">
-      <template v-slot:modal-header="{ cancel }">
-        <h5>Justification des heures</h5>
-        <button type="button" class="close">
-          <span aria-hidden="true" @click="cancel()">&times;</span>
-        </button>
-      </template>
+    <div class="bloc-modale" v-if="isModalJustifyHourOpen">
+			<div class="overlay" style="background: white" v-on:click="toggleModaleJustifyHour"></div>
 
-      <template v-slot:default>
-        <textarea v-model="description" class="form-control" style="min-width: 100%"></textarea>
-      </template>
+			<div class="modale" style="background: white; top: 10%;">
+				<div v-on:click="toggleModaleJustifyHour" class="btn-modale">
+					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+						viewBox="0 0 512.001 512.001" xml:space="preserve">
+						<g>
+							<path d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717
+								L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859
+								c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287
+								l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285
+								L284.286,256.002z"/>
+						</g>
+					</svg>
+				</div>
+        <div class="commentary pointer">
+          <h2 class="title">Justifier vos heures</h2>
 
-      <template v-slot:modal-footer="{ ok }">
-        <b-button size="sm" class="btn-costum" @click="sendDecription(); ok();">
-          Valider
-        </b-button>
-      </template>
-    </b-modal>
-
-
+          <textarea v-model="description" :placeholder="description == '' ? 'La raison de votre heure supplémentaire':''" class="form-control" style="min-width: 100%">La raison de votre heure supplémentaire</textarea>
+          <button class="button button-validation" @click="sendDecription();">Valider</button>
         </div>
+			</div> 
+		</div>
 
     <div class="bloc-modale" v-if="isModalSetHourOpen">
 			<div class="overlay" style="background: white" v-on:click="toggleModaleSetHour"></div>
 
-    <b-modal id="addHours" class="modal">
-      <template v-slot:modal-header="{ cancel }">
-        <h5>Ajouter du temps</h5>
-        <button type="button" class="close">
-          <span aria-hidden="true" @click="cancel()">&times;</span>
-        </button>
-      </template>
 			<div class="modale" style="background: white; top: 10%;">
 				<div v-on:click="toggleModaleSetHour" class="btn-modale">
 					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -243,76 +235,14 @@
             </tbody>
           </table>
 
-      <template v-slot:default="{ ok }"> 
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="addHour(0, 15); ok()">15'</button>
-          <button class="button button-number" v-on:click="addHour(0, 30); ok()">30'</button>
-          <button class="button button-number" v-on:click="addHour(0, 45); ok()">45'</button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="addHour(1, 0); ok()">1h</button>
-          <button class="button button-number" v-on:click="addHour(1, 15); ok()">1h15</button>
-          <button class="button button-number" v-on:click="addHour(1, 30); ok()">1h30</button>
           <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd);">Enregistrer</button>
         </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="addHour(1, 45); ok()">1h45</button>
-          <button class="button button-number" v-on:click="addHour(2, 0); ok()">2h</button>
-          <button class="button button-number" v-on:click="addHour(2, 15); ok()">2h15</button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="addHour(2, 30); ok()">2h30</button>
-          <button class="button button-number" v-on:click="addHour(2, 45); ok()">2h45</button>
-          <button class="button button-number" v-on:click="addHour(3, 0); ok()">3h</button>
-        </div>
-      </template>
 			</div> 
 		</div>
 
-      <template v-slot:modal-footer="{ close }">
-        <button class="button button-validation" @click="close();">
-          Fermer
-        </button>
-      </template>
-    </b-modal>
+    <modalHours :revele="isModalAddHourOpen" :toggleModal="toggleModaleAddHour" :action="addHour"></modalHours>
 
-    <b-modal id="substractHours" class="modal">
-      <template v-slot:modal-header="{ cancel }">
-        <h5>Enlever du temps</h5>
-        <button type="button" class="close">
-          <span aria-hidden="true" @click="cancel()">&times;</span>
-        </button>
-      </template>
-
-      <template v-slot:default="{ ok }">
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="subtractHour(0, 15); ok()">15'</button>
-          <button class="button button-number" v-on:click="subtractHour(0, 30); ok()">30'</button>
-          <button class="button button-number" v-on:click="subtractHour(0, 45); ok()">45'</button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="subtractHour(1, 0); ok()">1h</button>
-          <button class="button button-number" v-on:click="subtractHour(1, 15); ok()">1h15</button>
-          <button class="button button-number" v-on:click="subtractHour(1, 30); ok()">1h30</button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="subtractHour(1, 45); ok()">1h45</button>
-          <button class="button button-number" v-on:click="subtractHour(2, 0); ok()">2h</button>
-          <button class="button button-number" v-on:click="subtractHour(2, 15); ok()">2h15</button>
-        </div>
-        <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
-          <button class="button button-number" v-on:click="subtractHour(2, 30); ok()">2h30</button>
-          <button class="button button-number" v-on:click="subtractHour(2, 45); ok()">2h45</button>
-          <button class="button button-number" v-on:click="subtractHour(3, 0); ok()">3h</button>
-        </div>
-      </template>
-
-      <template v-slot:modal-footer="{ close }">
-        <button class="button button-validation" @click="close();">
-          Fermer
-        </button>
-      </template>
-    </b-modal>
+    <modalHours :revele="isModalSubtractHourOpen" :toggleModal="toggleModaleSubtractHour" :action="subtractHour"></modalHours>
 
   </div> 
 
@@ -324,6 +254,7 @@ import { mapActions, mapGetters } from 'vuex';
 import moment from 'moment'
 import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue'
 import ErrorPage from '../components/errorPage'
+import modalHours from '../components/ModalHours'
 
 export default {
   name: 'Home',
@@ -332,9 +263,13 @@ export default {
     BIconArrowRight,
     BIconTrash,
     BIconClock,
-    ErrorPage
+    ErrorPage,
+    modalHours
   },
   data: () => ({
+    isModalAddHourOpen: false,
+    isModalSubtractHourOpen: false,
+    isModalJustifyHourOpen: false,
     isModalSetHourOpen: false,
     amBegin : null,
     amEnd : null,
@@ -423,6 +358,21 @@ export default {
     })
   },
   methods: {
+    countDownChanged(dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs
+    },
+    toggleModaleAddHour: function() {
+      this.isModalAddHourOpen = !this.isModalAddHourOpen;
+    },
+    toggleModaleSubtractHour: function() {
+      this.isModalSubtractHourOpen = !this.isModalSubtractHourOpen;
+    },
+    toggleModaleJustifyHour: function() {
+      this.isModalJustifyHourOpen = !this.isModalJustifyHourOpen;
+    },
     toggleModaleSetHour: function() {
       this.isModalSetHourOpen = !this.isModalSetHourOpen;
     },
@@ -478,6 +428,7 @@ export default {
         'ranges': 'AV' + this.lines
       }
       this.updateSheet(payload)
+      this.isModalJustifyHourOpen = !this.isModalJustifyHourOpen;
     },
     changeDay(changedDay) {
       this.currentDay = changedDay
@@ -496,10 +447,12 @@ export default {
     addHour(hour, minute) {
       this.pmEnd = moment(this.pmEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
       this.sendPmEnd(this.pmEnd)
+      this.isModalAddHourOpen = !this.isModalAddHourOpen;
     },
     subtractHour(hour, minute) {
       this.pmEnd = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
       this.sendPmEnd(this.pmEnd)
+      this.isModalSubtractHourOpen = !this.isModalSubtractHourOpen;
     },
     clear() {
       let payload = {
