@@ -32,7 +32,7 @@ export default {
           }
         })
         array.find(element => {
-					if (element[0] == store.state['authentication'].profile.firstname) {
+					if (element[0] == store.state['authentication'].profile.email) {
 						commit('assignDashboardData', element);
 						return true 
 					}
