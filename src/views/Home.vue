@@ -172,62 +172,11 @@
       </template>
     </b-modal>
 
-    <b-modal id="setLocalStorage" class="modal">
-      <template v-slot:modal-header="{ cancel }">
-        <h5>Définition de l'horaire habituel</h5>
-        <button type="button" class="close">
-          <span aria-hidden="true" @click="cancel()">&times;</span>
-        </button>
-      </template>
 
-      <template v-slot:default>
-        <div style="margin-top: 3%;">
-					<p>Ce modal sert uniquement à sauvegarder l'horaire choisi</p>
-          <div class="form-row">
-            <div class="col-md-12">
-              <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
-              
-              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-                <label for="amBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
-                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-                  <input type="time" class="form-control" v-model="localAmBegin" style="text-align: center" id="amBegin">
-                </div>
-              </div>
-              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-                <label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
-                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-                  <input type="time" class="form-control absolute-center" style="text-align: center" v-model="localAmEnd" id="amEnd">
-                </div>
-              </div>
-
-            </div>
-            <div class="col-md-12">
-              <label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
-              
-              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-                <label for="pmBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
-                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-                  <input type="time" class="form-control" style="text-align: center" v-model="localPmBegin" id="pmBegin">
-                </div>
-              </div>
-              <div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-                <label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
-                <div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-                  <input type="time" class="form-control" style="text-align: center" v-model="localPmEnd" id="pmEnd">
-                </div>
-              </div>
-
-            </div>
-          </div>
         </div>
-      </template>
 
-      <template v-slot:modal-footer="{ ok }">
-        <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd); ok();">
-          Enregistrer
-        </button>
-      </template>
-    </b-modal>
+    <div class="bloc-modale" v-if="isModalSetHourOpen">
+			<div class="overlay" style="background: white" v-on:click="toggleModaleSetHour"></div>
 
     <b-modal id="addHours" class="modal">
       <template v-slot:modal-header="{ cancel }">
@@ -236,6 +185,63 @@
           <span aria-hidden="true" @click="cancel()">&times;</span>
         </button>
       </template>
+			<div class="modale" style="background: white; top: 10%;">
+				<div v-on:click="toggleModaleSetHour" class="btn-modale">
+					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+						viewBox="0 0 512.001 512.001" xml:space="preserve">
+						<g>
+							<path d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717
+								L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859
+								c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287
+								l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285
+								L284.286,256.002z"/>
+						</g>
+					</svg>
+				</div>
+        <div class="commentary pointer">
+          <div class="titleModal" style="padding-bottom: 20px;"><h3>Enregistrez votre journée type</h3></div>
+          <table class="table-data entry-hours">
+            <thead>
+              <tr>
+                <th colspan="2">Matin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Début</td>
+                <td class="form-inline">
+                  <input type="time" class="form-control col" v-model="localAmBegin" id="amBegin">
+                </td>
+              </tr>
+              <tr>
+                <td>Fin</td>
+                <td class="form-inline">
+                  <input type="time" class="form-control col" v-model="localAmEnd" id="amEnd">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table-data entry-hours">
+            <thead>
+              <tr>
+                <th colspan="2">Après-midi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Début</td>
+                <td class="form-inline">
+                  <input type="time" class="form-control col" v-model="localPmBegin" id="pmBegin">
+                </td>
+              </tr>
+              <tr>
+                <td>Fin</td>
+                <td class="form-inline"> 
+                  <input type="time" class="form-control col" v-model="localPmEnd" id="pmEnd">
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
       <template v-slot:default="{ ok }"> 
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
@@ -247,6 +253,7 @@
           <button class="button button-number" v-on:click="addHour(1, 0); ok()">1h</button>
           <button class="button button-number" v-on:click="addHour(1, 15); ok()">1h15</button>
           <button class="button button-number" v-on:click="addHour(1, 30); ok()">1h30</button>
+          <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd);">Enregistrer</button>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-around">
           <button class="button button-number" v-on:click="addHour(1, 45); ok()">1h45</button>
@@ -259,6 +266,8 @@
           <button class="button button-number" v-on:click="addHour(3, 0); ok()">3h</button>
         </div>
       </template>
+			</div> 
+		</div>
 
       <template v-slot:modal-footer="{ close }">
         <button class="button button-validation" @click="close();">
@@ -326,6 +335,7 @@ export default {
     ErrorPage
   },
   data: () => ({
+    isModalSetHourOpen: false,
     amBegin : null,
     amEnd : null,
     pmBegin : null,
@@ -413,6 +423,9 @@ export default {
     })
   },
   methods: {
+    toggleModaleSetHour: function() {
+      this.isModalSetHourOpen = !this.isModalSetHourOpen;
+    },
     today() {
       this.week = moment().isoWeek()
       this.currentDay = moment().format('dddd')
@@ -451,6 +464,7 @@ export default {
         this.amEnd = amEnd,
         this.pmBegin = pmBegin,
         this.pmEnd = pmEnd
+        this.isModalSetHourOpen = false;
       }
     },
     ...mapActions('authorization', [
@@ -583,3 +597,117 @@ export default {
   }
 }
 </script>
+
+<style>
+  
+  .title, .username {
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .title {
+    margin-bottom: .53rem;
+    padding: .13rem .4rem;
+    font-size: .93rem;
+    line-height: 1.5rem;
+    color: #000032;
+    background-color: #edf0f3;
+    text-align: left;
+  }
+  .commentary textarea {
+    width: 100%;
+    padding: .5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 3.5rem;
+    border: 1px solid #aab2bc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #aab2bc;
+    resize: none;
+  }
+
+  .titleModal {
+    text-align: center;
+  }
+  .bloc-modale {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .modale {
+    background: rgb(209, 213, 219);
+    color: #333;
+    position: fixed;
+    bottom: 6.3%;
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .btn-modale {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 1em;
+    height: 1em;
+  }
+  .time-selection {
+    background-color: rgb(209, 213, 219);
+    display: -ms-grid;
+    display: grid;
+    -ms-grid-columns: (1fr);
+    grid-template-columns: repeat(3,1fr);
+    -ms-grid-rows: (1fr);
+    grid-template-rows: repeat(4,1fr);
+    grid-column-gap: .5rem;
+    grid-row-gap: .5rem;
+    position: relative;
+    padding-top: 1.5rem;
+  }
+  .button.button-number {
+    padding-bottom: .5rem;
+    padding-top: .5rem;
+    background-color: #fff;
+    color: #52565b;
+    -webkit-transition: background-color .2s;
+    transition: background-color .2s;
+  }
+  .button {
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .button.button-validation {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    background-color: #e30074;
+    color: #fff;
+  }
+  .time-selection .button-validation {
+    grid-column-start: 1;
+    -ms-grid-column-span: 3;
+    grid-column-end: 4;
+    grid-row-start: 5;
+    -ms-grid-row-span: 1;
+    grid-row-end: 6;
+  }
+  .button.button-number:hover {
+    background-color: #e30074;
+    color: #ffff;
+  }
+
+</style>
