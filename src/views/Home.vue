@@ -16,7 +16,7 @@
         <div>
           <div class="month">{{ monthYear }}</div>
           <div class="week">Semaine {{ week }}</div>
-          <div v-show="currentWeek != week"><button class="button button-tertiary" @click="today()">Aujourd'hui</button></div>
+          <div v-show="currentWeek != week"><customButton :action="today" :text="'Aujourd\'hui'" :variant="'button button-tertiary'"/></div>
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right" v-on:click="changeWeek(1)">
           <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
@@ -31,7 +31,7 @@
           <span class="hours">Heures <span v-show="currentWeek >= week">🤔</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
-        <button v-on:click="toggleModaleJustifyHour" class="button button-primary" v-show="currentWeek >= week">Justifier les heures</button>
+        <customButton :action="toggleModaleJustifyHour" :text="'Justifier les heures'" :variant="'button button-primary'" v-show="currentWeek >= week"/>
       </div>
 
       <!-- Part days -->
@@ -133,10 +133,10 @@
 
       <!-- Buttons control -->
       <div class="buttons-row">
-        <button class="button button-primary" v-if="localAmBegin == null" v-on:click="toggleModaleSetHour">Horaire habituel</button>
+        <customButton :action="toggleModaleSetHour" :text="'Horaire habituel'" :variant="'button button-primary'" v-if="localAmBegin == null"/>
         <button class="button button-primary" v-else @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd)">Horaire habituel</button>
-        <button v-on:click="toggleModaleAddHour" class="button button-primary">+</button>
-        <button v-on:click="toggleModaleSubtractHour" class="button button-primary">-</button>
+        <customButton :action="toggleModaleAddHour" :text="'+'" :variant="'button button-primary'"/>
+        <customButton :action="toggleModaleSubtractHour" :text="'-'" :variant="'button button-primary'"/>
         <button class="button button-secondary" v-on:click="clear()">
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-trash" aria-hidden="true">
             <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
@@ -174,71 +174,7 @@
 			</div> 
 		</div>
 
-    <div class="bloc-modale" v-if="isModalSetHourOpen">
-			<div class="overlay" style="background: white" v-on:click="toggleModaleSetHour"></div>
-
-			<div class="modale" style="background: white; top: 10%;">
-				<div v-on:click="toggleModaleSetHour" class="btn-modale">
-					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-						viewBox="0 0 512.001 512.001" xml:space="preserve">
-						<g>
-							<path d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717
-								L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859
-								c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287
-								l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285
-								L284.286,256.002z"/>
-						</g>
-					</svg>
-				</div>
-        <div class="commentary pointer">
-          <div class="titleModal" style="padding-bottom: 20px;"><h3>Enregistrez votre journée type</h3></div>
-          <table class="table-data entry-hours">
-            <thead>
-              <tr>
-                <th colspan="2">Matin</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Début</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localAmBegin" id="amBegin">
-                </td>
-              </tr>
-              <tr>
-                <td>Fin</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localAmEnd" id="amEnd">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table-data entry-hours">
-            <thead>
-              <tr>
-                <th colspan="2">Après-midi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Début</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localPmBegin" id="pmBegin">
-                </td>
-              </tr>
-              <tr>
-                <td>Fin</td>
-                <td class="form-inline"> 
-                  <input type="time" class="form-control col" v-model="localPmEnd" id="pmEnd">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd);">Enregistrer</button>
-        </div>
-			</div> 
-		</div>
+    <modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
 
     <modalHours :revele="isModalAddHourOpen" :toggleModal="toggleModaleAddHour" :action="addHour"></modalHours>
 
@@ -255,6 +191,8 @@ import moment from 'moment'
 import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue'
 import ErrorPage from '../components/errorPage'
 import modalHours from '../components/ModalHours'
+import modalJustifyHours from '../components/ModalJustifyHours'
+import customButton from '../components/Button'
 
 export default {
   name: 'Home',
@@ -264,7 +202,9 @@ export default {
     BIconTrash,
     BIconClock,
     ErrorPage,
-    modalHours
+    modalHours,
+    modalJustifyHours,
+    customButton
   },
   data: () => ({
     isModalAddHourOpen: false,

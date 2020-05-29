@@ -116,128 +116,7 @@
 			</table>
 		</div>
 
-		<b-modal id="setLocalStorage" class="modal">
-			<template v-slot:modal-header="{ cancel }">
-				<h5>Définition de l'horaire habituel</h5>
-				<button type="button" class="close">
-					<span aria-hidden="true" @click="cancel()">&times;</span>
-				</button>
-			</template>
-
-			<template v-slot:default>
-				<div style="margin-top: 3%;">
-					<p>Ce modal sert uniquement à sauvegarder l'horaire choisi</p>
-					<div class="form-row">
-						<div class="col-md-12">
-							<label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Matin</label>
-							
-							<div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-								<label for="amBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
-								<div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-									<input type="time" class="form-control" v-model="localAmBegin" style="text-align: center" id="amBegin">
-								</div>
-							</div>
-							<div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-								<label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
-								<div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-									<input type="time" class="form-control absolute-center" style="text-align: center" v-model="localAmEnd" id="amEnd">
-								</div>
-							</div>
-
-						</div>
-						<div class="col-md-12">
-							<label class="col-form-label d-flex justify-content-start" style="background-color: #edf0f3; margin-bottom: 1%; padding-left: 10px">Après-midi</label>
-							
-							<div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-								<label for="pmBegin" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Début</label>
-								<div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-									<input type="time" class="form-control" style="text-align: center" v-model="localPmBegin" id="pmBegin">
-								</div>
-							</div>
-							<div class="form-group row" style="padding-left: 10px; padding-right: 10px;">
-								<label for="amEnd" class="col-7 col-sm-7 col-md-7 col-md-9 col-lg-7 col-xl-7 col-form-label d-flex justify-content-start">Fin</label>
-								<div class="col-5 col-sm-5 col-md-3 col-md-5 col-lg-5 col-xl-5">
-									<input type="time" class="form-control" style="text-align: center" v-model="localPmEnd" id="pmEnd">
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</template>
-
-			<template v-slot:modal-footer="{ ok }">
-				<b-button size="sm" class="btn-costum" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd); ok();">
-					Enregistrer
-				</b-button>
-			</template>
-		</b-modal>
-
-		<div class="bloc-modale" v-if="isModalSetHourOpen">
-			<div class="overlay" style="background: white" v-on:click="toggleModaleSetHour"></div>
-
-			<div class="modale" style="background: white; top: 10%;">
-				<div v-on:click="toggleModaleSetHour" class="btn-modale">
-					<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-						viewBox="0 0 512.001 512.001" xml:space="preserve">
-						<g>
-							<path d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717
-								L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859
-								c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287
-								l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285
-								L284.286,256.002z"/>
-						</g>
-					</svg>
-				</div>
-        <div class="commentary pointer">
-          <div class="titleModal" style="padding-bottom: 20px;"><h3>Enregistrez votre journée type</h3></div>
-          <table class="table-data entry-hours">
-            <thead>
-              <tr>
-                <th colspan="2">Matin</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Début</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localAmBegin" id="amBegin">
-                </td>
-              </tr>
-              <tr>
-                <td>Fin</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localAmEnd" id="amEnd">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table-data entry-hours">
-            <thead>
-              <tr>
-                <th colspan="2">Après-midi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Début</td>
-                <td class="form-inline">
-                  <input type="time" class="form-control col" v-model="localPmBegin" id="pmBegin">
-                </td>
-              </tr>
-              <tr>
-                <td>Fin</td>
-                <td class="form-inline"> 
-                  <input type="time" class="form-control col" v-model="localPmEnd" id="pmEnd">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button class="button button-validation" @click="storeStorage(localAmBegin, localAmEnd, localPmBegin, localPmEnd);">Enregistrer</button>
-        </div>
-			</div> 
-		</div>
+		<modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
 
 	</div> 
 </template>
@@ -249,12 +128,14 @@
 	import { BIconBoxArrowRight } from 'bootstrap-vue'
 	import ErrorPage from '../components/errorPage'
 	import router from '../router/index'
+	import modalJustifyHours from '../components/ModalJustifyHours'
 
 	export default {
 		name: 'dashboard',
 		components: {
 			ErrorPage,
-			BIconBoxArrowRight
+			BIconBoxArrowRight,
+			modalJustifyHours
 		},
 		data: () => ({
 			isModalSetHourOpen: false,
@@ -329,12 +210,6 @@
 			])
 		},
 		mounted() {
-			if(localStorage.getItem('hoursPlanified') != null) {
-				this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
-				this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
-				this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
-				this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
-			}
 			this.yearEarlier = moment(this.currentYear, 'YYYY').subtract(1, 'y').format('YYYY')
 		}
 	}
