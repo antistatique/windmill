@@ -33,12 +33,18 @@ export default {
       }).then((response) => {
         console.log('Data loaded')
         var array = []
+        // var arrayTest = []
+        
+        
+        // var test = Object.assign(...response.result.values[0].map((k, i) => ({[k]: response.result.values[1][i]})))
+
         response.result.values.forEach((element, index) => {
           if(index > 0){
             if (element[3] == store.state['authentication'].profile.email) {
               // index + 1 give the right line in the spreadsheet
               element.push((index+1))
               array.push(element)
+              // arrayTest.push(Object.assign(...response.result.values[0].map((k, i) => ({[k]: element[i]})), {'line': index+1}))
             }
           }
         })
@@ -72,7 +78,7 @@ export default {
       }).then((response) => {
         var result = response.result;
         console.log(`${result.updatedCells} cells updated.`);
-        dispatch('getSheet')
+        console.log('data modified')
       });
     },
     batchUpdateSheet({ state, dispatch }, payload) {
@@ -90,7 +96,7 @@ export default {
         data: body
       }).then(() => {
         console.log('cells updated');
-        dispatch('getSheet')
+        // dispatch('getSheet')
       });
     },
     travelWeek({ state, commit, dispatch }, payload) {

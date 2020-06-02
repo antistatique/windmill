@@ -40,31 +40,31 @@
           <span v-b-tooltip.hover :title="days.Monday.tooltip">{{ this.tableData[4] }}</span>
           <span class="week">Lun</span>
           <span class="day">{{ dayMonday }}</span>
-          <span class="time" :class="this.tableData[5] != this.tableData[6] ? 'extra-hours':''">{{ this.tableData[7] }}</span>
+          <span class="time" :class="this.tableData[5] != this.tableData[6] ? 'extra-hours':''">{{ this.tableData[7] == hoursTot ? hoursTot : this.tableData[7] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Tuesday' ? 'selected' : ''" v-on:click="changeDay('Tuesday')">
           <span v-b-tooltip.hover :title="days.Tuesday.tooltip">{{ this.tableData[4+8] }}</span>
           <span class="week">Mar</span>
           <span class="day">{{ dayTuesday }}</span>
-          <span class="time" :class="this.tableData[6+8] != this.tableData[5+8] ? 'extra-hours':''">{{ this.tableData[7+8] }}</span>
+          <span class="time" :class="this.tableData[6+8] != this.tableData[5+8] ? 'extra-hours':''">{{ this.tableData[7+8] == hoursTot ? hoursTot : this.tableData[7+8] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Wednesday' ? 'selected' : ''" v-on:click="changeDay('Wednesday')">
           <span v-b-tooltip.hover :title="days.Wednesday.tooltip">{{ this.tableData[4+16] }}</span>
           <span class="week">Mer</span>
           <span class="day">{{ dayWednesday }}</span>
-          <span class="time" :class="this.tableData[6+16] != this.tableData[5+16] ? 'extra-hours':''">{{ this.tableData[7+16] }}</span>
+          <span class="time" :class="this.tableData[6+16] != this.tableData[5+16] ? 'extra-hours':''">{{ this.tableData[7+16] == hoursTot ? hoursTot : this.tableData[7+16] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Thursday' ? 'selected' : ''" v-on:click="changeDay('Thursday')">
           <span v-b-tooltip.hover :title="days.Thursday.tooltip">{{ this.tableData[4+24] }}</span>
           <span class="week">Jeu</span>
           <span class="day">{{ dayThursday }}</span>
-          <span class="time" :class="this.tableData[6+24] != this.tableData[5+24] ? 'extra-hours':''">{{ this.tableData[7+24] }}</span>
+          <span class="time" :class="this.tableData[6+24] != this.tableData[5+24] ? 'extra-hours':''">{{ this.tableData[7+24] == hoursTot ? hoursTot : this.tableData[7+24] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Friday' ? 'selected' : ''" v-on:click="changeDay('Friday')">
           <span v-b-tooltip.hover :title="days.Friday.tooltip">{{ this.tableData[4+32] }}</span>
           <span class="week">Ven</span>
           <span class="day">{{ dayFriday }}</span>
-          <span class="time" :class="this.tableData[6+32] != this.tableData[5+32] ? 'extra-hours':''">{{ this.tableData[7+32] }}</span>
+          <span class="time" :class="this.tableData[6+32] != this.tableData[5+32] ? 'extra-hours':''">{{ this.tableData[7+32] == hoursTot ? hoursTot : this.tableData[7+32] }}</span>
         </div>
       </div>
 
@@ -207,6 +207,7 @@ export default {
     customButton
   },
   data: () => ({
+    hoursTot: null,
     isModalAddHourOpen: false,
     isModalSubtractHourOpen: false,
     isModalJustifyHourOpen: false,
@@ -355,6 +356,8 @@ export default {
         this.pmBegin = pmBegin,
         this.pmEnd = pmEnd
         this.isModalSetHourOpen = false;
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex, 4, amBegin, amEnd, pmBegin, pmEnd)
+        this.setHours()
       }
     },
     ...mapActions('authorization', [
@@ -368,11 +371,13 @@ export default {
         'ranges': 'AV' + this.lines
       }
       this.updateSheet(payload)
+      this.tableData.splice(this.days['Friday'].pmEndIndex+4, 1, this.description)
       this.isModalJustifyHourOpen = !this.isModalJustifyHourOpen;
     },
     changeDay(changedDay) {
       this.currentDay = changedDay
       this.setVar()
+      this.setHours()
     },
     changeWeek(nbWeek) {
       this.week = this.week+(nbWeek)
@@ -404,7 +409,11 @@ export default {
         this.amEnd = ""
         this.pmBegin = ""
         this.pmEnd = ""
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex, 4, "", "", "", "")
+        this.hoursTot = "00:00"
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
       })
+      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, this.tableData.slice(44)[0] - (moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60))
     },
     sendAmBegin(amBegin){
       amBegin == undefined ? amBegin = moment().format('HH:mm') : null
@@ -414,6 +423,8 @@ export default {
       }
       this.updateSheet(payload)
       this.amBegin = amBegin
+      this.tableData.splice(this.days[this.currentDay].amBeginIndex, 1, this.amBegin)
+      this.setHours()
     },
     sendAmEnd(amEnd){
       amEnd == undefined ? amEnd = moment().format('HH:mm') : null
@@ -423,6 +434,8 @@ export default {
       }
       this.updateSheet(payload)
       this.amEnd = amEnd
+      this.tableData.splice(this.days[this.currentDay].amEndIndex, 1, this.amEnd)
+      this.setHours()
     },
     sendPmBegin(pmBegin){
       pmBegin == undefined ? pmBegin = moment().format('HH:mm') : null
@@ -432,6 +445,8 @@ export default {
       }
       this.updateSheet(payload)
       this.pmBegin = pmBegin
+      this.tableData.splice(this.days[this.currentDay].pmBeginIndex, 1, this.pmBegin)
+      this.setHours()
     },
     sendPmEnd(pmEnd){
       pmEnd == undefined ? pmEnd = moment().format('HH:mm') : null
@@ -441,6 +456,8 @@ export default {
       }
       this.updateSheet(payload)
       this.pmEnd = pmEnd
+      this.tableData.splice(this.days[this.currentDay].pmEndIndex, 1, this.pmEnd)
+      this.setHours()
     },
     setVar() {
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
@@ -468,6 +485,31 @@ export default {
         this.smileyDanger = null
       }
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
+    },
+    setHours() {
+      if(this.amBegin != "" && this.amEnd != "" && this.pmBegin != "" && this.pmEnd != "") {
+        this.hoursTot = moment((moment(this.amEnd, 'HH:mm')-moment(this.amBegin, 'HH:mm'))+(moment(this.pmEnd, 'HH:mm')-moment(this.pmBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-2, 1, (moment(this.hoursTot, 'HH:mm').hours() + moment(this.hoursTot, 'HH:mm').minute()/60).toString())
+      } 
+      else if(this.amBegin != "" && this.amEnd != "") {
+        this.hoursTot = moment((moment(this.amEnd, 'HH:mm')-moment(this.amBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
+        this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, this.tableData.slice(44)[0] - ((moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60)))
+      }
+      else if(this.pmBegin != "" && this.pmEnd != "") {
+        this.hoursTot = moment((moment(this.pmEnd, 'HH:mm')-moment(this.pmBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
+        this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, this.tableData.slice(44)[0] - ((moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60)))
+      }
+      else if(this.amBegin == "" && this.amEnd == "" && this.pmBegin == "" && this.pmEnd == "") {
+        this.hoursTot = '00:00'
+      }
+      this.calculateHours()
+    },
+    calculateHours() {
+      var time = (moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').minute()/60)
+      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, time).toString()
     }
   },
   computed: {
