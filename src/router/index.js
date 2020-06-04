@@ -34,7 +34,7 @@ Vue.use(VueRouter)
     }
   },
   { 
-    path: '/', 
+    path: '*', 
     redirect: '/home' 
   }
 ]
