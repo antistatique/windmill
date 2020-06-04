@@ -6,13 +6,22 @@
    npm run build
       ```
    
-5. Après quelques recherches sur le net, je suis tombé sur la [documentation](https://router.vuejs.org/fr/guide/essentials/history-mode.html) de vue.js qui disent qu'il faut ajouter des paramètres sur notre serveur.
+2. Après quelques recherches sur le net, je suis tombé sur la [documentation](https://router.vuejs.org/fr/guide/essentials/history-mode.html) de vue.js qui disent qu'il faut ajouter des paramètres sur notre serveur.
 
-   1. ![err](/Users/jeremy/github/windmill/documentation/images/prod/error_server.png)
+   ![err](/Users/jeremy/github/windmill/documentation/images/prod/error_server.png)
 
-   2. Cette erreur survenait lorsqu'on écrivait dans l'url `/login`, `/home` et `/dashboard`. Pour palier à cette erreur, j'ai dû créer sur le serveur un fichier `.htaccess` afin d'y mettre ces lignes suivantes 
+   2. Cette erreur survenait lorsqu'on écrivait dans l'url `/login`, `/home` et `/dashboard`. Pour palier à cette erreur, j'ai dû faire les étapes suivantes 
 
-   3. ```bash
+   2. Se rendre dans la repo qui est servi par le serveur et créer un fichier `.htaccess`
+
+      ```bash
+      touch .htaccess
+      nano .htaccess
+      ```
+
+   4. Copier et coller les lignes ci-dessous dans le fichier
+
+      ```bash
       <IfModule mod_rewrite.c>
         RewriteEngine On
         RewriteBase /
@@ -20,14 +29,14 @@
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteRule . /index.html [L]
+        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
       </IfModule>
+   ```
+      
+1. Ces lignes permettront de faire une redirection lorsque nous tapons dans l'URL la page voulue. Mais aussi de faire la redirection vers le protocole `HTTPS` plutôt que `HTTP`
+      
+   5. Copier ensuite les fichiers générés par Vue.js sur le serveur 
+   
+      ```bash
+      scp -r dist/* [username]@[serveur]:[chemin/au/dossier/servi]
       ```
-
-
-
-### Problème 
-
-Impossible de taper dans la barre de recherche l'URL. On est obligés des passer par les boutons de l'applications. 
-
-- À voir s'il y a pas une config dans le serveur à faire 
-  - a2enmod ?
