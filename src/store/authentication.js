@@ -122,6 +122,7 @@ export default {
         if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance()) {
           gapi.auth2.getAuthInstance().signOut().then(() => {
             commit("signOut");
+            router.push('/login')
             resolve();
           });
         } else {
