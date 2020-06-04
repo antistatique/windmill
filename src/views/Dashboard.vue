@@ -50,28 +50,28 @@
 				</svg>
 			</span>
 			<h1 class="username">{{ result.firstname }}</h1>
-			<p class="header-title-bold">Il te reste {{ result.takeDayCurrentYear }} jours à poser</p>
-			<p class="header-subtitle-regular">3 jours de vacances et 1 jour (8.24h) supplémentaire</p>
+			<p class="header-title-bold">Il te reste {{ result.takeDayCurrentYear - result.overtimeRecup }} jours à poser</p>
+			<p class="header-subtitle-regular">{{ parseFloat(result.diffValid) + parseFloat(result.soldeYearEarlier) - parseFloat(result.budgetOffDay) }} jours de vacances et {{ (parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup).toFixed(2) }} jour ({{ ((parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup)*8.4).toFixed(2) }}h) supplémentaires</p>
 		</div>
 
 		<div class="data-tables">
 			<table class="table-data table-count">
 				<thead>
 					<tr>
-						<th colspan="2">Budget temps</th>
+						<th colspan="2">Budget congés/vacances</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>Année en cours {{ currentYear }}</td>
+						<td>Budget année en cours {{ currentYear }}</td>
 						<td>{{ result.diffValid }} j</td>
 					</tr>
 					<tr>
-						<td>Report {{ yearEarlier }}</td>
+						<td>Solde année précédente {{ yearEarlier }}</td>
 						<td>{{ result.soldeYearEarlier }} j</td>
 					</tr>
 					<tr>
-						<td>Heures supplémentaires</td>
+						<td>Heures supplémentaires totales</td>
 						<td>{{ result.overtimeHours }} h</td>
 					</tr>
 				</tbody>
@@ -88,8 +88,8 @@
 						<td>{{ result.budgetOffDay }} j</td>
 					</tr>
 					<tr>
-						<td>Heures supplémentaires récupérées</td>
-						<td>{{ result.overtimeRecup }}</td>
+						<td>Jours supplémentaires récupérés</td>
+						<td>{{ result.overtimeRecup }} j</td>
 					</tr>
 				</tbody>
 			</table>
@@ -101,7 +101,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>Maladie</td>
+						<td>Absences justifiées</td>
 						<td>{{ result.sickDay }} j</td>
 					</tr>
 					<tr>
@@ -143,7 +143,6 @@
 			result: {
 				firstname: "",
 				diffValid: "",
-				offDay: "",
 				formationDay: "",
 				moneyFormation: "",
 				sickDay: "",
@@ -183,15 +182,14 @@
 			},
 			setVar() {
 				this.result.firstname = this.getDataDashboard[0]
-				this.result.diffValid = this.getDataDashboard[1]
-				this.result.offDay = this.getDataDashboard[2]
+				this.result.overtimeHours = this.getDataDashboard[1]
+				this.result.budgetOffDay = this.getDataDashboard[2]
 				this.result.formationDay = this.getDataDashboard[3]
 				this.result.moneyFormation = this.getDataDashboard[4]
 				this.result.sickDay = this.getDataDashboard[5]
 				this.result.overtimeRecup = this.getDataDashboard[6]
 				this.result.percentageWork = this.getDataDashboard[7]
-				this.result.overtimeHours = this.getDataDashboard[8]
-				this.result.budgetOffDay = this.getDataDashboard[9]
+				this.result.diffValid = this.getDataDashboard[9]
 				this.result.soldeYearEarlier = this.getDataDashboard[10]
 				this.result.rowSheetYearEarlier = this.getDataDashboard[11]
 				this.result.takeDayCurrentYear = this.getDataDashboard[12]
@@ -201,7 +199,6 @@
 			]),
 			logout() {
 				this.signOut();
-				router.push('/login')
 			}
 		},
 		computed: {
