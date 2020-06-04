@@ -231,8 +231,6 @@ export default {
     dayWednesday: null,
     dayThursday: null,
     dayFriday: null,
-    smileyMan: null,
-    smileyDanger: null,
     dataLoaded: null,
     days: {
       Monday: {
@@ -296,15 +294,10 @@ export default {
     this.$store.dispatch('authorization/getSheet').then(() => {
       this.$store.getters['authorization/tableData'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
       this.setVar()
+      this.calculateHours()
     })
   },
   methods: {
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown
-    },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs
-    },
     toggleModaleAddHour: function() {
       this.isModalAddHourOpen = !this.isModalAddHourOpen;
     },
@@ -413,9 +406,10 @@ export default {
         this.hoursTot = "00:00"
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
       })
-      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, this.tableData.slice(44)[0] - (moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60))
+      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, (this.tableData.slice(44)[0] - (moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60)).toFixed(2))
     },
     sendAmBegin(amBegin){
+      // Set current hour (with the chrono)
       amBegin == undefined ? amBegin = moment().format('HH:mm') : null
       let payload = {
         'value': amBegin,
@@ -476,14 +470,6 @@ export default {
       this.days['Wednesday'].tooltip = this.tooltips(this.tableData[4+16])
       this.days['Thursday'].tooltip = this.tooltips(this.tableData[4+24])
       this.days['Friday'].tooltip = this.tooltips(this.tableData[4+32])
-      if (this.tableData[46] == '🤔' && this.tableData[48] == '⚠️') {
-        this.smileyMan = this.tableData[46]
-        this.smileyDanger = this.tableData[48]
-      }
-      else {
-        this.smileyMan = null
-        this.smileyDanger = null
-      }
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     },
     setHours() {
@@ -509,7 +495,7 @@ export default {
     },
     calculateHours() {
       var time = (moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').minute()/60)
-      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, time).toString()
+      this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, time.toFixed(2))
     }
   },
   computed: {
@@ -613,8 +599,8 @@ export default {
     padding-top: 1.5rem;
   }
   .button.button-number {
-    padding-bottom: .5rem;
-    padding-top: .5rem;
+    padding-bottom: 20px;
+    padding-top: 20px;
     background-color: #fff;
     color: #52565b;
     -webkit-transition: background-color .2s;
