@@ -20,7 +20,7 @@ export default {
   },
   actions: {
     async getDashboardSheet({ state, commit }) {
-      var ranges = [ `résumé-${state.currentYear}!A1:M` ];
+      var ranges = [ `résumé-${state.currentYear}!A1:N` ];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
@@ -32,7 +32,7 @@ export default {
           }
         })
         array.find(element => {
-					if (element[0] == store.state['authentication'].profile.email) {
+					if (element[13] == store.state['authentication'].profile.email) {
 						commit('assignDashboardData', element);
 						return true 
 					}
