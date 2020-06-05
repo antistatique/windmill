@@ -9,6 +9,7 @@ export default {
     spreadsheetId: process.env.VUE_APP_SPREADSHEET_ID,
     mainTableData: null,
     dataFiltered: null,
+    keyArray: null,
     currentYear: moment().year(),
     week: moment().isoWeek()
   },
@@ -21,7 +22,9 @@ export default {
     },
     assignDataFiltered(state, payload) {
       state.dataFiltered = payload;
-      state.redirect = true
+    },
+    assignKeyArray(state, payload) {
+      state.keyArray = payload;
     },
   },
   actions: {
@@ -43,7 +46,8 @@ export default {
           }
         })
         commit('assignTableData', array);
-        array.find(element => {
+        array.find((element, index) => {
+          element[1] == state.week ? commit('assignKeyArray', index) : null
           if (element[1] == state.week) {
             commit('assignDataFiltered', element);
             return true;
@@ -93,12 +97,7 @@ export default {
       });
     },
     travelWeek({ state, commit, dispatch }, payload) {
-      state.mainTableData.find(element => {
-        if (element[1] == payload.value) {
-          commit('assignDataFiltered', element);
-          return true;
-        }
-      })
+      commit('assignDataFiltered', state.mainTableData[payload.value])
     }
   }
 };

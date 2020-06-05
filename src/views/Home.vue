@@ -8,7 +8,7 @@
 
       <!-- Navigations weeks -->
       <div class="header-calendar">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-left" v-on:click="changeWeek(-1)">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-left" v-on:click="$store.state['authorization'].keyArray != 0 ? changeWeek(-1) : null">
           <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
             <path d="M16.25,23.25,5.53,12.53a.749.749,0,0,1,0-1.06L16.25.75" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
           </g>
@@ -18,7 +18,7 @@
           <div class="week">Semaine {{ week }}</div>
           <div v-show="currentWeek != week"><customButton :action="today" :text="'Aujourd\'hui'" :variant="'button button-tertiary'"/></div>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right" v-on:click="changeWeek(1)">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right" v-on:click="$store.state['authorization'].keyArray != $store.state['authorization'].mainTableData.length ? changeWeek(1) : null">
           <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
             <path d="M5.5.75,16.22,11.47a.749.749,0,0,1,0,1.06L5.5,23.25" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
           </g>
@@ -224,6 +224,7 @@ export default {
     currentDay: null,
     currentWeek: null,
     week: null,
+    unchangedWeek: null,
     description: null,
     monthYear: null,
     dayMonday: null,
@@ -293,6 +294,7 @@ export default {
   beforeCreate() {
     this.$store.dispatch('authorization/getSheet').then(() => {
       this.$store.getters['authorization/tableData'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
+      this.unchangedWeek = this.$store.state['authorization'].keyArray
       this.setVar()
       this.calculateHours()
     })
@@ -311,10 +313,10 @@ export default {
       this.isModalSetHourOpen = !this.isModalSetHourOpen;
     },
     today() {
-      this.week = moment().isoWeek()
+      this.$store.state['authorization'].keyArray = this.unchangedWeek
       this.currentDay = moment().format('dddd')
       let payload = {
-        'value': this.week,
+        'value': this.unchangedWeek,
       }
       this.travelWeek(payload).then(() => {
         this.setVar()
@@ -373,11 +375,9 @@ export default {
       this.setHours()
     },
     changeWeek(nbWeek) {
-      this.week = this.week+(nbWeek)
       let payload = {
-        'value': this.week,
+        'value': this.$store.state['authorization'].keyArray += (nbWeek),
       }
-      this.$store.state['authorization'].week = this.week
       this.travelWeek(payload).then(() => {
         this.setVar()
       })
@@ -470,6 +470,7 @@ export default {
       this.days['Wednesday'].tooltip = this.tooltips(this.tableData[4+16])
       this.days['Thursday'].tooltip = this.tooltips(this.tableData[4+24])
       this.days['Friday'].tooltip = this.tooltips(this.tableData[4+32])
+      this.week = this.tableData[1]
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     },
     setHours() {
@@ -511,7 +512,6 @@ export default {
       this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
     }
     return [
-      this.week = moment().isoWeek(),
       this.currentWeek = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
     ]
