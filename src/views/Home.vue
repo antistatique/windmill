@@ -40,31 +40,31 @@
           <span v-b-tooltip.hover :title="days.Monday.tooltip">{{ this.tableData[4] }}</span>
           <span class="week">Lun</span>
           <span class="day">{{ dayMonday }}</span>
-          <span class="time" :class="this.tableData[5] != this.tableData[6] ? 'extra-hours':''">{{ this.tableData[7] == hoursTot ? hoursTot : this.tableData[7] }}</span>
+          <span class="time" :class="this.tableData[5] < this.tableData[6] ? 'extra-hours':''">{{ this.tableData[7] == hoursTot ? hoursTot : this.tableData[7] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Tuesday' ? 'selected' : ''" v-on:click="changeDay('Tuesday')">
           <span v-b-tooltip.hover :title="days.Tuesday.tooltip">{{ this.tableData[4+8] }}</span>
           <span class="week">Mar</span>
           <span class="day">{{ dayTuesday }}</span>
-          <span class="time" :class="this.tableData[6+8] != this.tableData[5+8] ? 'extra-hours':''">{{ this.tableData[7+8] == hoursTot ? hoursTot : this.tableData[7+8] }}</span>
+          <span class="time" :class="this.tableData[5+8] < this.tableData[6+8] ? 'extra-hours':''">{{ this.tableData[7+8] == hoursTot ? hoursTot : this.tableData[7+8] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Wednesday' ? 'selected' : ''" v-on:click="changeDay('Wednesday')">
           <span v-b-tooltip.hover :title="days.Wednesday.tooltip">{{ this.tableData[4+16] }}</span>
           <span class="week">Mer</span>
           <span class="day">{{ dayWednesday }}</span>
-          <span class="time" :class="this.tableData[6+16] != this.tableData[5+16] ? 'extra-hours':''">{{ this.tableData[7+16] == hoursTot ? hoursTot : this.tableData[7+16] }}</span>
+          <span class="time" :class="this.tableData[5+16] < this.tableData[6+16] ? 'extra-hours':''">{{ this.tableData[7+16] == hoursTot ? hoursTot : this.tableData[7+16] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Thursday' ? 'selected' : ''" v-on:click="changeDay('Thursday')">
           <span v-b-tooltip.hover :title="days.Thursday.tooltip">{{ this.tableData[4+24] }}</span>
           <span class="week">Jeu</span>
           <span class="day">{{ dayThursday }}</span>
-          <span class="time" :class="this.tableData[6+24] != this.tableData[5+24] ? 'extra-hours':''">{{ this.tableData[7+24] == hoursTot ? hoursTot : this.tableData[7+24] }}</span>
+          <span class="time" :class="this.tableData[5+24] < this.tableData[6+24] ? 'extra-hours':''">{{ this.tableData[7+24] == hoursTot ? hoursTot : this.tableData[7+24] }}</span>
         </div>
         <div class="date" :class="this.currentDay == 'Friday' ? 'selected' : ''" v-on:click="changeDay('Friday')">
           <span v-b-tooltip.hover :title="days.Friday.tooltip">{{ this.tableData[4+32] }}</span>
           <span class="week">Ven</span>
           <span class="day">{{ dayFriday }}</span>
-          <span class="time" :class="this.tableData[6+32] != this.tableData[5+32] ? 'extra-hours':''">{{ this.tableData[7+32] == hoursTot ? hoursTot : this.tableData[7+32] }}</span>
+          <span class="time" :class="this.tableData[5+32] < this.tableData[6+32] ? 'extra-hours':''">{{ this.tableData[7+32] == hoursTot ? hoursTot : this.tableData[7+32] }}</span>
         </div>
       </div>
 
@@ -433,6 +433,7 @@ export default {
         this.tableData.splice(this.days[this.currentDay].amBeginIndex, 4, "", "", "", "")
         this.hoursTot = "00:00"
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
+        this.tableData.splice(this.days[this.currentDay].amBeginIndex-2, 1, "0")
       })
       this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, (this.tableData.slice(44)[0] - (moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60)).toFixed(2))
     },
