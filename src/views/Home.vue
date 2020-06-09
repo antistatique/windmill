@@ -78,23 +78,23 @@
         <tbody>
           <tr>
             <td>Début</td>
-            <td class="d-inline-flex col-1">
+            <td class="d-inline-flex col-2">
               <button class="button button-secondary" v-on:click="sendAmBegin()" :class="amBegin == '' ? '' : 'd-none'">
                 <BIconClock class="icon icon-chrono"/>
               </button>
             </td>
-            <td class="d-inline-flex col-11">
+            <td class="d-inline-flex col-10">
               <input type="time" class="form-control col" v-model="amBegin" @blur="sendAmBegin(amBegin)" id="amBegin">
             </td>
           </tr>
           <tr>
             <td>Fin</td>
-            <td class="d-inline-flex col-1">
+            <td class="d-inline-flex col-2">
               <button class="button button-secondary" v-on:click="sendAmEnd()" :class="amBegin != '' && amEnd == '' ? '' : 'd-none'">
                 <BIconClock style="icon icon-chrono"/>
               </button>
             </td>
-            <td class="d-inline-flex col-11">
+            <td class="d-inline-flex col-10">
               <input type="time" class="form-control d-inline col" v-model="amEnd" @blur="sendAmEnd(amEnd)" id="amEnd">
             </td>
           </tr>
@@ -111,23 +111,23 @@
         <tbody>
           <tr>
             <td>Début</td>
-            <td class="d-inline-flex col-1">
+            <td class="d-inline-flex col-2">
               <button class="button button-secondary" v-on:click="sendPmBegin()" :class="amBegin != '' && amEnd != '' && pmBegin == '' ? '' : 'd-none'">
                 <BIconClock class="icon icon-chrono"/>
               </button>
             </td>
-            <td class="d-inline-flex col-11">
+            <td class="d-inline-flex col-10">
               <input type="time" class="form-control col" v-model="pmBegin" @blur="sendPmBegin(pmBegin)" id="pmBegin">
             </td>
           </tr>
           <tr>
             <td>Fin</td>
-            <td class="d-inline-flex col-1">
+            <td class="d-inline-flex col-2">
               <button class="button button-secondary" v-on:click="sendPmEnd()" :class="amBegin != '' && amEnd != '' && pmBegin != ''&& pmEnd == '' ? '' : 'd-none'">
                 <BIconClock class="icon icon-chrono"/>
               </button>  
             </td>
-            <td class="d-inline-flex col-11">
+            <td class="d-inline-flex col-10">
               <input type="time" class="form-control col" v-model="pmEnd" @blur="sendPmEnd(pmEnd)" id="pmEnd">
             </td>
           </tr>
