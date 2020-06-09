@@ -28,7 +28,7 @@
       <!-- Justification hours -->
       <div class="wrap-status">
         <div>
-          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">🤔</span></span>
+          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">{{ this.tableData[46] }}</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
         <customButton :action="toggleModaleJustifyHour" :text="'Justifier les heures'" :variant="'button button-primary'" v-show="currentWeek >= week"/>
