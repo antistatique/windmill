@@ -28,7 +28,7 @@
       <!-- Justification hours -->
       <div class="wrap-status">
         <div>
-          <span class="hours">Heures <span v-show="currentWeek >= week">🤔</span></span>
+          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">🤔</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
         <customButton :action="toggleModaleJustifyHour" :text="'Justifier les heures'" :variant="'button button-primary'" v-show="currentWeek >= week"/>
@@ -207,6 +207,7 @@ export default {
     customButton
   },
   data: () => ({
+    showSmiley: false,
     hoursTot: null,
     isModalAddHourOpen: false,
     isModalSubtractHourOpen: false,
@@ -495,6 +496,7 @@ export default {
       this.days['Thursday'].tooltip = this.tooltips(this.tableData[4+24])
       this.days['Friday'].tooltip = this.tooltips(this.tableData[4+32])
       this.week = this.tableData[1]
+      this.tableData[46] == '🤔' ? this.showSmiley = true : this.showSmiley = false
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     },
     setHours() {
