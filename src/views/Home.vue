@@ -383,13 +383,37 @@ export default {
       })
     },
     addHour(hour, minute) {
-      this.pmEnd = moment(this.pmEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
-      this.sendPmEnd(this.pmEnd)
+      var res
+      if(this.pmEnd != '') {
+        res = moment(this.pmEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
+      }
+      else if (this.pmBegin != '') {
+        res = moment(this.pmBegin, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
+      }
+      else if (this.amEnd != '') {
+        res = moment(this.amEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
+      }
+      else if (this.amBegin != '') {
+        res = moment(this.amBegin, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
+      }
+      this.sendPmEnd(res)
       this.isModalAddHourOpen = !this.isModalAddHourOpen;
     },
     subtractHour(hour, minute) {
-      this.pmEnd = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
-      this.sendPmEnd(this.pmEnd)
+      var res
+      if(this.pmEnd != '') {
+        res = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
+      }
+      else if (this.pmBegin != '') {
+        res = moment(this.pmBegin, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
+      }
+      else if (this.amEnd != '') {
+        res = moment(this.amEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
+      }
+      else if (this.amBegin != '') {
+        res = moment(this.amBegin, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
+      }
+      this.sendPmEnd(res)
       this.isModalSubtractHourOpen = !this.isModalSubtractHourOpen;
     },
     clear() {
