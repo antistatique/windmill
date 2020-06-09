@@ -96,6 +96,7 @@ export default {
   }
   .header-calendar .icon {
     color: #c4cad0;
+    font-size: 25px;
   }
   .icon, .icon svg {
     width: 1em;
