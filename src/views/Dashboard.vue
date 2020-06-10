@@ -50,8 +50,8 @@
 				</svg>
 			</span>
 			<h1 class="username">{{ result.firstname }}</h1>
-			<p class="header-title-bold">Il te reste {{ result.takeDayCurrentYear - result.overtimeRecup }} jours à poser</p>
-			<p class="header-subtitle-regular">{{ parseFloat(result.diffValid) + parseFloat(result.soldeYearEarlier) - parseFloat(result.budgetOffDay) }} jours de vacances et {{ (parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup).toFixed(2) }} jour ({{ ((parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup)*8.4).toFixed(2) }}h) supplémentaires</p>
+			<p class="header-title-bold">Il te reste {{ result.takeDayCurrentYear }} jours à poser</p>
+			<p class="header-subtitle-regular">{{ (parseFloat(result.diffValid) + parseFloat(result.soldeYearEarlier) - parseFloat(result.budgetOffDay)).toFixed(2) }} jours de vacances et {{ (parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup).toFixed(2) }} jour ({{ ((parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup)*8.4).toFixed(2) }}h) supplémentaires</p>
 		</div>
 
 		<div class="data-tables">
@@ -151,7 +151,6 @@
 				overtimeHours: "",
 				budgetOffDay: "",
 				soldeYearEarlier: "",
-				rowSheetYearEarlier: "",
 				takeDayCurrentYear: "",
 				localAmBegin : null,
 				localAmEnd : null,
@@ -191,8 +190,7 @@
 				this.result.percentageWork = this.getDataDashboard[7]
 				this.result.diffValid = this.getDataDashboard[9]
 				this.result.soldeYearEarlier = this.getDataDashboard[10]
-				this.result.rowSheetYearEarlier = this.getDataDashboard[11]
-				this.result.takeDayCurrentYear = this.getDataDashboard[12]
+				this.result.takeDayCurrentYear = this.getDataDashboard[11]
 			},
 			...mapActions('authentication', [
 				'signOut',
