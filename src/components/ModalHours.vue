@@ -15,7 +15,7 @@
 					</g>
 				</svg>
 			</div>
-			<div class="titleModal">Ajouter du temps</div>
+			<div class="titleModal">{{name}}</div>
 			<div class="time-selection">
 				<button class="button button-number" v-on:click="action(0, 15);">15'</button>
 				<button class="button button-number" v-on:click="action(0, 30);">30'</button>
@@ -41,7 +41,8 @@
 		props: [
 			"revele",
 			"toggleModal",
-			"action"
+			"action",
+			"name"
 		],
 	}
 </script>

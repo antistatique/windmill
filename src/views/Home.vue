@@ -179,9 +179,9 @@
 
     <modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
 
-    <modalHours :revele="isModalAddHourOpen" :toggleModal="toggleModaleAddHour" :action="addHour"></modalHours>
+    <modalHours :revele="isModalAddHourOpen" :toggleModal="toggleModaleAddHour" :action="addHour" :name="'Ajouter du temps'"></modalHours>
 
-    <modalHours :revele="isModalSubtractHourOpen" :toggleModal="toggleModaleSubtractHour" :action="subtractHour"></modalHours>
+    <modalHours :revele="isModalSubtractHourOpen" :toggleModal="toggleModaleSubtractHour" :action="subtractHour" :name="'Enlever du temps'"></modalHours>
 
   </div> 
 
