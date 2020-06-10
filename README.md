@@ -29,6 +29,9 @@ cp .env.example .env
   - You must add the `client_id` from the API Google
   - And the `ID` of the spreadsheet
 
-### Work journal 
 
-In this [link](https://docs.google.com/spreadsheets/d/1VdWgKJNUbh4l2Fgs0EE9mFe9Lny3hPH48g_UWj54AII/edit?usp=sharing) you can check my daily work on the project
+
+### Links 
+
+- [Production instructions](documentation/production.md) 
+- [Work journal](https://docs.google.com/spreadsheets/d/1VdWgKJNUbh4l2Fgs0EE9mFe9Lny3hPH48g_UWj54AII/edit?usp=sharing)
