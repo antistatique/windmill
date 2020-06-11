@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>infoDictionary</key>
+	<dict>
+		<key>MEMDEV6725SuppressionDict</key>
+		<dict>
+			<key>documentState</key>
+			<integer>4</integer>
+		</dict>
+	</dict>
+	<key>savePoint</key>
+	<dict>
+		<key>documentModificationDate</key>
+		<date>2020-06-05T13:20:38Z</date>
+		<key>reversionPointsByLogID</key>
+		<dict>
+			<key>FfyykY4LS0uMwaB_t3mhOw</key>
+			<dict>
+				<key>branchHeads</key>
+				<dict>
+					<key>masterBranch</key>
+					<string>N9FFTnf0v2KkozxOVixalGtquSk</string>
+					<key>userBranches</key>
+					<dict>
+						<key>Ka9cEhLGScyx2JzvYbRfYg</key>
+						<dict>
+							<key>public</key>
+							<string>N9FFTnf0v2KkozxOVixalGtquSk</string>
+						</dict>
+					</dict>
+				</dict>
+			</dict>
+		</dict>
+		<key>timestamp</key>
+		<date>2020-06-05T13:20:38Z</date>
+		<key>workarea</key>
+		<string>public</string>
+	</dict>
+	<key>userNames</key>
+	<dict>
+		<key>root</key>
+		<string></string>
+	</dict>
+</dict>
+</plist>
