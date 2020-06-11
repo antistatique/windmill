@@ -11,7 +11,8 @@ export default {
     dataFiltered: null,
     keyArray: null,
     currentYear: moment().year(),
-    week: moment().isoWeek()
+    week: moment().isoWeek(),
+    smiley: null
   },
   getters: {
     tableData: state => state.dataFiltered,
@@ -26,9 +27,12 @@ export default {
     assignKeyArray(state, payload) {
       state.keyArray = payload;
     },
+    assignSmiley(state, payload) {
+      state.smiley = payload
+    }
   },
   actions: {
-    async getSheet({ state, commit }) {
+    async getSheet({ state, commit, dispatch }) {
       var ranges = [ `saisie-${state.currentYear}!A1:AW` ];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
@@ -49,6 +53,7 @@ export default {
         array.find((element, index) => {
           element[1] == state.week ? commit('assignKeyArray', index) : null
           if (element[1] == state.week) {
+            dispatch('getSmiley', { 'line': element.slice(-1)[0] })
             commit('assignDataFiltered', element);
             return true;
           }
@@ -77,6 +82,7 @@ export default {
         var result = response.result;
         console.log(`${result.updatedCells} cells updated.`);
         console.log('data modified')
+        dispatch('getSmiley', payload)
       });
     },
     batchUpdateSheet({ state, dispatch }, payload) {
@@ -94,9 +100,27 @@ export default {
         data: body
       }).then(() => {
         console.log('cells updated');
+        console.log(payload)
+        dispatch('getSmiley', payload)
       });
     },
-    travelWeek({ state, commit, dispatch }, payload) {
+    async getSmiley({ state, commit }, payload) {
+      var ranges = [ `saisie-${state.currentYear}!AU${payload.line}` ];
+      await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: state.spreadsheetId,
+        range: ranges
+      }).then((response) => {
+        console.log(response.result.values)
+        if (response.result.values != undefined) {
+          if (response.result.values != "#NUM!") {
+            commit('assignSmiley', response.result.values[0][0])
+          }
+        } else {
+          commit('assignSmiley', '') 
+        }
+      });
+    },
+    travelWeek({ state, commit }, payload) {
       commit('assignDataFiltered', state.mainTableData[payload.value])
     }
   }

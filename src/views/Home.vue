@@ -32,7 +32,7 @@
       <!-- Justification hours -->
       <div class="wrap-status">
         <div>
-          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">{{ this.tableData[46] }}</span></span>
+          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">{{ this.$store.state['authorization'].smiley }}</span></span>
           <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
         </div>
         <customButton :action="toggleModaleJustifyHour" :text="'Justifier les heures'" :variant="'button button-primary'" v-show="currentWeek >= week"/>
@@ -351,6 +351,7 @@ export default {
             pmEnd,
           },
           'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+          'line': this.lines
         }
         
         this.batchUpdateSheet(payload)
@@ -366,7 +367,8 @@ export default {
     ...mapActions('authorization', [
       'travelWeek',
       'updateSheet',
-      'batchUpdateSheet'
+      'batchUpdateSheet',
+      'getSmiley'
     ]),
     sendDecription() {
       let payload = {
@@ -428,6 +430,7 @@ export default {
       let payload = {
         'value': "",
         'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
+        'line': this.lines
       }
       this.batchUpdateSheet(payload).then(() => {
         this.amBegin = ""
@@ -446,7 +449,8 @@ export default {
       amBegin == undefined ? amBegin = moment().format('HH:mm') : null
       let payload = {
         'value': amBegin,
-        'ranges': this.days[this.currentDay].amBegin + this.lines
+        'ranges': this.days[this.currentDay].amBegin + this.lines,
+        'line': this.lines
       }
       this.updateSheet(payload)
       this.amBegin = amBegin
@@ -457,7 +461,8 @@ export default {
       amEnd == undefined ? amEnd = moment().format('HH:mm') : null
       let payload = {
         'value': amEnd,
-        'ranges': this.days[this.currentDay].amEnd + this.lines
+        'ranges': this.days[this.currentDay].amEnd + this.lines,
+        'line': this.lines
       }
       this.updateSheet(payload)
       this.amEnd = amEnd
@@ -468,7 +473,8 @@ export default {
       pmBegin == undefined ? pmBegin = moment().format('HH:mm') : null
       let payload = {
         'value': pmBegin,
-        'ranges': this.days[this.currentDay].pmBegin + this.lines
+        'ranges': this.days[this.currentDay].pmBegin + this.lines,
+        'line': this.lines
       }
       this.updateSheet(payload)
       this.pmBegin = pmBegin
@@ -479,7 +485,8 @@ export default {
       pmEnd == undefined ? pmEnd = moment().format('HH:mm') : null
       let payload = {
         'value': pmEnd,
-        'ranges': this.days[this.currentDay].pmEnd + this.lines
+        'ranges': this.days[this.currentDay].pmEnd + this.lines,
+        'line': this.lines
       }
       this.updateSheet(payload)
       this.pmEnd = pmEnd
