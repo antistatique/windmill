@@ -4,6 +4,7 @@
 	</div>
 	<div class="dashboard" v-else>
 
+		<!-- Header of the page -->
 		<div class="header">
 			<span class="icon-right">
 
@@ -54,6 +55,7 @@
 			<p class="header-subtitle-regular">{{ (parseFloat(result.diffValid) + parseFloat(result.soldeYearEarlier) - parseFloat(result.budgetOffDay)).toFixed(2) }} jours de vacances et {{ (parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup).toFixed(2) }} jour ({{ ((parseFloat(result.overtimeHours) / 8.4 - result.overtimeRecup)*8.4).toFixed(2) }}h) supplémentaires</p>
 		</div>
 
+		<!-- Content of the page -->
 		<div class="data-tables">
 			<table class="table-data table-count">
 				<thead>
@@ -116,6 +118,7 @@
 			</table>
 		</div>
 
+		<!-- Modal for storing the values in the local storage -->
 		<modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
 
 	</div> 
@@ -132,11 +135,13 @@
 
 	export default {
 		name: 'dashboard',
+		// Imported components
 		components: {
 			ErrorPage,
 			BIconBoxArrowRight,
 			modalJustifyHours
 		},
+		// Variables
 		data: () => ({
 			isModalSetHourOpen: false,
 			dataLoaded: null,
@@ -160,6 +165,7 @@
 			currentYear: moment().year(),
 			yearEarlier: null
 		}),
+		// Call the API for storing the values 
 		beforeCreate() {
 			this.$store.dispatch('dashboard/getDashboardSheet').then(() => {
 				this.$store.getters['dashboard/getDataDashboard'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
@@ -167,9 +173,11 @@
 			})
 		},
 		methods: {
+			// Show modal
 			toggleModaleSetHour: function() {
 			this.isModalSetHourOpen = !this.isModalSetHourOpen;
 			},
+			// Set hours in the local storage
 			storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
 				localStorage.setItem('hoursPlanified', JSON.stringify({
 					amBegin: amBegin,
@@ -179,19 +187,42 @@
 				}))
 				this.isModalSetHourOpen = !this.isModalSetHourOpen
 			},
+			// Set variables before showing them 
 			setVar() {
+				// firstname of the user 
 				this.result.firstname = this.getDataDashboard[0]
+
+				// Overtime for the year 
 				this.result.overtimeHours = this.getDataDashboard[1]
+
+				// Number of day off
 				this.result.budgetOffDay = this.getDataDashboard[2]
+
+				// Number of day in formation
 				this.result.formationDay = this.getDataDashboard[3]
+
+				// Money used for formation
 				this.result.moneyFormation = this.getDataDashboard[4]
+
+				// Justified absences
 				this.result.sickDay = this.getDataDashboard[5]
+
+				// Number of day recupered
 				this.result.overtimeRecup = this.getDataDashboard[6]
+
+				// Pourcentage work
 				this.result.percentageWork = this.getDataDashboard[7]
+
+				// Overtime
 				this.result.diffValid = this.getDataDashboard[9]
+
+				// Week off for the last year
 				this.result.soldeYearEarlier = this.getDataDashboard[10]
+
+				// Week off for the current year
 				this.result.takeDayCurrentYear = this.getDataDashboard[11]
 			},
+			// Get the function signOut from the store authentication
 			...mapActions('authentication', [
 				'signOut',
 			]),
@@ -205,6 +236,7 @@
 			])
 		},
 		mounted() {
+			// Get the current year 
 			this.yearEarlier = moment(this.currentYear, 'YYYY').subtract(1, 'y').format('YYYY')
 		}
 	}

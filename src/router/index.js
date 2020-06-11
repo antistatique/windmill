@@ -45,6 +45,7 @@ const router = new VueRouter({
   routes
 })
 
+// Check if the user is connected or not
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     store.dispatch("authentication/isSignedIn").then(isSignedIn => {
@@ -57,7 +58,7 @@ router.beforeEach((to, from, next) => {
       }
     })
   } else {
-    next() // assurez vous de toujours appeler `next()` !
+    next() 
   }
 })
 
