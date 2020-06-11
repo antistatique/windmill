@@ -35,6 +35,10 @@
 </template>
 
 <style>
+	a {
+		padding: 3em;
+	}
+
 	.nav router-link {
 		display: block;
 		width: 50%;
