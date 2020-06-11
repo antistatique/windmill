@@ -16,11 +16,13 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
+    // Importe the files for the login, the home page and the dashboard
     authentication,
     authorization,
     dashboard
   },
   plugins: [
+    // Make data persisted
     createPersistedState({
       paths: [
         'authentication.profile',

@@ -20,17 +20,20 @@ export default {
   data() {
     return {};
   },
+  // Get a getters from the store authentication
   computed: {
     ...mapGetters('authentication', [
       'loggedIn'
     ]),
   },
+  // Get methods from the store authentication
   methods: {
     ...mapActions('authentication', [
       'signIn',
       'signOut',
       'isSignedIn'
     ]),
+    // Use method from the store 
     login() {
       this.signIn();
     },

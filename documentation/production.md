@@ -18,14 +18,20 @@
 
    2. Cette erreur survenait lorsqu'on écrivait dans l'url `/login`, `/home` et `/dashboard`. Pour palier à cette erreur, j'ai dû faire les étapes suivantes 
 
-   2. Se rendre dans la repo qui est servi par le serveur et créer un fichier `.htaccess`
+   2. Se rendre dans la repo 
+
+      ```bash
+      ssh windmill@ssh-windmill.alwaysdata.net
+      ```
+      
+   4. Créer un fichier `.htaccess`
 
       ```bash
       touch .htaccess
       nano .htaccess
       ```
 
-   4. Copier et coller les lignes ci-dessous dans le fichier
+   5. Copier et coller les lignes ci-dessous dans le fichier
 
       ```bash
       <IfModule mod_rewrite.c>
@@ -37,13 +43,13 @@
         RewriteRule . /index.html [L]
       </IfModule>
       ```
-      
+
       1. Ces lignes permettront de faire une redirection lorsque nous tapons dans l'URL la page voulue.
 
 4. Copier ensuite les fichiers générés par Vue.js sur le serveur 
 
    ```bash
-   scp -r dist/* [username]@[serveur]:[chemin/au/dossier/servi]
+   scp -r dist/* windmill@ssh-windmill.alwaysdata.net:www/windmill.antistatique.net/current/
    ```
 
 

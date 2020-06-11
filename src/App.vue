@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <!-- Show the navbar -->
     <Navbar/>
+    <!-- Show the view selected by the router view -->
     <router-view/>
   </div>
 </template>
@@ -16,6 +18,7 @@ export default {
 </script>
 
 <style>
+  /* All the styles for the application */
   @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
   #app {
     font-family: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;

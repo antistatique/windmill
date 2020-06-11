@@ -299,6 +299,7 @@ export default {
       }
     }
   }),
+  // Call the API for storing the values 
   beforeCreate() {
     this.$store.dispatch('authorization/getSheet').then(() => {
       this.$store.getters['authorization/tableData'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
@@ -308,6 +309,7 @@ export default {
     })
   },
   methods: {
+    // 4 next functions will show a different modal
     toggleModaleAddHour: function() {
       this.isModalAddHourOpen = !this.isModalAddHourOpen;
     },
@@ -320,6 +322,7 @@ export default {
     toggleModaleSetHour: function() {
       this.isModalSetHourOpen = !this.isModalSetHourOpen;
     },
+    // Back to the current week
     today() {
       this.$store.state['authorization'].keyArray = this.unchangedWeek
       this.currentDay = moment().format('dddd')
@@ -330,10 +333,12 @@ export default {
         this.setVar()
       })
     },
+    // Show tootips on the emojis
     tooltips(smiley) {
       var data = {'🇨🇭': 'Jour férié', '💪': 'Jour de travail', '✈️': 'Jour de congé', '😷': 'Absence justifiée', '💤': 'Jour de repos', '⚖️': 'Reprise d\'heures supplémentaires', '🎓': 'Jour de formation'}
       return data[smiley]
     },
+    // Set or store values from the local storage
     storeStorage(amBegin, amEnd, pmBegin, pmEnd) {
       if(amBegin != '' && amEnd != '' && pmBegin != '' && pmEnd != '') {
         localStorage.setItem('hoursPlanified', JSON.stringify({
@@ -364,27 +369,33 @@ export default {
         this.setHours()
       }
     },
+    // Get methods form the store 
     ...mapActions('authorization', [
       'travelWeek',
       'updateSheet',
       'batchUpdateSheet',
       'getSmiley'
     ]),
+    // Store description 
     sendDecription() {
       let payload = {
         'value': this.description,
         'ranges': 'AV' + this.lines
       }
+      // Send in the spreadsheet
       this.updateSheet(payload)
+      // Store value in the table data
       this.tableData.splice(this.days['Friday'].pmEndIndex+4, 1, this.description)
       this.isModalJustifyHourOpen = !this.isModalJustifyHourOpen;
     },
     changeDay(changedDay) {
+      // Get the day when clicked on it 
       this.currentDay = changedDay
       this.setVar()
       this.setHours()
     },
     changeWeek(nbWeek) {
+      // Get the new week
       let payload = {
         'value': this.$store.state['authorization'].keyArray += (nbWeek),
       }
@@ -392,8 +403,10 @@ export default {
         this.setVar()
       })
     },
+    // Add hour fast
     addHour(hour, minute) {
       var res
+      // Get the last input with a hour and add an hour
       if(this.pmEnd != '') {
         res = moment(this.pmEnd, 'HH:mm').add(hour, 'h').add(minute, 'm').format('HH:mm')
       }
@@ -409,8 +422,10 @@ export default {
       this.sendPmEnd(res)
       this.isModalAddHourOpen = !this.isModalAddHourOpen;
     },
+    // Remove hour fast
     subtractHour(hour, minute) {
       var res
+      // Get the last input with a hour and subtract an hour
       if(this.pmEnd != '') {
         res = moment(this.pmEnd, 'HH:mm').subtract(hour, 'h').subtract(minute, 'm').format('HH:mm')
       }
@@ -426,6 +441,7 @@ export default {
       this.sendPmEnd(res)
       this.isModalSubtractHourOpen = !this.isModalSubtractHourOpen;
     },
+    // Clear all the inputs
     clear() {
       let payload = {
         'value': "",
@@ -433,10 +449,13 @@ export default {
         'line': this.lines
       }
       this.batchUpdateSheet(payload).then(() => {
+        // Empty all the inputs
         this.amBegin = ""
         this.amEnd = ""
         this.pmBegin = ""
         this.pmEnd = ""
+
+        // Store the new value in the table data
         this.tableData.splice(this.days[this.currentDay].amBeginIndex, 4, "", "", "", "")
         this.hoursTot = "00:00"
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
@@ -444,77 +463,115 @@ export default {
       })
       this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, (this.tableData.slice(44)[0] - (moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days[this.currentDay].amBeginIndex-1], 'HH:mm').minute()/60)).toFixed(2))
     },
+    // Store first hour for the morning
     sendAmBegin(amBegin){
       // Set current hour (with the chrono)
+      // Check if it's the current hour entered or an hour from the input
       amBegin == undefined ? amBegin = moment().format('HH:mm') : null
       let payload = {
         'value': amBegin,
         'ranges': this.days[this.currentDay].amBegin + this.lines,
         'line': this.lines
       }
+      // Store in the spreadsheet
       this.updateSheet(payload)
       this.amBegin = amBegin
+      // Store in the table data
       this.tableData.splice(this.days[this.currentDay].amBeginIndex, 1, this.amBegin)
+      // Get right hours for the day
       this.setHours()
     },
+    // Store last hour for the morning
     sendAmEnd(amEnd){
+      // Check if it's the current hour entered or an hour from the input
       amEnd == undefined ? amEnd = moment().format('HH:mm') : null
       let payload = {
         'value': amEnd,
         'ranges': this.days[this.currentDay].amEnd + this.lines,
         'line': this.lines
       }
+      // Store in the spreadsheet
       this.updateSheet(payload)
       this.amEnd = amEnd
+      // Store in the table data
       this.tableData.splice(this.days[this.currentDay].amEndIndex, 1, this.amEnd)
+      // Get right hours for the day
       this.setHours()
     },
+    // Store first hour for the afternoon
     sendPmBegin(pmBegin){
+      // Check if it's the current hour entered or an hour from the input
       pmBegin == undefined ? pmBegin = moment().format('HH:mm') : null
       let payload = {
         'value': pmBegin,
         'ranges': this.days[this.currentDay].pmBegin + this.lines,
         'line': this.lines
       }
+      // Store in the spreadsheet
       this.updateSheet(payload)
       this.pmBegin = pmBegin
+      // Store in the table data
       this.tableData.splice(this.days[this.currentDay].pmBeginIndex, 1, this.pmBegin)
+      // Get right hours for the day
       this.setHours()
     },
+    // Store last hour for the afternoon
     sendPmEnd(pmEnd){
+      // Check if it's the current hour entered or an hour from the input
       pmEnd == undefined ? pmEnd = moment().format('HH:mm') : null
       let payload = {
         'value': pmEnd,
         'ranges': this.days[this.currentDay].pmEnd + this.lines,
         'line': this.lines
       }
+      // Store in the spreadsheet
       this.updateSheet(payload)
       this.pmEnd = pmEnd
+      // Store in the table data
       this.tableData.splice(this.days[this.currentDay].pmEndIndex, 1, this.pmEnd)
+      // Get right hours for the day
       this.setHours()
     },
     setVar() {
+      // Get hour for a day from the table data and show in the input
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
+
+      // Get the last line from the table data -> it's going to be the right line in the spreadsheet
       this.lines = this.tableData.slice(-1)[0],
+
+      // Get the month
       this.monthYear = moment(this.tableData[0], 'YYYY-MM-DD', 'Fr', true).format('MMMM YYYY').toUpperCase(),
+
+      // Date for a day 
       this.dayMonday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).format('DD'),
       this.dayTuesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(1, 'd').format('DD'),
       this.dayWednesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(2, 'd').format('DD'),
       this.dayThursday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(3, 'd').format('DD'),
       this.dayFriday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(4, 'd').format('DD')
+
+      // Tooltips for each day 
       this.days['Monday'].tooltip = this.tooltips(this.tableData[4])
       this.days['Tuesday'].tooltip = this.tooltips(this.tableData[4+8])
       this.days['Wednesday'].tooltip = this.tooltips(this.tableData[4+16])
       this.days['Thursday'].tooltip = this.tooltips(this.tableData[4+24])
       this.days['Friday'].tooltip = this.tooltips(this.tableData[4+32])
+
+      // Get the number of the week
       this.week = this.tableData[1]
+
+      // Check if the emoji is in the table at the key 46
       this.tableData[46] == '🤔' ? this.showSmiley = true : this.showSmiley = false
+
+      // Get the description 
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     },
+    // Modify hours for the day after each insert of hours 
+    // The values will directly change in the table data to avoid API calls and not to overload the application
     setHours() {
+      // In each test it will addition all the hours together and store in the table data
       if(this.amBegin != "" && this.amEnd != "" && this.pmBegin != "" && this.pmEnd != "") {
         this.hoursTot = moment((moment(this.amEnd, 'HH:mm')-moment(this.amBegin, 'HH:mm'))+(moment(this.pmEnd, 'HH:mm')-moment(this.pmBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
@@ -535,17 +592,21 @@ export default {
       }
       this.calculateHours()
     },
+    // Same as before but for the total hours for the week
     calculateHours() {
+      // Addition all hours together and store in table data
       var time = (moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Monday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Tuesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Wednesday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Thursday'].amBeginIndex-1], 'HH:mm').minute()/60) + (moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').hours() + moment(this.tableData[this.days['Friday'].amBeginIndex-1], 'HH:mm').minute()/60)
       this.tableData.splice(this.days['Friday'].pmEndIndex+1, 1, time.toFixed(2))
     }
   },
   computed: {
+    // Get table data from the store
     ...mapGetters('authorization', [
       'tableData'
     ])
   },
   mounted() {
+    // Get values from the local storage if exist
     if(localStorage.getItem('hoursPlanified') != null){
       this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
       this.localAmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).amEnd
@@ -553,6 +614,7 @@ export default {
       this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
     }
     return [
+      // Get current week and day
       this.currentWeek = moment().isoWeek(),
       this.currentDay = moment().format('dddd'),
     ]

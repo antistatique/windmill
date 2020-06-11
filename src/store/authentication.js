@@ -5,6 +5,7 @@ import router from "../router";
 
 export default {
   namespaced: true,
+  // Variable waiting values
   state: {
     signedIn: false,
     profile: null,
@@ -13,11 +14,13 @@ export default {
     scope: "profile https://www.googleapis.com/auth/spreadsheets",
     GoogleAuth: false
   },
+  // Give the values 
   getters: {
     loggedIn: state => state.signedIn,
     isLoading: state => state.loading,
     profileGet: state => state.profile
   },
+  // Store the values in the state corresponding 
   mutations: {
     signIn(state, profile) {
       state.signedIn = true;
@@ -43,11 +46,14 @@ export default {
       }
     }
   },
+  // Make the calls to the API
   actions: {
+    // Init gapi
     initGapi({ state, commit }) {
       return new Promise(resolve => {
         gapi.load('auth2', {
           callback: () => {
+            // Client ID, DiscoveryDocs and scope are required
             gapi.auth2.init({
                 client_id: state.clientId,
                 discoveryDocs: "https://sheets.googleapis.com/$discovery/rest?version=v4",
@@ -66,6 +72,7 @@ export default {
         });
       });
     },
+    // Get the profile of the user 
     assignUser({ commit, state }, userData) {
       let user = state.GoogleAuth.currentUser.get();
       if (userData) {
@@ -75,6 +82,7 @@ export default {
         return commit("signIn", user.getBasicProfile());
       }
     },
+    // Check if the user is signed in
     isSignedIn({ dispatch, commit, state }) {
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(() => {
@@ -93,12 +101,14 @@ export default {
         });
       });
     }, 
+    // Call the method for sign in the user 
     signIn({ dispatch, state }) {
       console.log("signing in...");
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(async () => {
           await state.GoogleAuth.signIn({scope: "profile email"}).then(response => {
             if (response) {
+              // The user can access to the spreadsheet 
               dispatch("assignUser", response).then(() => {
                 router.push('/home')
                 resolve(true);
@@ -116,6 +126,7 @@ export default {
         });
       });
     },
+    // Sign out the user 
     signOut({ commit }) {
       console.log("signing out...");
       return new Promise(resolve => {
