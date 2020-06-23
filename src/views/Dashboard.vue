@@ -2,7 +2,7 @@
 	<div class="dashboard" v-if="dataLoaded == false">
 		<ErrorPage/>
 	</div>
-	<div class="dashboard" v-else>
+	<div class="dashboard mx-auto bg-white min-vh-100" v-else v-bind:style="{maxWidth: '500px'}">
 
 		<!-- Header of the page -->
 		<div class="header">

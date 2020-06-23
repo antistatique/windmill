@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar fixed-bottom bg-light justify-content-around nav">
+	<nav class="navbar fixed-bottom bg-light justify-content-around nav mx-auto" v-bind:style="{maxWidth: '500px'}">
 		<router-link class="navbar-brand" to="/home">
 			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-edit">
 				<g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">

@@ -2,7 +2,7 @@
   <div v-if="dataLoaded == false" class="home">
 		<ErrorPage/>
   </div>
-  <div v-else class="home">
+  <div v-else class="home mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
 
     <div class="stamp-hours">
 

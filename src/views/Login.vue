@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
 
     <div class="centered">
       <h1 style="padding-bottom: 40px;">Windmill</h1>
