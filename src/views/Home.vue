@@ -6,29 +6,8 @@
 
     <div class="stamp-hours">
 
-      <!-- Navigations weeks -->
-      <div class="header-calendar">
-        <div class="d-flex p-3" v-on:click="$store.state['authorization'].keyArray != 0 ? changeWeek(-1) : null">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-left">
-          <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
-            <path d="M16.25,23.25,5.53,12.53a.749.749,0,0,1,0-1.06L16.25.75" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
-          </g>
-        </svg>
-        </div>
-        <div class="d-flex justify-content-center align-items-center flex-grow-1 flex-column">
-          <div class="month">{{ monthYear }}</div>
-          <div class="week">Semaine {{ week }}</div>
-          <div style="display: flex;justify-content: center;"><customButton :action="today" :text="'Aujourd\'hui'" v-show="currentWeek != week" :variant="'button button-tertiary'"/></div>
-        </div>
-        <div class="d-flex p-3" v-on:click="$store.state['authorization'].keyArray != $store.state['authorization'].mainTableData.length ? changeWeek(1) : null">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" viewBox="0 0 140 140" class="icon icon-arrow-right">
-          <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">
-            <path d="M5.5.75,16.22,11.47a.749.749,0,0,1,0,1.06L5.5,23.25" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
-          </g>
-        </svg>
-        </div>
-      </div>
-
+      <WeekNavigation v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:currentMonth="this.monthYear" v-bind:changeWeek="changeWeek" v-bind:today="today"/>
+ 
       <!-- Justification hours -->
       <div class="wrap-status">
         <div>
@@ -200,6 +179,7 @@ import ErrorPage from '../components/errorPage'
 import modalHours from '../components/ModalHours'
 import modalJustifyHours from '../components/ModalJustifyHours'
 import customButton from '../components/Button'
+import Justification from '../components/Justification'
 
 export default {
   name: 'Home',
@@ -211,7 +191,8 @@ export default {
     ErrorPage,
     modalHours,
     modalJustifyHours,
-    customButton
+    customButton,
+    WeekNavigation,
   },
   data: () => ({
     showSmiley: false,
