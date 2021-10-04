@@ -180,6 +180,7 @@ import modalHours from '../components/ModalHours'
 import modalJustifyHours from '../components/ModalJustifyHours'
 import customButton from '../components/Button'
 import Justification from '../components/Justification'
+import WeekNavigation from '../components/calendar/WeekNavigation'
 
 export default {
   name: 'Home',
@@ -193,6 +194,7 @@ export default {
     modalJustifyHours,
     customButton,
     WeekNavigation,
+    Justification,
   },
   data: () => ({
     showSmiley: false,
