@@ -10,7 +10,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue, vBlur)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = true;
 
 new Vue({
   router,

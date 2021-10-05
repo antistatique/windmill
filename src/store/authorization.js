@@ -70,7 +70,7 @@ export default {
       });
     },
     // Update a cell in the spreadsheet
-    updateSheet({ state, commit, dispatch }, payload) {
+    async updateSheet({ state, commit, dispatch }, payload) {
       let values = [
         [
           payload.value
@@ -79,7 +79,7 @@ export default {
       let body = {
         values: values
       };
-      gapi.client.sheets.spreadsheets.values.update({
+      await gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: state.spreadsheetId,
         range: `saisie-${state.currentYear}!${payload.ranges}`,
         valueInputOption: 'USER_ENTERED',
@@ -89,7 +89,7 @@ export default {
       });
     },
     // Update multiple cells in the spreadsheet
-    batchUpdateSheet({ state, dispatch }, payload) {
+    async batchUpdateSheet({ state, dispatch }, payload) {
       let values = [["", "", "", ""]];
       if (Object.keys(payload.value).length !== 0) {
         values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
@@ -100,7 +100,7 @@ export default {
           values: values
         }
       ];
-      gapi.client.sheets.spreadsheets.values.batchUpdate({
+      await gapi.client.sheets.spreadsheets.values.batchUpdate({
         spreadsheetId: state.spreadsheetId,
         valueInputOption: 'USER_ENTERED',
         data: body

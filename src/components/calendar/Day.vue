@@ -22,8 +22,6 @@ export default {
   },
   methods: {
     computeTimeClass() {
-      console.log(this.tableData[7 + this.tableDataOffset], { offset: this.tableDataOffset, props: this.$props });
-
       if (this.doneHours < this.legalHours || this.doneHours > this.legalHours) {
         return 'extra-hours'
       }
@@ -40,6 +38,9 @@ export default {
     },
     totalHours: function () {
       return this.tableData[7 + this.tableDataOffset];
+    },
+    emoji: function() {
+      return this.tableData[4 + this.tableDataOffset] ?? '?';
     }
   }
 }
