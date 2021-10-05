@@ -43,6 +43,9 @@ export default {
         changeWeek: Function,
         today: Function,
     },
+    updated() {
+      this.baseWeek = this.baseWeek === null ? this.currentWeek : this.baseWeek
+    },
     data() {
         return {
             baseWeek: this.currentWeek,
