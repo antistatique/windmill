@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <!-- Show the navbar -->
-    <Navbar/>
     <!-- Show the view selected by the router view -->
     <router-view/>
+    <!-- Show the navbar -->
+    <Navbar/>
   </div>
 </template>
 
@@ -251,7 +251,7 @@ export default {
   }
   .buttons-row button {
     flex: 0 0 3.15rem;
-    margin-right: .5rem; 
+    margin-right: .5rem;
   }
   .buttons-row button:last-of-type {
     margin-right: 0;

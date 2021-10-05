@@ -2,7 +2,7 @@
   <div v-if="typeof dataLoaded === 'undefined'" class="home">
     <ErrorPage/>
   </div>
-  <div v-else class="home mx-auto bg-white min-vh-100" :style="{maxWidth: '500px'}">
+  <div v-else class="home mx-auto bg-white min-vh-100 p-1" :style="{maxWidth: '730px', minWidth: '330px'}">
     <div class="stamp-hours">
       <WeekNavigation :store="$store" :currentWeek="this.week" :currentMonth="this.monthYear" :changeWeek="changeWeek"
                       :today="today"/>
@@ -125,10 +125,10 @@
 
     </div>
 
-    <div class="bloc-modale" v-if="isModalJustifyHourOpen">
-      <div class="overlay" style="background: white" v-on:click="toggleModaleJustifyHour"></div>
+    <div class="bloc-modale" style="backdrop-filter: blur(5px) brightness(30%)" v-if="isModalJustifyHourOpen">
+      <div class="overlay" v-on:click="toggleModaleJustifyHour"></div>
 
-      <div class="modale" style="background: white; top: 10%;">
+      <div class="modale container rounded-lg" style="background: white; max-width: 730px; position: relative;">
         <div v-on:click="toggleModaleJustifyHour" class="btn-modale">
           <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                x="0px" y="0px"
