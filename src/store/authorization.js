@@ -15,11 +15,11 @@ export default {
     week: moment().isoWeek(),
     smiley: null
   },
-  // Give the values 
+  // Give the values
   getters: {
     tableData: state => state.dataFiltered,
   },
-  // Store the values in the state corresponding 
+  // Store the values in the state corresponding
   mutations: {
     assignTableData(state, tableData) {
       state.mainTableData = tableData;
@@ -38,17 +38,16 @@ export default {
   actions: {
     // Get all the values from the spreadsheet
     async getSheet({ state, commit, dispatch }) {
-      var ranges = [ `saisie-${state.currentYear}!A1:AW` ];
+      let ranges = [ `saisie-${state.currentYear}!A1:AW` ];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
-        console.log('Data loaded')
-        var array = []
+        let array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
             // First filter to get all the rows for the user connected
-            if (element[3] == store.state['authentication'].profile.email) {
+            if (element[3] === store.state['authentication'].profile.email) {
               // index + 1 give the right line in the spreadsheet
               element.push((index+1))
               array.push(element)
@@ -72,13 +71,12 @@ export default {
     },
     // Update a cell in the spreadsheet
     updateSheet({ state, commit, dispatch }, payload) {
-      console.log(payload)
-      var values = [
+      let values = [
         [
           payload.value
         ],
       ];
-      var body = {
+      let body = {
         values: values
       };
       gapi.client.sheets.spreadsheets.values.update({
@@ -86,18 +84,15 @@ export default {
         range: `saisie-${state.currentYear}!${payload.ranges}`,
         valueInputOption: 'USER_ENTERED',
         resource: body
-      }).then((response) => {
-        var result = response.result;
-        console.log(`${result.updatedCells} cells updated.`);
-        console.log('data modified')
+      }).then(() => {
         dispatch('getSmiley', payload)
       });
     },
     // Update multiple cells in the spreadsheet
     batchUpdateSheet({ state, dispatch }, payload) {
-      var values;
-      payload.value == "" ? values = [["", "", "", ""]] : values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
-      var body = [
+      let values;
+      payload.value === "" ? values = [["", "", "", ""]] : values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
+      let body = [
         {
           range: `saisie-${state.currentYear}!${payload.ranges}`,
           values: values
@@ -108,8 +103,6 @@ export default {
         valueInputOption: 'USER_ENTERED',
         data: body
       }).then(() => {
-        console.log('cells updated');
-        console.log(payload)
         dispatch('getSmiley', payload)
       });
     },
@@ -120,13 +113,13 @@ export default {
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
-        console.log(response.result.values)
-        if (response.result.values != undefined) {
-          if (response.result.values != "#NUM!") {
-            commit('assignSmiley', response.result.values[0][0])
-          }
-        } else {
-          commit('assignSmiley', '') 
+        if (!response.result.hasOwnProperty('values')) {
+          commit('assignSmiley', '')
+        }
+
+        if (response.result.hasOwnProperty('values') && !response.result.values.includes('#NUM!')) {
+          const [values] = response.result.values;
+          commit('assignSmiley', values[0])
         }
       });
     },

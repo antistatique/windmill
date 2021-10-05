@@ -7,9 +7,9 @@
     <div class="stamp-hours">
 
       <WeekNavigation v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:currentMonth="this.monthYear" v-bind:changeWeek="changeWeek" v-bind:today="today"/>
- 
+
       <Justification v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:baseWeek="this.currentWeek" v-bind:showSmiley="showSmiley" v-bind:toggleModaleJustifyHour="toggleModaleJustifyHour" v-bind:tableData="tableData"/>
-      
+
 
 
       <!-- Part days -->
@@ -54,7 +54,7 @@
         </tbody>
       </table>
 
-      <!-- Part hours -->  
+      <!-- Part hours -->
       <table class="table-data entry-hours">
         <thead>
           <tr>
@@ -78,7 +78,7 @@
             <td class="d-inline-flex col-2">
               <button class="button button-secondary" v-on:click="sendPmEnd()" :class="amBegin != '' && amEnd != '' && pmBegin != ''&& pmEnd == '' ? '' : 'd-none'">
                 <BIconClock class="icon icon-chrono"/>
-              </button>  
+              </button>
             </td>
             <td class="d-inline-flex col-10">
               <input type="time" class="form-control col" v-model="pmEnd" @blur="sendPmEnd(pmEnd)" id="pmEnd">
@@ -127,7 +127,7 @@
           <textarea v-model="description" :placeholder="description == '' ? 'La raison de votre heure supplémentaire':''" class="form-control" style="min-width: 100%">La raison de votre heure supplémentaire</textarea>
           <button class="button button-validation" @click="sendDecription();">Valider</button>
         </div>
-			</div> 
+			</div>
 		</div>
 
     <modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
@@ -136,7 +136,7 @@
 
     <modalHours :revele="isModalSubtractHourOpen" :toggleModal="toggleModaleSubtractHour" :action="subtractHour" :name="'Enlever du temps'"></modalHours>
 
-  </div> 
+  </div>
 
 </template>
 
@@ -156,7 +156,7 @@ import Day from '../components/calendar/Day'
 export default {
   name: 'Home',
   components: {
-    BIconArrowLeft, 
+    BIconArrowLeft,
     BIconArrowRight,
     BIconTrash,
     BIconClock,
@@ -254,7 +254,7 @@ export default {
       }
     }
   }),
-  // Call the API for storing the values 
+  // Call the API for storing the values
   beforeCreate() {
     this.$store.dispatch('authorization/getSheet').then(() => {
       this.$store.getters['authorization/tableData'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
@@ -302,7 +302,7 @@ export default {
           pmBegin: pmBegin,
           pmEnd: pmEnd,
         }))
-  
+
         let payload = {
           'value': {
             amBegin,
@@ -313,7 +313,7 @@ export default {
           'ranges': this.days[this.currentDay].amBegin + this.lines + ":" + this.days[this.currentDay].pmEnd + this.lines,
           'line': this.lines
         }
-        
+
         this.batchUpdateSheet(payload)
         this.amBegin = amBegin,
         this.amEnd = amEnd,
@@ -324,14 +324,14 @@ export default {
         this.setHours()
       }
     },
-    // Get methods form the store 
+    // Get methods form the store
     ...mapActions('authorization', [
       'travelWeek',
       'updateSheet',
       'batchUpdateSheet',
       'getSmiley'
     ]),
-    // Store description 
+    // Store description
     sendDecription() {
       let payload = {
         'value': this.description,
@@ -344,7 +344,7 @@ export default {
       this.isModalJustifyHourOpen = !this.isModalJustifyHourOpen;
     },
     changeDay(changedDay) {
-      // Get the day when clicked on it 
+      // Get the day when clicked on it
       this.currentDay = changedDay
       this.setVar()
       this.setHours()
@@ -488,16 +488,9 @@ export default {
       this.setHours()
     },
     setVar() {
-
-      
-
-      console.log(this.tableData)
-
       // Get hour for a day from the table data and show in the input
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
-      console.log(this.amBegin)
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
-      console.log(this.amEnd)
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
 
@@ -507,14 +500,14 @@ export default {
       // Get the month
       this.monthYear = moment(this.tableData[0], 'YYYY-MM-DD', 'Fr', true).format('MMMM YYYY').toUpperCase(),
 
-      // Date for a day 
+      // Date for a day
       this.dayMonday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).format('DD'),
       this.dayTuesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(1, 'd').format('DD'),
       this.dayWednesday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(2, 'd').format('DD'),
       this.dayThursday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(3, 'd').format('DD'),
       this.dayFriday = moment(this.tableData[0], 'YYYY-MM-DD', 'fr', true).add(4, 'd').format('DD')
 
-      // Tooltips for each day 
+      // Tooltips for each day
       this.days['Monday'].tooltip = this.tooltips(this.tableData[4])
       this.days['Tuesday'].tooltip = this.tooltips(this.tableData[4+8])
       this.days['Wednesday'].tooltip = this.tooltips(this.tableData[4+16])
@@ -527,10 +520,10 @@ export default {
       // Check if the emoji is in the table at the key 46
       this.tableData[46] == '🤔' ? this.showSmiley = true : this.showSmiley = false
 
-      // Get the description 
+      // Get the description
       if(this.tableData[46] == '🤔' || this.tableData[46] == '') this.description = this.tableData[47]
     },
-    // Modify hours for the day after each insert of hours 
+    // Modify hours for the day after each insert of hours
     // The values will directly change in the table data to avoid API calls and not to overload the application
     setHours() {
       // In each test it will addition all the hours together and store in the table data
@@ -538,7 +531,7 @@ export default {
         this.hoursTot = moment((moment(this.amEnd, 'HH:mm')-moment(this.amBegin, 'HH:mm'))+(moment(this.pmEnd, 'HH:mm')-moment(this.pmBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-2, 1, (moment(this.hoursTot, 'HH:mm').hours() + moment(this.hoursTot, 'HH:mm').minute()/60).toString())
-      } 
+      }
       else if(this.amBegin != "" && this.amEnd != "") {
         this.hoursTot = moment((moment(this.amEnd, 'HH:mm')-moment(this.amBegin, 'HH:mm'))).subtract(1, 'h').format('HH:mm')
         this.tableData.splice(this.days[this.currentDay].amBeginIndex-1, 1, this.hoursTot)
@@ -575,7 +568,6 @@ export default {
       this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
       this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
     }
-    console.log(this.tableData)
     return [
       // Get current week and day
       this.currentWeek = moment().isoWeek(),
@@ -586,7 +578,7 @@ export default {
 </script>
 
 <style>
-  
+
   .title, .username {
     border-radius: 4px;
     font-weight: 600;

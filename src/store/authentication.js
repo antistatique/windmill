@@ -14,13 +14,13 @@ export default {
     scope: "profile https://www.googleapis.com/auth/spreadsheets",
     GoogleAuth: false
   },
-  // Give the values 
+  // Give the values
   getters: {
     loggedIn: state => state.signedIn,
     isLoading: state => state.loading,
     profileGet: state => state.profile
   },
-  // Store the values in the state corresponding 
+  // Store the values in the state corresponding
   mutations: {
     signIn(state, profile) {
       state.signedIn = true;
@@ -72,7 +72,7 @@ export default {
         });
       });
     },
-    // Get the profile of the user 
+    // Get the profile of the user
     assignUser({ commit, state }, userData) {
       let user = state.GoogleAuth.currentUser.get();
       if (userData) {
@@ -95,29 +95,35 @@ export default {
             }
             resolve(state.GoogleAuth.isSignedIn.get() && state.profile);
           } catch (e) {
+            // ISSUE-52: https://github.com/antistatique/windmill/issues/52
+            // Find a way to inform the user for the Auth failure.
             console.log(e);
             reject(e);
           }
         });
       });
-    }, 
-    // Call the method for sign in the user 
+    },
+    // Call the method for sign in the user
     signIn({ dispatch, state }) {
       console.log("signing in...");
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(async () => {
           await state.GoogleAuth.signIn({scope: "profile email"}).then(response => {
             if (response) {
-              // The user can access to the spreadsheet 
+              // The user can access to the spreadsheet
               dispatch("assignUser", response).then(() => {
                 router.push('/home')
                 resolve(true);
               });
             } else {
+              // ISSUE-52: https://github.com/antistatique/windmill/issues/52
+              // Find a way to inform the user for the Auth failure.
               reject();
             }
           })
           .catch(err => {
+            // ISSUE-52: https://github.com/antistatique/windmill/issues/52
+            // Find a way to inform the user for the Auth failure.
             console.log(err);
             dispatch("signOut").then(() => {
               reject();
@@ -126,7 +132,7 @@ export default {
         });
       });
     },
-    // Sign out the user 
+    // Sign out the user
     signOut({ commit }) {
       console.log("signing out...");
       return new Promise(resolve => {
