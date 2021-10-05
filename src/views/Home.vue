@@ -128,7 +128,7 @@
     <div class="bloc-modale" style="backdrop-filter: blur(5px) brightness(30%)" v-if="isModalJustifyHourOpen">
       <div class="overlay" v-on:click="toggleModaleJustifyHour"></div>
 
-      <div class="modale container rounded-lg" style="background: white; max-width: 730px; position: relative;">
+      <div class="modale container rounded-lg px-4 pt-5" style="background: white; max-width: 730px; position: relative;">
         <div v-on:click="toggleModaleJustifyHour" class="btn-modale">
           <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                x="0px" y="0px"
