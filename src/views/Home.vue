@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataLoaded == false" class="home">
+  <div v-if="dataLoaded == undefined" class="home">
 		<ErrorPage/>
   </div>
   <div v-else class="home mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
@@ -8,47 +8,17 @@
 
       <WeekNavigation v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:currentMonth="this.monthYear" v-bind:changeWeek="changeWeek" v-bind:today="today"/>
  
-      <!-- Justification hours -->
-      <div class="wrap-status">
-        <div>
-          <span class="hours">Heures <span v-show="currentWeek >= week && showSmiley">{{ this.$store.state['authorization'].smiley }}</span></span>
-          <div class="denominator"><span class="numerator">{{ this.tableData[44] }}</span>/ {{ this.tableData[45] }}</div>
-        </div>
-        <customButton :action="toggleModaleJustifyHour" :text="'Justifier les heures'" :variant="'button button-primary'" v-show="currentWeek >= week"/>
-      </div>
+      <Justification v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:baseWeek="this.currentWeek" v-bind:showSmiley="showSmiley" v-bind:toggleModaleJustifyHour="toggleModaleJustifyHour" v-bind:tableData="tableData"/>
+      
+
 
       <!-- Part days -->
       <div class="calendar">
-        <div class="date" :class="this.currentDay == 'Monday' ? 'selected' : ''" v-on:click="changeDay('Monday')">
-          <span v-b-tooltip.hover :title="days.Monday.tooltip">{{ this.tableData[4] }}</span>
-          <span class="week">Lun</span>
-          <span class="day">{{ dayMonday }}</span>
-          <span class="time" :class="this.tableData[5] < this.tableData[6] ? 'extra-hours':''">{{ this.tableData[7] == hoursTot ? hoursTot : this.tableData[7] }}</span>
-        </div>
-        <div class="date" :class="this.currentDay == 'Tuesday' ? 'selected' : ''" v-on:click="changeDay('Tuesday')">
-          <span v-b-tooltip.hover :title="days.Tuesday.tooltip">{{ this.tableData[4+8] }}</span>
-          <span class="week">Mar</span>
-          <span class="day">{{ dayTuesday }}</span>
-          <span class="time" :class="this.tableData[5+8] < this.tableData[6+8] ? 'extra-hours':''">{{ this.tableData[7+8] == hoursTot ? hoursTot : this.tableData[7+8] }}</span>
-        </div>
-        <div class="date" :class="this.currentDay == 'Wednesday' ? 'selected' : ''" v-on:click="changeDay('Wednesday')">
-          <span v-b-tooltip.hover :title="days.Wednesday.tooltip">{{ this.tableData[4+16] }}</span>
-          <span class="week">Mer</span>
-          <span class="day">{{ dayWednesday }}</span>
-          <span class="time" :class="this.tableData[5+16] < this.tableData[6+16] ? 'extra-hours':''">{{ this.tableData[7+16] == hoursTot ? hoursTot : this.tableData[7+16] }}</span>
-        </div>
-        <div class="date" :class="this.currentDay == 'Thursday' ? 'selected' : ''" v-on:click="changeDay('Thursday')">
-          <span v-b-tooltip.hover :title="days.Thursday.tooltip">{{ this.tableData[4+24] }}</span>
-          <span class="week">Jeu</span>
-          <span class="day">{{ dayThursday }}</span>
-          <span class="time" :class="this.tableData[5+24] < this.tableData[6+24] ? 'extra-hours':''">{{ this.tableData[7+24] == hoursTot ? hoursTot : this.tableData[7+24] }}</span>
-        </div>
-        <div class="date" :class="this.currentDay == 'Friday' ? 'selected' : ''" v-on:click="changeDay('Friday')">
-          <span v-b-tooltip.hover :title="days.Friday.tooltip">{{ this.tableData[4+32] }}</span>
-          <span class="week">Ven</span>
-          <span class="day">{{ dayFriday }}</span>
-          <span class="time" :class="this.tableData[5+32] < this.tableData[6+32] ? 'extra-hours':''">{{ this.tableData[7+32] == hoursTot ? hoursTot : this.tableData[7+32] }}</span>
-        </div>
+        <Day day="Lun" daySelector="Monday" v-bind:tableDataOffset="0" v-bind:tooltip="days.Monday.tooltip" v-bind:selected="this.currentDay == 'Monday'" v-bind:dayDate="dayMonday" v-bind:totalWorkTime="hoursTot" v-bind:changeDay="changeDay" v-bind:tableData="this.tableData"/>
+        <Day day="Mar" daySelector="Tuesday" v-bind:tableDataOffset="8" v-bind:tooltip="days.Tuesday.tooltip" v-bind:selected="this.currentDay == 'Tuesday'" v-bind:dayDate="dayTuesday" v-bind:totalWorkTime="hoursTot" v-bind:changeDay="changeDay" v-bind:tableData="this.tableData"/>
+        <Day day="Mer" daySelector="Wednesday" v-bind:tableDataOffset="16" v-bind:tooltip="days.Wednesday.tooltip" v-bind:selected="this.currentDay == 'Wednesday'" v-bind:dayDate="dayWednesday" v-bind:totalWorkTime="hoursTot" v-bind:changeDay="changeDay" v-bind:tableData="this.tableData"/>
+        <Day day="Jeu" daySelector="Thursday" v-bind:tableDataOffset="24" v-bind:tooltip="days.Thursday.tooltip" v-bind:selected="this.currentDay == 'Thursday'" v-bind:dayDate="dayThursday" v-bind:totalWorkTime="hoursTot" v-bind:changeDay="changeDay" v-bind:tableData="this.tableData"/>
+        <Day day="Ven" daySelector="Friday" v-bind:tableDataOffset="32" v-bind:tooltip="days.Friday.tooltip" v-bind:selected="this.currentDay == 'Friday'" v-bind:dayDate="dayFriday" v-bind:totalWorkTime="hoursTot" v-bind:changeDay="changeDay" v-bind:tableData="this.tableData"/>
       </div>
 
       <!-- Part hours -->
@@ -181,6 +151,7 @@ import modalJustifyHours from '../components/ModalJustifyHours'
 import customButton from '../components/Button'
 import Justification from '../components/Justification'
 import WeekNavigation from '../components/calendar/WeekNavigation'
+import Day from '../components/calendar/Day'
 
 export default {
   name: 'Home',
@@ -195,6 +166,7 @@ export default {
     customButton,
     WeekNavigation,
     Justification,
+    Day,
   },
   data: () => ({
     showSmiley: false,
@@ -516,9 +488,16 @@ export default {
       this.setHours()
     },
     setVar() {
+
+      
+
+      console.log(this.tableData)
+
       // Get hour for a day from the table data and show in the input
       this.amBegin = this.tableData[this.days[this.currentDay].amBeginIndex],
+      console.log(this.amBegin)
       this.amEnd = this.tableData[this.days[this.currentDay].amEndIndex],
+      console.log(this.amEnd)
       this.pmBegin = this.tableData[this.days[this.currentDay].pmBeginIndex],
       this.pmEnd = this.tableData[this.days[this.currentDay].pmEndIndex],
 
@@ -596,6 +575,7 @@ export default {
       this.localPmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).pmBegin
       this.localPmEnd = JSON.parse(localStorage.getItem('hoursPlanified')).pmEnd
     }
+    console.log(this.tableData)
     return [
       // Get current week and day
       this.currentWeek = moment().isoWeek(),
