@@ -257,7 +257,7 @@ export default {
   }
   .buttons-row button {
     flex: 0 0 3.15rem;
-    margin-right: .5rem; 
+    margin-right: .5rem;
   }
   .buttons-row button:last-of-type {
     margin-right: 0;
