@@ -83,7 +83,7 @@ export default {
       }
     },
     // Check if the user is signed in
-    isSignedIn({ dispatch, commit, state }) {
+    isSignedIn({ dispatch, commit, state, rootState }) {
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(() => {
           commit("getAuthInstance", gapi.auth2.getAuthInstance());
@@ -95,9 +95,11 @@ export default {
             }
             resolve(state.GoogleAuth.isSignedIn.get() && state.profile);
           } catch (e) {
-            console.log(e);
             reject(e);
           }
+        }).catch((e) => {
+          rootState.error = "Windmill n'as pas pu ce connecter à Google"
+          reject(e)
         });
       });
     }, 

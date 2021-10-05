@@ -1,9 +1,5 @@
 <template>
-  <div v-if="dataLoaded == undefined" class="home">
-		<ErrorPage/>
-  </div>
-  <div v-else class="home mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
-
+  <div class="home mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
     <div class="stamp-hours">
 
       <WeekNavigation v-bind:store="$store" v-bind:currentWeek="this.week" v-bind:currentMonth="this.monthYear" v-bind:changeWeek="changeWeek" v-bind:today="today"/>
@@ -261,6 +257,8 @@ export default {
       this.unchangedWeek = this.$store.state['authorization'].keyArray
       this.setVar()
       this.calculateHours()
+    }).catch((e) => {
+      this.$store.state.error = "Windmill n'as pas reçu de données"
     })
   },
   methods: {

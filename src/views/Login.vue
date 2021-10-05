@@ -17,6 +17,9 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'login',
+  beforeCreate() {
+    this.$store.state.error  = !this.loggedIn ? "L'utilisateur n'est pas connecté" : ''
+  },
   data() {
     return {};
   },
