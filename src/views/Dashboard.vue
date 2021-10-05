@@ -168,7 +168,7 @@
 		// Call the API for storing the values
 		beforeCreate() {
 			this.$store.dispatch('dashboard/getDashboardSheet').then(() => {
-				typeof this.$store.getters['dashboard/getDataDashboard'] !== undefined ? this.dataLoaded = true : this.dataLoaded = false
+				typeof this.$store.getters['dashboard/getDataDashboard'] !== 'undefined' ? this.dataLoaded = true : this.dataLoaded = false
 				this.setVar()
 			})
 		},

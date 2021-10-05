@@ -90,8 +90,10 @@ export default {
     },
     // Update multiple cells in the spreadsheet
     batchUpdateSheet({ state, dispatch }, payload) {
-      let values;
-      payload.value === "" ? values = [["", "", "", ""]] : values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
+      let values = [["", "", "", ""]];
+      if (Object.keys(payload.value).length !== 0) {
+        values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
+      }
       let body = [
         {
           range: `saisie-${state.currentYear}!${payload.ranges}`,
@@ -108,7 +110,11 @@ export default {
     },
     // Return or not the smiley in the column AU in the spreadsheet
     async getSmiley({ state, commit }, payload) {
-      var ranges = [ `saisie-${state.currentYear}!AU${payload.line}` ];
+      if (!payload.hasOwnProperty('line')) {
+        return;
+      }
+
+      let ranges = [`saisie-${state.currentYear}!AU${payload.line}` ];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges

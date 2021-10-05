@@ -1,28 +1,46 @@
 <template>
-    <div class="date" :class="this.selected ? 'selected' : ''" v-on:click="changeDay(daySelector)">
-        <span v-b-tooltip.hover :title="tooltip">{{ this.tableData[4 + tableDataOffset] }}</span>
-        <span class="week">{{ day }}</span>
-        <span class="day">{{ dayDate }}</span>
-        <span class="time" :class="this.tableData[5 + tableDataOffset] < this.tableData[6 + tableDataOffset] ? 'extra-hours':''">{{ this.tableData[7 + tableDataOffset] == totalWorkTime ? totalWorkTime : this.tableData[7 + tableDataOffset] }}</span>
-    </div>
+  <div class="date" :class="this.selected ? 'selected' : ''" v-on:click="changeDay(daySelector)">
+    <span v-b-tooltip.hover :title="tooltip">{{ this.tableData[4 + tableDataOffset] }}</span>
+    <span class="week">{{ day }}</span>
+    <span class="day">{{ dayDate }}</span>
+    <span :class="'time ' + computeTimeClass()">{{ totalHours }}</span>
+  </div>
 </template>
-    
+
 <script>
 export default {
-    name: 'Day',
-    props: {
-        tableDataOffset: Number,
-        currentDay: String,
-        selected: Boolean,
-        day: String,
-        dayDate: String,
-        totalWorkTime: String,
-        daySelector: String,
-        changeDay: Function,
-        tableData: Array,
-        tooltip: String,
+  name: 'Day',
+  props: {
+    tableDataOffset: Number,
+    selected: Boolean,
+    day: String,
+    dayDate: String,
+    daySelector: String,
+    changeDay: Function,
+    tableData: Array,
+    tooltip: String,
+  },
+  methods: {
+    computeTimeClass() {
+      console.log(this.tableData[7 + this.tableDataOffset], { offset: this.tableDataOffset, props: this.$props });
+
+      if (this.doneHours < this.legalHours || this.doneHours > this.legalHours) {
+        return 'extra-hours'
+      }
+
+      return '';
     },
-    data() {
+  },
+  computed: {
+    doneHours: function () {
+      return this.tableData[6 + this.tableDataOffset];
     },
+    legalHours: function () {
+      return this.tableData[5 + this.tableDataOffset];
+    },
+    totalHours: function () {
+      return this.tableData[7 + this.tableDataOffset];
+    }
+  }
 }
 </script>
