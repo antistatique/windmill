@@ -13,6 +13,7 @@
     "core-js": "^3.6.4",
     "moment": "^2.25.3",
     "register-service-worker": "^1.7.1",
+    "tb-skeleton": "^0.3.6",
     "v-blur": "^1.0.4",
     "vue": "^2.6.11",
     "vue-gapi": "^0.2.2",

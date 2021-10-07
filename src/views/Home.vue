@@ -6,6 +6,11 @@
 
       <Justification :store="$store" :currentWeek="this.week" :baseWeek="this.currentWeek" :showSmiley="showSmiley"
                      :toggleModaleJustifyHour="toggleModaleJustifyHour" :tableData="tableData" v-if="tableData"/>
+      <div v-else class="rounded-lg" style="width: 100%">
+        <skeleton theme="opacity" shape="radius" bg-color="#dcdbdc">
+          <tb-skeleton aspect-ratio="0.2" shape="rect" theme="opacity"></tb-skeleton>
+        </skeleton>
+      </div>
 
 
       <!-- Part days -->
@@ -166,15 +171,16 @@
 <script>
 /* eslint-disable */
 import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment'
-import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue'
-import ErrorPage from '../components/errorPage'
-import modalHours from '../components/ModalHours'
-import modalJustifyHours from '../components/ModalJustifyHours'
-import customButton from '../components/Button'
-import Justification from '../components/Justification'
-import WeekNavigation from '../components/calendar/WeekNavigation'
-import Day from '../components/calendar/Day'
+import moment from 'moment';
+import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue';
+import ErrorPage from '../components/errorPage';
+import modalHours from '../components/ModalHours';
+import modalJustifyHours from '../components/ModalJustifyHours';
+import customButton from '../components/Button';
+import Justification from '../components/Justification';
+import WeekNavigation from '../components/calendar/WeekNavigation';
+import Day from '../components/calendar/Day';
+import { TbSkeleton, Skeleton } from 'tb-skeleton';
 
 export default {
   name: 'Home',
@@ -190,6 +196,8 @@ export default {
     WeekNavigation,
     Justification,
     Day,
+    TbSkeleton,
+    Skeleton
   },
   data: () => ({
     showSmiley: false,
