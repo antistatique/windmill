@@ -3,7 +3,7 @@
     <span v-b-tooltip.hover :title="tooltip">{{ this.tableData[4 + tableDataOffset] }}</span>
     <span class="week">{{ day }}</span>
     <span class="day">{{ dayDate }}</span>
-    <span :class="'time ' + computeTimeClass()">{{ totalHours }}</span>
+    <span :class="'time ' + computeTimeClass()">{{ doneHours }}</span>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     computeTimeClass() {
-      if (this.doneHours < this.legalHours || this.doneHours > this.legalHours) {
+      if (this.doneHours > this.legalHours) {
         return 'extra-hours'
       }
 
@@ -31,14 +31,12 @@ export default {
   },
   computed: {
     doneHours: function () {
-      return this.tableData[6 + this.tableDataOffset];
+      return this.tableData[7 + this.tableDataOffset];
     },
     legalHours: function () {
-      return this.tableData[5 + this.tableDataOffset];
+      let time = this.tableData[5 + this.tableDataOffset].split('.')
+      return time[0].toString().padStart(2, '0') + ':' + (time[1] * 60 / 10).toString().padStart(2, '0') // Convert to a comparable format from 8.4 to 08:24
     },
-    totalHours: function () {
-      return this.tableData[7 + this.tableDataOffset];
-    }
   }
 }
 </script>
