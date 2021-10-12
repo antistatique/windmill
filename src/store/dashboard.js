@@ -43,7 +43,6 @@ export default {
                 return true
             }
         })
-        console.log('Dashboard loaded')
         if (response.status !== 200) {
           return false;
         }
