@@ -1,5 +1,5 @@
 <template>
-  <div class="date" :class="this.selected ? 'selected' : ''" v-on:click="changeDay(daySelector)">
+  <div class="date" :class="this.currentDay === this.daySelector ? 'selected' : ''" v-on:click="changeDay(daySelector)">
     <span v-b-tooltip.hover :title="tooltip">{{ this.tableData[4 + tableDataOffset] }}</span>
     <span class="week">{{ day }}</span>
     <span class="day">{{ dayDate }}</span>
@@ -12,7 +12,7 @@ export default {
   name: 'Day',
   props: {
     tableDataOffset: Number,
-    selected: Boolean,
+    currentDay: String,
     day: String,
     dayDate: String,
     daySelector: String,

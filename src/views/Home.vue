@@ -11,19 +11,19 @@
       <!-- Part days -->
       <div class="calendar">
         <Day day="Lun" daySelector="Monday" :tableDataOffset="0" :tooltip="days.Monday.tooltip"
-             :selected="this.currentDay === 'Monday'" :dayDate="dayMonday" :changeDay="changeDay"
+            :dayDate="dayMonday" :currentDay="this.currentDay" :changeDay="changeDay"
              :tableData="this.tableData"/>
         <Day day="Mar" daySelector="Tuesday" :tableDataOffset="8" :tooltip="days.Tuesday.tooltip"
-             :selected="this.currentDay === 'Tuesday'" :dayDate="dayTuesday" :changeDay="changeDay"
+             :dayDate="dayTuesday" :currentDay="this.currentDay" :changeDay="changeDay"
              :tableData="this.tableData"/>
         <Day day="Mer" daySelector="Wednesday" :tableDataOffset="16" :tooltip="days.Wednesday.tooltip"
-             :selected="this.currentDay === 'Wednesday'" :dayDate="dayWednesday" :changeDay="changeDay"
+             :dayDate="dayWednesday" :currentDay="this.currentDay" :changeDay="changeDay"
              :tableData="this.tableData"/>
         <Day day="Jeu" daySelector="Thursday" :tableDataOffset="24" :tooltip="days.Thursday.tooltip"
-             :selected="this.currentDay === 'Thursday'" :dayDate="dayThursday" :changeDay="changeDay"
+            :dayDate="dayThursday" :currentDay="this.currentDay" :changeDay="changeDay"
              :tableData="this.tableData"/>
         <Day day="Ven" daySelector="Friday" :tableDataOffset="32" :tooltip="days.Friday.tooltip"
-             :selected="this.currentDay === 'Friday'" :dayDate="dayFriday" :changeDay="changeDay"
+             :dayDate="dayFriday" :currentDay="this.currentDay" :changeDay="changeDay"
              :tableData="this.tableData"/>
       </div>
 
