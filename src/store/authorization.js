@@ -130,7 +130,8 @@ export default {
       });
     },
     // Get the right week in the table data
-    travelWeek({ state, commit }, payload) {
+    travelWeek({ state, commit, dispatch }, payload) {
+      dispatch('getSmiley', payload)
       commit('assignDataFiltered', state.mainTableData[payload.value])
     }
   }

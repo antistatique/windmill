@@ -4,7 +4,7 @@
       <WeekNavigation :store="$store" :currentWeek="this.week" :currentMonth="this.monthYear" :changeWeek="changeWeek"
                       :today="today"/>
 
-      <Justification :store="$store" :currentWeek="this.week" :baseWeek="this.currentWeek" :showSmiley="showSmiley"
+      <Justification :store="$store" :currentWeek="this.week" :baseWeek="this.currentWeek" :showSmiley="this.showSmiley"
                      :toggleModaleJustifyHour="toggleModaleJustifyHour" :tableData="tableData"/>
 
 
