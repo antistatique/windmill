@@ -5,26 +5,31 @@
                       :today="today"/>
 
       <Justification :store="$store" :currentWeek="this.week" :baseWeek="this.currentWeek" :showSmiley="this.showSmiley"
-                     :toggleModaleJustifyHour="toggleModaleJustifyHour" :tableData="tableData"/>
+                     :toggleModaleJustifyHour="toggleModaleJustifyHour" :tableData="tableData" v-if="tableData"/>
+      <div v-else class="rounded-lg" style="width: 100%">
+        <skeleton theme="opacity" shape="radius" bg-color="#dcdbdc">
+          <tb-skeleton aspect-ratio="0.2" shape="rect" theme="opacity"></tb-skeleton>
+        </skeleton>
+      </div>
 
 
       <!-- Part days -->
       <div class="calendar">
         <Day day="Lun" daySelector="Monday" :tableDataOffset="0" :tooltip="days.Monday.tooltip"
             :dayDate="dayMonday" :currentDay="this.currentDay" :changeDay="changeDay"
-             :tableData="this.tableData"/>
+             :tableData="this.tableData" v-if="tableData"/>
         <Day day="Mar" daySelector="Tuesday" :tableDataOffset="8" :tooltip="days.Tuesday.tooltip"
              :dayDate="dayTuesday" :currentDay="this.currentDay" :changeDay="changeDay"
-             :tableData="this.tableData"/>
+             :tableData="this.tableData" v-if="tableData"/>
         <Day day="Mer" daySelector="Wednesday" :tableDataOffset="16" :tooltip="days.Wednesday.tooltip"
              :dayDate="dayWednesday" :currentDay="this.currentDay" :changeDay="changeDay"
-             :tableData="this.tableData"/>
+             :tableData="this.tableData" v-if="tableData"/>
         <Day day="Jeu" daySelector="Thursday" :tableDataOffset="24" :tooltip="days.Thursday.tooltip"
             :dayDate="dayThursday" :currentDay="this.currentDay" :changeDay="changeDay"
-             :tableData="this.tableData"/>
+             :tableData="this.tableData" v-if="tableData"/>
         <Day day="Ven" daySelector="Friday" :tableDataOffset="32" :tooltip="days.Friday.tooltip"
              :dayDate="dayFriday" :currentDay="this.currentDay" :changeDay="changeDay"
-             :tableData="this.tableData"/>
+             :tableData="this.tableData" v-if="tableData"/>
       </div>
 
       <!-- Part hours -->
@@ -166,15 +171,16 @@
 <script>
 /* eslint-disable */
 import { mapActions, mapGetters } from 'vuex';
-import moment from 'moment'
-import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue'
-import ErrorPage from '../components/errorPage'
-import modalHours from '../components/ModalHours'
-import modalJustifyHours from '../components/ModalJustifyHours'
-import customButton from '../components/Button'
-import Justification from '../components/Justification'
-import WeekNavigation from '../components/calendar/WeekNavigation'
-import Day from '../components/calendar/Day'
+import moment from 'moment';
+import { BIconArrowLeft, BIconArrowRight, BIconTrash, BIconClock } from 'bootstrap-vue';
+import ErrorPage from '../components/errorPage';
+import modalHours from '../components/ModalHours';
+import modalJustifyHours from '../components/ModalJustifyHours';
+import customButton from '../components/Button';
+import Justification from '../components/Justification';
+import WeekNavigation from '../components/calendar/WeekNavigation';
+import Day from '../components/calendar/Day';
+import { TbSkeleton, Skeleton } from 'tb-skeleton';
 
 export default {
   name: 'Home',
@@ -190,6 +196,8 @@ export default {
     WeekNavigation,
     Justification,
     Day,
+    TbSkeleton,
+    Skeleton
   },
   data: () => ({
     showSmiley: false,
