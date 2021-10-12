@@ -22,8 +22,6 @@ export default {
   },
   methods: {
     computeTimeClass() {
-      console.log(this.tableData[7 + this.tableDataOffset], { offset: this.tableDataOffset, props: this.$props });
-
       if (this.doneHours < this.legalHours || this.doneHours > this.legalHours) {
         return 'extra-hours'
       }
