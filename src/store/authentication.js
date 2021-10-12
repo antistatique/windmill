@@ -104,8 +104,7 @@ export default {
       });
     },
     // Call the method for sign in the user
-    signIn({ dispatch, state }) {
-      console.log("signing in...");
+    signIn({ dispatch, state, rootState }) {
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(async () => {
           await state.GoogleAuth.signIn({scope: "profile email"}).then(response => {
@@ -116,15 +115,12 @@ export default {
                 resolve(true);
               });
             } else {
-              // ISSUE-52: https://github.com/antistatique/windmill/issues/52
-              // Find a way to inform the user for the Auth failure.
+              rootState.error = "Problème d'authentification de l'utilisateur"
               reject();
             }
           })
           .catch(err => {
-            // ISSUE-52: https://github.com/antistatique/windmill/issues/52
-            // Find a way to inform the user for the Auth failure.
-            console.log(err);
+            rootState.error = "Problème d'authentification de l'utilisateur"
             dispatch("signOut").then(() => {
               reject();
             });
