@@ -3,7 +3,7 @@
     <ErrorMessage v-if="this.$store.state.error" :message="this.$store.state.error" />
     <div v-else>
       <!-- Show the navbar -->
-      <Navbar/>
+      <Navbar v-if="this.$route.path !== '/login'"/>
       <!-- Show the view selected by the router view -->
       <router-view/>
     </div>

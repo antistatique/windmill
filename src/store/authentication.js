@@ -44,6 +44,12 @@ export default {
       if (!state.GoogleAuth) {
         state.GoogleAuth = authInstance;
       }
+    },
+    refreshToken(state) {
+      console.log('refreshToken called', state)
+      gapi.auth.authorize({ client_id: state.clientId, immediate: true, scope: state.scope }, (token => {
+        console.log(token);
+      }));
     }
   },
   // Make the calls to the API
@@ -143,6 +149,10 @@ export default {
           resolve();
         }
       });
+    },
+    refreshToken({ commit }) {
+      console.log('Got a commit')
+      commit('refreshToken')
     }
   }
 };

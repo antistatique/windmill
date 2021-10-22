@@ -372,6 +372,9 @@ export default {
       'batchUpdateSheet',
       'getSmiley',
     ]),
+    ...mapActions('authentication', [
+       'refreshToken'
+    ]),
     // Store description
     sendDescription() {
       let payload = {
@@ -598,6 +601,7 @@ export default {
     ]),
   },
   mounted() {
+    window.setInterval(this.refreshToken, 2.7e+6);
     // Get values from the local storage if exist
     if (localStorage.getItem('hoursPlanified') != null) {
       this.localAmBegin = JSON.parse(localStorage.getItem('hoursPlanified')).amBegin
