@@ -30,8 +30,10 @@ cp .env.example .env
   - And the `ID` of the spreadsheet
 
 
+## Deployment
+The deployment on production is managed by a Github Actions.
+
 
 ### Links 
 
-- [Production instructions](documentation/production.md) 
 - [Work journal](https://docs.google.com/spreadsheets/d/1VdWgKJNUbh4l2Fgs0EE9mFe9Lny3hPH48g_UWj54AII/edit?usp=sharing)
