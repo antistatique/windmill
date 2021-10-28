@@ -1,18 +1,24 @@
 <template>
   <div id="app">
-    <!-- Show the navbar -->
-    <Navbar/>
-    <!-- Show the view selected by the router view -->
-    <router-view/>
+    <ErrorMessage v-if="this.$store.state.error" :message="this.$store.state.error" />
+    <div v-else>
+      <!-- Show the navbar -->
+      <Navbar v-if="this.$route.path !== '/login'"/>
+      <!-- Show the view selected by the router view -->
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
+import ErrorMessage from './components/ErrorMessage'
+
 /* eslint-disable */
 import Navbar from './components/navbar'
 export default {
   components: {
-    Navbar
+    Navbar,
+    ErrorMessage,
   }
 }
 </script>
@@ -251,7 +257,7 @@ export default {
   }
   .buttons-row button {
     flex: 0 0 3.15rem;
-    margin-right: .5rem; 
+    margin-right: .5rem;
   }
   .buttons-row button:last-of-type {
     margin-right: 0;

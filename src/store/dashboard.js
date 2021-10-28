@@ -11,11 +11,11 @@ export default {
     filteredDataDashboard: null,
     currentYear: moment().year(),
   },
-  // Give the values 
+  // Give the values
   getters: {
     getDataDashboard: state => state.filteredDataDashboard,
   },
-  // Store the values in the state corresponding 
+  // Store the values in the state corresponding
   mutations: {
     assignDashboardData(state, payload) {
       state.filteredDataDashboard = payload;
@@ -23,14 +23,14 @@ export default {
   },
   // Make the calls to the API
   actions: {
-    // Get all the values for the dashboard 
+    // Get all the values for the dashboard
     async getDashboardSheet({ state, commit }) {
-      var ranges = [ `résumé-${state.currentYear}!A1:M` ];
+      let ranges = [`résumé-${state.currentYear}!A1:M`];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges
       }).then((response) => {
-        var array = []
+        let array = []
         response.result.values.forEach((element, index) => {
           if(index > 0){
 						array.push(element)
@@ -38,12 +38,11 @@ export default {
         })
         // Filter the data for the user connected
         array.find(element => {
-					if (element[12] == store.state['authentication'].profile.email) {
-						commit('assignDashboardData', element);
-						return true 
-					}
+            if (element[12] === store.state['authentication'].profile.email) {
+                commit('assignDashboardData', element);
+                return true
+            }
         })
-        console.log('Dashboard loaded')
         if (response.status !== 200) {
           return false;
         }

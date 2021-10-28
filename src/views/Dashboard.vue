@@ -1,14 +1,11 @@
 <template>
-	<div class="dashboard" v-if="dataLoaded == false">
-		<ErrorPage/>
-	</div>
-	<div class="dashboard mx-auto bg-white min-vh-100" v-else v-bind:style="{maxWidth: '500px'}">
+	<div class="dashboard mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '730px'}">
 
 		<!-- Header of the page -->
 		<div class="header">
 			<span class="icon-right">
 
-				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="margin-right: 7px" class="icon icon-logout" 
+				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="margin-right: 7px" class="icon icon-logout"
 					viewBox="0 0 496 496" xml:space="preserve" @click="toggleModaleSetHour">
 					<g>
 						<path d="M488,200h-37.6c-5.106-21.625-13.678-42.282-25.384-61.168l26.6-26.6c3.123-3.124,3.123-8.188,0-11.312L395.08,44.352
@@ -34,8 +31,8 @@
 							z" fill="#fff"/>
 					</g>
 				</svg>
-				
-				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="icon icon-logout" 
+
+				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" class="icon icon-logout"
 					viewBox="0 0 512 512" xml:space="preserve" @click="logout()">
 						<g>
 							<path d="M330.667,384h-21.333c-5.891,0-10.667,4.776-10.667,10.667v74.667h-256V42.667h256v74.667
@@ -121,7 +118,7 @@
 		<!-- Modal for storing the values in the local storage -->
 		<modalJustifyHours :revele="isModalSetHourOpen" :toggleModal="toggleModaleSetHour" :action="storeStorage"></modalJustifyHours>
 
-	</div> 
+	</div>
 </template>
 
 <script>
@@ -165,11 +162,13 @@
 			currentYear: moment().year(),
 			yearEarlier: null
 		}),
-		// Call the API for storing the values 
+		// Call the API for storing the values
 		beforeCreate() {
 			this.$store.dispatch('dashboard/getDashboardSheet').then(() => {
-				this.$store.getters['dashboard/getDataDashboard'] != undefined ? this.dataLoaded = true : this.dataLoaded = false
+				typeof this.$store.getters['dashboard/getDataDashboard'] !== 'undefined' ? this.dataLoaded = true : this.dataLoaded = false
 				this.setVar()
+			}).catch((e) => {
+				this.$store.state.error = "Windmill n'as pas reçu de données du dashboard"
 			})
 		},
 		methods: {
@@ -187,12 +186,12 @@
 				}))
 				this.isModalSetHourOpen = !this.isModalSetHourOpen
 			},
-			// Set variables before showing them 
+			// Set variables before showing them
 			setVar() {
-				// firstname of the user 
+				// firstname of the user
 				this.result.firstname = this.getDataDashboard[0]
 
-				// Overtime for the year 
+				// Overtime for the year
 				this.result.overtimeHours = this.getDataDashboard[1]
 
 				// Number of day off
@@ -236,7 +235,7 @@
 			])
 		},
 		mounted() {
-			// Get the current year 
+			// Get the current year
 			this.yearEarlier = moment(this.currentYear, 'YYYY').subtract(1, 'y').format('YYYY')
 		}
 	}

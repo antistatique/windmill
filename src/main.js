@@ -7,10 +7,11 @@ import vBlur from 'v-blur'
 import { BootstrapVue } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import  'tb-skeleton/dist/skeleton.css'
 
 Vue.use(BootstrapVue, vBlur)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   router,

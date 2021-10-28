@@ -1,5 +1,5 @@
 <template>
-  <div class="about mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '500px'}">
+  <div class="about mx-auto bg-white min-vh-100" v-bind:style="{maxWidth: '100%'}">
 
     <div class="centered">
       <h1 style="padding-bottom: 40px;">Windmill</h1>
@@ -31,9 +31,9 @@ export default {
     ...mapActions('authentication', [
       'signIn',
       'signOut',
-      'isSignedIn'
+      'isSignedIn',
     ]),
-    // Use method from the store 
+    // Use method from the store
     login() {
       this.signIn();
     },

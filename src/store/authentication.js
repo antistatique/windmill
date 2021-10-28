@@ -14,13 +14,13 @@ export default {
     scope: "profile https://www.googleapis.com/auth/spreadsheets",
     GoogleAuth: false
   },
-  // Give the values 
+  // Give the values
   getters: {
     loggedIn: state => state.signedIn,
     isLoading: state => state.loading,
     profileGet: state => state.profile
   },
-  // Store the values in the state corresponding 
+  // Store the values in the state corresponding
   mutations: {
     signIn(state, profile) {
       state.signedIn = true;
@@ -44,6 +44,12 @@ export default {
       if (!state.GoogleAuth) {
         state.GoogleAuth = authInstance;
       }
+    },
+    refreshToken(state) {
+      console.log('refreshToken called', state)
+      gapi.auth.authorize({ client_id: state.clientId, immediate: true, scope: state.scope }, (token => {
+        console.log(token);
+      }));
     }
   },
   // Make the calls to the API
@@ -72,7 +78,7 @@ export default {
         });
       });
     },
-    // Get the profile of the user 
+    // Get the profile of the user
     assignUser({ commit, state }, userData) {
       let user = state.GoogleAuth.currentUser.get();
       if (userData) {
@@ -83,7 +89,7 @@ export default {
       }
     },
     // Check if the user is signed in
-    isSignedIn({ dispatch, commit, state }) {
+    isSignedIn({ dispatch, commit, state, rootState }) {
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(() => {
           commit("getAuthInstance", gapi.auth2.getAuthInstance());
@@ -95,30 +101,32 @@ export default {
             }
             resolve(state.GoogleAuth.isSignedIn.get() && state.profile);
           } catch (e) {
-            console.log(e);
             reject(e);
           }
+        }).catch((e) => {
+          rootState.error = "Windmill n'as pas pu ce connecter à Google"
+          reject(e)
         });
       });
-    }, 
-    // Call the method for sign in the user 
-    signIn({ dispatch, state }) {
-      console.log("signing in...");
+    },
+    // Call the method for sign in the user
+    signIn({ dispatch, state, rootState }) {
       return new Promise((resolve, reject) => {
         dispatch("initGapi").then(async () => {
           await state.GoogleAuth.signIn({scope: "profile email"}).then(response => {
             if (response) {
-              // The user can access to the spreadsheet 
+              // The user can access to the spreadsheet
               dispatch("assignUser", response).then(() => {
                 router.push('/home')
                 resolve(true);
               });
             } else {
+              rootState.error = "Problème d'authentification de l'utilisateur"
               reject();
             }
           })
           .catch(err => {
-            console.log(err);
+            rootState.error = "Problème d'authentification de l'utilisateur"
             dispatch("signOut").then(() => {
               reject();
             });
@@ -126,7 +134,7 @@ export default {
         });
       });
     },
-    // Sign out the user 
+    // Sign out the user
     signOut({ commit }) {
       console.log("signing out...");
       return new Promise(resolve => {
@@ -141,6 +149,10 @@ export default {
           resolve();
         }
       });
+    },
+    refreshToken({ commit }) {
+      console.log('Got a commit')
+      commit('refreshToken')
     }
   }
 };
