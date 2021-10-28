@@ -47,6 +47,17 @@
     },
     "rules": {}
   },
+  "vue": {
+    "pwa": {
+      "appleMobileWebAppCapable": "yes",
+      "appleMobileWebAppStatusBarStyle": "black",
+      "workboxOptions": {
+        "exclude": [
+          ".htaccess"
+        ]
+      }
+    }
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
