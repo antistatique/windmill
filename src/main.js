@@ -11,7 +11,7 @@ import  'tb-skeleton/dist/skeleton.css'
 
 Vue.use(BootstrapVue, vBlur)
 
-Vue.config.productionTip = true;
+Vue.config.productionTip = false;
 
 new Vue({
   router,
