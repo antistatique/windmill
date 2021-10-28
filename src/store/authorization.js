@@ -70,7 +70,7 @@ export default {
       });
     },
     // Update a cell in the spreadsheet
-    async updateSheet({ state, commit, dispatch }, payload) {
+    updateSheet({ state, commit, dispatch }, payload) {
       let values = [
         [
           payload.value
@@ -79,7 +79,7 @@ export default {
       let body = {
         values: values
       };
-      await gapi.client.sheets.spreadsheets.values.update({
+      gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: state.spreadsheetId,
         range: `saisie-${state.currentYear}!${payload.ranges}`,
         valueInputOption: 'USER_ENTERED',
@@ -89,7 +89,7 @@ export default {
       });
     },
     // Update multiple cells in the spreadsheet
-    async batchUpdateSheet({ state, dispatch }, payload) {
+    batchUpdateSheet({ state, dispatch }, payload) {
       let values = [["", "", "", ""]];
       if (Object.keys(payload.value).length !== 0) {
         values = [[payload.value.amBegin, payload.value.amEnd, payload.value.pmBegin, payload.value.pmEnd]]
@@ -100,7 +100,7 @@ export default {
           values: values
         }
       ];
-      await gapi.client.sheets.spreadsheets.values.batchUpdate({
+      gapi.client.sheets.spreadsheets.values.batchUpdate({
         spreadsheetId: state.spreadsheetId,
         valueInputOption: 'USER_ENTERED',
         data: body
@@ -121,9 +121,10 @@ export default {
       }).then((response) => {
         if (!response.result.hasOwnProperty('values')) {
           commit('assignSmiley', '')
+          return;
         }
 
-        if (response.result.hasOwnProperty('values') && !response.result.values.includes('#NUM!')) {
+        if (!response.result.values[0].includes('#NUM!')) {
           const [values] = response.result.values;
           commit('assignSmiley', values[0])
         }
