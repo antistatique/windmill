@@ -114,7 +114,7 @@ export default {
         return;
       }
 
-      let ranges = [`saisie-${state.currentYear}!AU${payload.line}` ];
+      let ranges = [ `saisie-${state.currentYear}!AU${payload.line}` ];
       await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: state.spreadsheetId,
         range: ranges

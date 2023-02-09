@@ -316,6 +316,7 @@ export default {
       this.currentDay = moment().format('dddd')
       let payload = {
         'value': this.unchangedWeek,
+        'line': this.$store.state['authorization'].mainTableData[this.unchangedWeek].slice(-1)[0],
       }
       this.travelWeek(payload).then(() => {
         this.setVar()
@@ -395,8 +396,10 @@ export default {
     },
     changeWeek(nbWeek) {
       // Get the new week
+      let value = this.$store.state['authorization'].keyArray += (nbWeek);
       let payload = {
-        'value': this.$store.state['authorization'].keyArray += (nbWeek),
+        'value': value,
+        'line': this.$store.state['authorization'].mainTableData[value].slice(-1)[0],
       }
       this.travelWeek(payload).then(() => {
         this.setVar()
