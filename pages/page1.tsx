@@ -4,6 +4,6 @@ const Page1 = () => {
 			<h1 className='text-xl'>Page 1</h1>
 		</main>
 	);
-}
+};
 
 export default Page1;

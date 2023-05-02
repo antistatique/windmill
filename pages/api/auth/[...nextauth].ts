@@ -53,10 +53,7 @@ const scopes = [
 ];
 
 export default NextAuth({
-	secret: process.env.AUTH_SECRET,
-	pages: {
-		signIn: '/auth/signin',
-	},
+	secret: process.env.NEXTAUTH_SECRET,
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID || '',
@@ -80,6 +77,7 @@ export default NextAuth({
 
 			return { ...session, accessToken: token.accessToken as string };
 		},
+
 		async jwt({ token, user, account }) {
 			// Initial sign in
 			if (account && user) {
@@ -97,6 +95,10 @@ export default NextAuth({
 
 			// Access token has expired, try to update it
 			return refreshAccessToken(token);
+		},
+
+		async redirect() {
+			return '/';
 		},
 	},
 });

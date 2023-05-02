@@ -1,9 +1,9 @@
-const Home = () => {
-  return (
-    <main>
-      <h1 className='text-xl'>Index</h1>
-    </main>
-  )
-}
+const Index = () => {
+	return (
+		<main>
+			<h1 className='text-xl'>Index</h1>
+		</main>
+	);
+};
 
-export default Home;
+export default Index;
