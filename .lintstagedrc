@@ -1,3 +1,0 @@
-{
-	"src/**/*.{js,jsx,ts,tsx}": "eslint --ext .js,.jsx,.ts,.tsx --max-warnings=0"
-}
