@@ -1,7 +1,11 @@
+import { useSession } from "next-auth/react";
+
 const Page1 = () => {
+	const { data } = useSession();
+	
 	return (
-		<main>
-			<h1 className='text-xl'>Page 1</h1>
+		<main className="text-center">
+			<h1 className='text-xl'>{data?.user?.name}</h1>
 		</main>
 	);
 };

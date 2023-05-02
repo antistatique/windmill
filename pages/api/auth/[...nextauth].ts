@@ -18,7 +18,6 @@ const refreshAccessToken = async (payload: JWT) => {
 		});
 
 		const refreshToken = await response.json();
-		console.log('REFRESHED TOKEN', refreshToken);
 
 		if (!response.ok) {
 			throw refreshToken;
@@ -79,12 +78,12 @@ export default NextAuth({
 		},
 
 		async jwt({ token, user, account }) {
-			// Initial sign in
 			if (account && user) {
 				return {
 					accessToken: account.accessToken,
 					accessTokenExpires: Date.now() + account.expires_in * 1000,
 					refreshToken: account.refresh_token,
+					user: user,
 				};
 			}
 
