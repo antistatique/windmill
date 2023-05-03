@@ -15,7 +15,11 @@ module.exports = {
 			yellow: '#FFF618',
 			background: '#F1ECE8',
 		},
-		extend: {},
+		extend: {
+			outlineWidth: {
+				3: '3px',
+			},
+		},
 	},
 	plugins: [],
 };

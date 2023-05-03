@@ -27,7 +27,7 @@ const Dashboard = () => {
 			<div className='h-64 flex flex-col items-center justify-center text-center bg-pink text-white font-semibold space-y-4'>
 				<h1 className='text-4xl'>{summary?.name}</h1>
 
-				<span className='py-2 px-4 bg-yellow rounded-xl text-black'>
+				<span className='py-2 px-4 bg-yellow rounded-xl text-blue'>
 					{`Il te reste ${pluralize(
 						summary.remaining_days_to_take,
 						'jour'
