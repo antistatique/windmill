@@ -1,5 +1,6 @@
-import Summary from '@/interfaces/summary';
 import { useEffect, useState } from 'react';
+
+import Summary from '@/interfaces/summary';
 
 const Dashboard = () => {
 	const [summary, setSummary] = useState({} as Summary);
@@ -44,7 +45,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 
-			<div className='py-6 px-3'>
+			<div className='py-6 px-3 space-y-6'>
 				<div className='space-y-3'>
 					<h2 className='font-semibold'>Budget congés / vacances</h2>
 
@@ -60,6 +61,21 @@ const Dashboard = () => {
 						<div className='p-3 flex'>
 							<span className='grow'>Heures supplémentaires totales</span>
 							<span className='font-semibold'>{`${summary.remaining_overtime} h`}</span>
+						</div>
+					</div>
+				</div>
+
+				<div className='space-y-3'>
+					<h2 className='font-semibold'>Consommées</h2>
+
+					<div className='bg-white rounded-xl divide-y divide-background shadow'>
+						<div className='p-3 flex'>
+							<span className='grow'>Vacances posées</span>
+							<span className='font-semibold'>{`${summary.vacation} j`}</span>
+						</div>
+						<div className='p-3 flex'>
+							<span className='grow'>Jours supplémentaires récupérés</span>
+							<span className='font-semibold'>{`${summary.overtime} j`}</span>
 						</div>
 					</div>
 				</div>
