@@ -17,13 +17,13 @@ const WeekNavigation = () => {
 	};
 
 	return (
-		<div className='p-8 flex justify-between items-center'>
+		<div className='flex justify-between items-center'>
 			<button
 				type='button'
 				onClick={handlePreviousWeek}
 				disabled={!canGoToPreviousWeek}
 				className={`h-12 w-12 flex justify-center items-center text-gray ${
-					canGoToPreviousWeek ? 'hover:text-black' : ''
+					canGoToPreviousWeek ? 'hover:text-blue' : ''
 				}`}
 			>
 				<GoChevronLeft className='h-6 w-6' />
@@ -41,7 +41,7 @@ const WeekNavigation = () => {
 				onClick={handleNextWeek}
 				disabled={!canGoToNextWeek}
 				className={`h-12 w-12 flex justify-center items-center text-gray ${
-					canGoToNextWeek ? 'hover:text-black' : ''
+					canGoToNextWeek ? 'hover:text-blue' : ''
 				}`}
 			>
 				<GoChevronRight className='h-6 w-6' />
