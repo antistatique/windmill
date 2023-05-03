@@ -1,6 +1,6 @@
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 
-import useStore from '@/stores/week';
+import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
 	const { date, week, inc, dec } = useStore();

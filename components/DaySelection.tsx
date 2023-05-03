@@ -1,21 +1,21 @@
 import moment from 'moment';
 
-import useWeek from '@/stores/week';
+import useStore from '@/stores/date';
 
 export default function DayNavigation() {
-	const { week } = useWeek();
+	const { date, week, selectDay } = useStore();
 
 	const firstDay = moment().week(week).startOf('week');
 	const days = [...Array(5)].map((_, index) => {
 		return {
 			value: moment(firstDay).add(index, 'days'),
 			emoji: '/emojies/workDay.svg',
-			hoursWorked: Math.floor(Math.random() * 9 * 100) / 100,
+			hoursWorked: '08:00',
 		};
 	});
 
 	const handleSelectDate = (day: moment.Moment) => {
-		console.log(day);
+		selectDay(day);
 	};
 
 	return (
@@ -24,7 +24,11 @@ export default function DayNavigation() {
 				<div
 					key={day.value.unix()}
 					onClick={() => handleSelectDate(day.value)}
-					className='w-24 p-2 flex flex-col items-center cursor-pointer space-y-1 bg-white rounded-xl shadow'
+					className={`grow p-2 flex flex-col items-center cursor-pointer space-y-1 bg-white rounded-xl shadow  ${
+						day.value.date() === date.date()
+							? '-outline-offset-2 outline outline-3 outline-pink'
+							: ''
+					}`}
 				>
 					<span className='font-semibold text-base text-gray'>
 						{day.value.format('DD')}
@@ -36,9 +40,7 @@ export default function DayNavigation() {
 						{day.value.format('dd')}
 					</span>
 
-					<span className='font-semibold'>
-						{moment.utc(day.hoursWorked * 60 * 60 * 1000).format('HH:mm')}
-					</span>
+					<span className='font-semibold'>{day.hoursWorked}</span>
 				</div>
 			))}
 		</div>
