@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Summary from '@/interfaces/summary';
 import pluralize from '@/helpers/pluralize';
 
+import Section from '@/components/dashboard/Section';
+
 const Dashboard = () => {
 	const [summary, setSummary] = useState({} as Summary);
 
@@ -19,6 +21,9 @@ const Dashboard = () => {
 	const remainingOverTimeDays = summary.remaining_overtime / 8.4;
 
 	const currentYear = new Date().getFullYear();
+
+	const formation_budget = 5;
+	const formation_expense_budget = 1200;
 
 	return (
 		<main>
@@ -42,39 +47,53 @@ const Dashboard = () => {
 			</div>
 
 			<div className='py-6 px-3 space-y-6'>
-				<div className='space-y-3'>
-					<h2 className='font-semibold'>Budget congés / vacances</h2>
-
-					<div className='bg-white rounded-xl divide-y divide-background shadow'>
-						<div className='p-3 flex'>
-							<span className='grow'>{`Budget année en cours ${currentYear}`}</span>
-							<span className='font-semibold'>{`${summary.vacation_sold} j`}</span>
-						</div>
-						<div className='p-3 flex'>
-							<span className='grow'>Solde année précedente 2022</span>
-							<span className='font-semibold'>{`${summary.previous_year_vacation_sold} j`}</span>
-						</div>
-						<div className='p-3 flex'>
-							<span className='grow'>Heures supplémentaires totales</span>
-							<span className='font-semibold'>{`${summary.remaining_overtime} h`}</span>
-						</div>
-					</div>
-				</div>
-
-				<div className='space-y-3'>
-					<h2 className='font-semibold'>Consommées</h2>
-
-					<div className='bg-white rounded-xl divide-y divide-background shadow'>
-						<div className='p-3 flex'>
-							<span className='grow'>Vacances posées</span>
-							<span className='font-semibold'>{`${summary.vacation} j`}</span>
-						</div>
-						<div className='p-3 flex'>
-							<span className='grow'>Jours supplémentaires récupérés</span>
-							<span className='font-semibold'>{`${summary.overtime} j`}</span>
-						</div>
-					</div>
-				</div>
+				<Section
+					label='Budget congés / vacances'
+					items={[
+						{
+							label: `Budget année en cours ${currentYear}`,
+							value: `${summary.vacation_sold} j`,
+						},
+						{
+							label: `Solde année précedente ${currentYear - 1}`,
+							value: `${summary.previous_year_vacation_sold} j`,
+						},
+						{
+							label: 'Heures supplémentaires totales',
+							value: `${summary.remaining_overtime} h`,
+						},
+					]}
+				/>
+				<Section
+					label='Consommées'
+					items={[
+						{
+							label: 'Vacances posées',
+							value: `${summary.vacation} j`,
+						},
+						{
+							label: 'Jours supplémentaires récupérés',
+							value: `${summary.overtime} j`,
+						},
+					]}
+				/>
+				<Section
+					label='Indicatifs'
+					items={[
+						{
+							label: 'Absences justifiées',
+							value: `${1} j`,
+						},
+						{
+							label: 'Temps de formation',
+							value: `${summary.formation} / ${formation_budget} j`,
+						},
+						{
+							label: 'Budget de formation CHF',
+							value: `${summary.formation_expenses} / ${formation_expense_budget}`,
+						},
+					]}
+				/>
 			</div>
 		</main>
 	);
