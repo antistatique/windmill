@@ -1,7 +1,13 @@
+import 'moment/locale/fr';
+
+import WeekNavigation from '@/components/WeekNavigation';
+
 const Index = () => {
 	return (
 		<main>
-			<h1 className='text-xl'>Index</h1>
+			<div className='bg-white shadow'>
+				<WeekNavigation />
+			</div>
 		</main>
 	);
 };
