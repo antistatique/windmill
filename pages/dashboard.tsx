@@ -4,18 +4,15 @@ import Summary from '@/interfaces/summary';
 import pluralize from '@/helpers/pluralize';
 
 import Section from '@/components/dashboard/Section';
+import { useQuery } from 'react-query';
 
 const Dashboard = () => {
-	const [summary, setSummary] = useState({} as Summary);
+	const summaryQuery = useQuery('summary', () =>
+		fetch('/api/summary').then((res) => res.json())
+	);
+	const summary: Summary = summaryQuery.data;
 
-	useEffect(() => {
-		fetch('/api/summary')
-			.then((res) => res.json())
-			.then((data) => {
-				setSummary(data);
-				console.log(data);
-			});
-	}, []);
+	if (summaryQuery.isLoading) return <div>Loading...</div>;
 
 	const remainingVacationDays = summary.vacation_sold - summary.vacation;
 	const remainingOverTimeDays = summary.remaining_overtime / 8.4;
@@ -46,7 +43,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 
-			<div className='py-6 px-3 space-y-6'>
+			<div className='py-6 px-3 space-y-8'>
 				<Section
 					label='Budget congés / vacances'
 					items={[

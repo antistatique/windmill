@@ -24,7 +24,7 @@ const routes = [
 
 const Nav = () => {
 	return (
-		<nav>
+		<nav className='bg-white py-1 drop-shadow'>
 			<ul className='flex justify-evenly'>
 				{routes.map((route) => (
 					<li key={route.name}>
