@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Summary from '@/interfaces/summary';
+import pluralize from '@/helpers/pluralize';
 
 const Dashboard = () => {
 	const [summary, setSummary] = useState({} as Summary);
@@ -25,21 +26,16 @@ const Dashboard = () => {
 				<h1 className='text-4xl'>{summary?.name}</h1>
 
 				<span className='py-2 px-4 bg-yellow rounded-xl text-black'>
-					{`Il te reste ${summary?.remaining_days_to_take} ${
-						summary.remaining_days_to_take > 1 ? 'jours' : 'jour'
-					} à poser`}
+					{`Il te reste ${pluralize(
+						summary.remaining_days_to_take,
+						'jour'
+					)} à poser`}
 				</span>
 
 				<div>
+					<p>{`${pluralize(remainingVacationDays, 'jour')} de vacances`}</p>
 					<p>
-						{`${remainingVacationDays} ${
-							remainingVacationDays > 1 ? 'jours' : 'jour'
-						} de vacances`}
-					</p>
-					<p>
-						{`${remainingOverTimeDays.toFixed(2)} ${
-							remainingOverTimeDays > 1 ? 'jours' : 'jour'
-						}
+						{`${pluralize(Number(remainingOverTimeDays.toFixed(2)), 'jour')} 
 						(${summary.remaining_overtime}h) supplémentaires`}
 					</p>
 				</div>
