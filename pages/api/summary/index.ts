@@ -45,7 +45,7 @@ export default async function handler(
 			working_percent: row[7],
 			remaining_overtime: row[8],
 			vacation_sold: row[9],
-			previous_year_sold: row[10],
+			previous_year_vacation_sold: row[10],
 			remaining_days_to_take: row[11],
 			email: row[12],
 		};

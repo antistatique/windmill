@@ -10,6 +10,6 @@ export default interface Summary {
 	working_percent: number;
 	remaining_overtime: number;
 	vacation_sold: number;
-	previous_year_sold: number;
+	previous_year_vacation_sold: number;
 	remaining_days_to_take: number;
 }

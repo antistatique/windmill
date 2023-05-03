@@ -16,10 +16,12 @@ const Dashboard = () => {
 	const remainingVacationDays = summary.vacation_sold - summary.vacation;
 	const remainingOverTimeDays = summary.remaining_overtime / 8.4;
 
+	const currentYear = new Date().getFullYear();
+
 	return (
 		<main>
-			<div className='h-64 flex flex-col items-center justify-center text-center bg-pink text-white text-lg font-semibold space-y-4'>
-				<h2 className='text-4xl'>{summary?.name}</h2>
+			<div className='h-64 flex flex-col items-center justify-center text-center bg-pink text-white font-semibold space-y-4'>
+				<h1 className='text-4xl'>{summary?.name}</h1>
 
 				<span className='py-2 px-4 bg-yellow rounded-xl text-black'>
 					{`Il te reste ${summary?.remaining_days_to_take} ${
@@ -39,6 +41,27 @@ const Dashboard = () => {
 						}
 						(${summary.remaining_overtime}h) supplémentaires`}
 					</p>
+				</div>
+			</div>
+
+			<div className='py-6 px-3'>
+				<div className='space-y-3'>
+					<h2 className='font-semibold'>Budget congés / vacances</h2>
+
+					<div className='bg-white rounded-xl divide-y divide-background shadow'>
+						<div className='p-3 flex'>
+							<span className='grow'>{`Budget année en cours ${currentYear}`}</span>
+							<span className='font-semibold'>{`${summary.vacation_sold} j`}</span>
+						</div>
+						<div className='p-3 flex'>
+							<span className='grow'>Solde année précedente 2022</span>
+							<span className='font-semibold'>{`${summary.previous_year_vacation_sold} j`}</span>
+						</div>
+						<div className='p-3 flex'>
+							<span className='grow'>Heures supplémentaires totales</span>
+							<span className='font-semibold'>{`${summary.remaining_overtime} h`}</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</main>
