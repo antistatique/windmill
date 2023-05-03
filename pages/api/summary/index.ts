@@ -32,8 +32,12 @@ export default async function handler(
 	});
 
 	const rows = response.data.values;
+	if (!rows?.length) {
+		res.status(404).json({ message: 'No data found' });
+		return;
+	}
 
-	const summary = rows!.map((row) => {
+	const summary = rows.map((row) => {
 		return {
 			name: row[0],
 			diff_valid: row[1],
