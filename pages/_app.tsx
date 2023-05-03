@@ -24,7 +24,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 				</div>
 
 				{!withoutNav.includes(path) && (
-					<header className='sticky bottom-0'>
+					<header className='sticky bottom-0 shadow'>
 						<Nav />
 					</header>
 				)}
