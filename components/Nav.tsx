@@ -12,7 +12,7 @@ const routes = [
 	},
 	{
 		name: 'Dashboard',
-		path: '/page1',
+		path: '/dashboard',
 		icon: <DashboardIcon />,
 	},
 	{
