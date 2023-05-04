@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import Summary from '@/interfaces/summary';
 import pluralize from '@/helpers/pluralize';
 
@@ -7,9 +5,12 @@ import Section from '@/components/dashboard/Section';
 import { useQuery } from 'react-query';
 
 const Dashboard = () => {
-	const summaryQuery = useQuery('summary', () =>
-		fetch('/api/summary').then((res) => res.json())
-	);
+	const summaryQuery = useQuery('summary', async () => {
+		const response = await fetch('/api/summary');
+		const data = await response.json();
+		return data;
+	});
+
 	const summary: Summary = summaryQuery.data;
 
 	if (summaryQuery.isLoading) return <div>Loading...</div>;
