@@ -26,8 +26,8 @@ const WeekHours = ({worktime}: Props) => {
 				{haveToJustify && (
 					<span className='p-2 bg-white rounded-full'>
 						<img
-							src='/emojies/thinkingFace.svg'
-							alt='emoji'
+							src='/emojies/thinking_face.svg'
+							alt='Thinking face emoji'
 							className='h-6 w-6'
 						/>
 					</span>
