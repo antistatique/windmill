@@ -23,12 +23,15 @@ export default async function handler(
 	const auth = new google.auth.OAuth2();
 	auth.setCredentials({ access_token: session?.accessToken });
 
-	const { week } = req.query;
-	console.log(week);
+	const week = Number(req.query.week);
+	const index = Number(req.query.index);
 
-	const weekNumber = Number(week);
-	const startLine = 938; // TODO: Get this from the spreadsheet resume sheet
-	const weekLine = startLine + weekNumber - 1;
+	if (isNaN(week) || isNaN(index)) {
+		res.status(400).json({ message: 'Bad request' });
+		return;
+	}
+	
+	const weekLine = index + week - 1;
 
 	const sheets = google.sheets({ version: 'v4', auth: auth });
 	const range = `saisie-2023!A${weekLine}:AV${weekLine}`;

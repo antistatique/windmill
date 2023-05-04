@@ -1,16 +1,44 @@
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query';
 
-import Worktime from "@/interfaces/worktime";
+import Worktime from '@/interfaces/worktime';
 
 import useStore from '@/stores/date';
+import { useEffect, useState } from 'react';
 
 const WeekHours = () => {
 	const { week } = useStore();
 
-	const worktimeQuery = useQuery(['worktime', week], () =>
-		fetch(`/api/worktime/${week}`).then((res) => res.json())
-	);
-	const worktime: Worktime = worktimeQuery.data;
+	const [index, setIndex] = useState(0);
+	const summaryQuery = useQuery('summary', async () => {
+		const response = await fetch('/api/summary');
+		const data = await response.json();
+		return data.index;
+	});
+
+	const [worktime, setWorktime] = useState<Worktime | null>(null);
+	const worktimeQuery = useQuery(['worktime', week], async () => {
+		if (!index) {
+			return;
+		}
+
+		const response = await fetch(`/api/worktime/${week}?index=${index}`);
+		const data = await response.json();
+		return data;
+	});
+
+	useEffect(() => {
+		const storedIndex = localStorage.getItem('index');
+
+		if (storedIndex) {
+			setIndex(Number(storedIndex));
+		} else if (summaryQuery.data) {
+			localStorage.setItem('index', summaryQuery.data);
+			setIndex(summaryQuery.data);
+		}
+
+		worktimeQuery.refetch();
+		setWorktime(worktimeQuery.data!);
+	}, [summaryQuery.data, worktimeQuery.data]);
 
 	return (
 		<div className='py-3 px-4 flex justify-between items-center bg-background rounded-xl'>
