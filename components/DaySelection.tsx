@@ -9,13 +9,7 @@ type Props = {
 };
 
 const DayNavigation = ({ worktime }: Props) => {
-	const { date, week, selectDay } = useStore();
-
-	const days = worktime?.days.map((day) => ({
-		value: moment(day.date),
-		emoji: day.emoji,
-		hoursWorked: day.hours,
-	}));
+	const { date: selectedDay, selectDay } = useStore();
 
 	const handleSelectDate = (day: moment.Moment) => {
 		selectDay(day);
@@ -23,32 +17,50 @@ const DayNavigation = ({ worktime }: Props) => {
 
 	return (
 		<div className='flex justify-between items-center space-x-2'>
-			{days?.map((day) => (
-				<div
-					key={day.value.unix()}
-					onClick={() => handleSelectDate(day.value)}
-					className={`grow p-2 flex flex-col items-center cursor-pointer space-y-1 bg-white rounded-xl shadow  ${
-						day.value.date() === date.date()
-							? '-outline-offset-2 outline outline-3 outline-pink'
-							: ''
-					}`}
-				>
-					<span className='font-semibold text-base text-gray'>
-						{day.value.format('DD')}
-					</span>
+			{worktime?.days?.map((day) => {
+				const date = moment(day.date);
+				const value = date;
+				const isCurrentDay = date.isSame(moment(), 'day');
+				const isPastDay = date.isBefore(moment(), 'day');
+				const emoji = day.emoji;
+				const hoursDone = moment.utc(
+					moment.duration(day.hours_done, 'hours').asMilliseconds()
+				);
 
-					{day.emoji}
-					{/* 
-					<img src={day.emoji} alt='emoji' className='h-6 w-6' />
-					 */}
+				return (
+					<div
+						key={value.unix()}
+						onClick={() => handleSelectDate(value)}
+						className={`grow p-2 flex flex-col items-center cursor-pointer space-y-1 bg-white rounded-xl shadow  ${
+							value.date() === selectedDay.date()
+								? '-outline-offset-2 outline outline-3 outline-pink'
+								: ''
+						}`}
+					>
+						<span
+							className={`font-semibold text-base ${
+								isCurrentDay ? 'text-pink' : 'text-gray'
+							}`}
+						>
+							{value.format('DD')}
+						</span>
 
-					<span className='font-semibold text-2xl capitalize'>
-						{day.value.format('dd')}
-					</span>
+						<span className='text-2xl'>{emoji}</span>
 
-					<span className='font-semibold'>{day.hoursWorked}</span>
-				</div>
-			))}
+						<div
+							className={`flex flex-col items-center ${
+								isPastDay || isCurrentDay ? 'text-blue' : 'text-gray'
+							}`}
+						>
+							<span className='font-semibold text-2xl capitalize'>
+								{value.format('dd')}
+							</span>
+
+							<span className='font-semibold'>{hoursDone.format('HH:mm')}</span>
+						</div>
+					</div>
+				);
+			})}
 		</div>
 	);
 };
