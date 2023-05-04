@@ -11,8 +11,12 @@ module.exports = {
 			black: '#000000',
 			blue: '#000032',
 			gray: '#9898AB',
-			pink: '#FF0099',
+			pink: {
+				DEFAULT: '#FF0099',
+				dark: '#F20091',
+			},
 			yellow: '#FFF618',
+			westar: '#DED6CF',
 			background: '#F1ECE8',
 		},
 		extend: {

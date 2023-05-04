@@ -12,4 +12,5 @@ export default interface Summary {
 	vacation_sold: number;
 	previous_year_vacation_sold: number;
 	remaining_days_to_take: number;
+	index: number;
 }

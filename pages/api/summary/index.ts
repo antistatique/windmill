@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
 import { google } from 'googleapis';
 
 import Summary from '@/interfaces/summary';
-import { getSession } from 'next-auth/react';
 
 type Error = {
 	message: string;
@@ -24,7 +24,7 @@ export default async function handler(
 	auth.setCredentials({ access_token: session?.accessToken });
 
 	const sheets = google.sheets({ version: 'v4', auth: auth });
-	const range = `résumé-2023!A:M`;
+	const range = `résumé-2023!A:P`;
 
 	const response = await sheets.spreadsheets.values.get({
 		spreadsheetId: process.env.SHEET_ID,
@@ -52,6 +52,7 @@ export default async function handler(
 			previous_year_vacation_sold: row[10],
 			remaining_days_to_take: row[11],
 			email: row[12],
+			index: row[15],
 		};
 	}).filter((row) => row.email === session?.user?.email)[0]
 
