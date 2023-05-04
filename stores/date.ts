@@ -10,7 +10,7 @@ interface DateState {
 }
 
 const dateStore = create<DateState>((set) => ({
-	date: moment().startOf('week'),
+	date: moment(),
 	week: moment().week(),
 	inc: () =>
 		set((state: any) => ({
