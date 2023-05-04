@@ -11,6 +11,17 @@
     "fix:ts": "eslint --ext ts,tsx ./ --max-warnings=0 --fix"
   },
   "dependencies": {
+    "next": "13.3.4",
+    "next-auth": "^4.22.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "react-query": "^3.39.3",
+    "zustand": "^4.3.7",
+    "moment": "^2.29.4",
+    "googleapis": "^118.0.0"
+  },
+  "devDependencies": {
     "@types/node": "18.16.3",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
@@ -29,16 +40,8 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-tailwindcss": "^3.8.3",
-    "moment": "^2.29.4",
-    "next": "13.3.4",
-    "next-auth": "^4.22.1",
     "postcss": "8.4.23",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-icons": "^4.8.0",
-    "react-query": "^3.39.3",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
-    "zustand": "^4.3.7"
+    "typescript": "5.0.4"
   }
 }
