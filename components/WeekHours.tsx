@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import moment from 'moment';
 
 import Worktime from '@/interfaces/worktime';
 
@@ -40,6 +41,11 @@ const WeekHours = () => {
 		setWorktime(worktimeQuery.data!);
 	}, [summaryQuery.data, worktimeQuery.data]);
 
+	const haveToJustify = worktime
+		? worktime.need_justification &&
+		  moment().week(worktime.week_number).day(5).isSameOrBefore(moment())
+		: false;
+
 	return (
 		<div className='py-3 px-4 flex justify-between items-center bg-background rounded-xl'>
 			<div>
@@ -50,9 +56,27 @@ const WeekHours = () => {
 				</div>
 			</div>
 
-			<button className='py-1 px-5 bg-white hover:outline outline-3 outline-westar rounded-lg font-semibold text-xl'>
-				Justifier
-			</button>
+			<div className='flex space-x-3'>
+				{haveToJustify && (
+					<span className='p-2 bg-white rounded-full'>
+						<img
+							src='/emojies/thinkingFace.svg'
+							alt='emoji'
+							className='h-6 w-6'
+						/>
+					</span>
+				)}
+
+				<button
+					className={`py-1 px-5 rounded-lg font-semibold text-xl ${
+						haveToJustify
+							? 'bg-pink hover:bg-pink-dark text-white'
+							: 'bg-white hover:outline outline-3 outline-westar'
+					}`}
+				>
+					Justifier
+				</button>
+			</div>
 		</div>
 	);
 };

@@ -14,6 +14,6 @@ export default interface Worktime {
 
 	hours_done: number;
 	hours_todo: number;
-	is_validated: boolean;
+	need_justification: boolean;
 	justification: string;
 }

@@ -41,74 +41,73 @@ export default async function handler(
 		range,
 	});
 
-	const rows = response.data.values;
-	if (!rows?.length) {
+	if (!response.data.values) {
 		res.status(404).json({ message: 'No data found' });
 		return;
 	}
 
-	const worktime = rows!.map((row) => {
-		return {
-			week_start: row[0],
-			week_number: row[1],
-			name: row[2],
-			email: row[3],
-			monday: {
-				emoji: row[4],
-				hours: row[5],
-				hours_hundred: row[6],
-				total: row[7],
-				am_start: row[8],
-				am_stop: row[9],
-				pm_start: row[10],
-				pm_stop: row[11],
-			},
-			tuesday: {
-				emoji: row[12],
-				hours: row[13],
-				hours_hundred: row[14],
-				total: row[15],
-				am_start: row[16],
-				am_stop: row[17],
-				pm_start: row[18],
-				pm_stop: row[19],
-			},
-			wednesday: {
-				emoji: row[20],
-				hours: row[21],
-				hours_hundred: row[22],
-				total: row[23],
-				am_start: row[24],
-				am_stop: row[25],
-				pm_start: row[26],
-				pm_stop: row[27],
-			},
-			thursday: {
-				emoji: row[28],
-				hours: row[29],
-				hours_hundred: row[30],
-				total: row[31],
-				am_start: row[32],
-				am_stop: row[33],
-				pm_start: row[34],
-				pm_stop: row[35],
-			},
-			friday: {
-				emoji: row[36],
-				hours: row[37],
-				hours_hundred: row[38],
-				total: row[39],
-				am_start: row[40],
-				am_stop: row[41],
-				pm_start: row[42],
-				pm_stop: row[43],
-			},
-			hours_done: row[44],
-			hours_todo: row[45],
-			is_validated: row[46],
-			justification: row[47],
-		};
-	})[0];
+	const values = response.data.values[0];
+
+	const worktime: Worktime = {
+		week_start: values[0],
+		week_number: values[1],
+		name: values[2],
+		email: values[3],
+		monday: {
+			emoji: values[4],
+			hours: values[5],
+			hours_hundred: values[6],
+			total: values[7],
+			am_start: values[8],
+			am_stop: values[9],
+			pm_start: values[10],
+			pm_stop: values[11],
+		},
+		tuesday: {
+			emoji: values[12],
+			hours: values[13],
+			hours_hundred: values[14],
+			total: values[15],
+			am_start: values[16],
+			am_stop: values[17],
+			pm_start: values[18],
+			pm_stop: values[19],
+		},
+		wednesday: {
+			emoji: values[20],
+			hours: values[21],
+			hours_hundred: values[22],
+			total: values[23],
+			am_start: values[24],
+			am_stop: values[25],
+			pm_start: values[26],
+			pm_stop: values[27],
+		},
+		thursday: {
+			emoji: values[28],
+			hours: values[29],
+			hours_hundred: values[30],
+			total: values[31],
+			am_start: values[32],
+			am_stop: values[33],
+			pm_start: values[34],
+			pm_stop: values[35],
+		},
+		friday: {
+			emoji: values[36],
+			hours: values[37],
+			hours_hundred: values[38],
+			total: values[39],
+			am_start: values[40],
+			am_stop: values[41],
+			pm_start: values[42],
+			pm_stop: values[43],
+		},
+		hours_done: values[44],
+		hours_todo: values[45],
+		need_justification: Boolean(values[46]),
+		justification: values[47],
+	};
 
 	res.status(200).json(worktime);
 }
