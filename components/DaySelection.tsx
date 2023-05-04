@@ -2,17 +2,20 @@ import moment from 'moment';
 
 import useStore from '@/stores/date';
 
-export default function DayNavigation() {
+import Worktime from '@/interfaces/worktime';
+
+type Props = {
+	worktime: Worktime | null;
+};
+
+const DayNavigation = ({ worktime }: Props) => {
 	const { date, week, selectDay } = useStore();
 
-	const firstDay = moment().week(week).startOf('week');
-	const days = [...Array(5)].map((_, index) => {
-		return {
-			value: moment(firstDay).add(index, 'days'),
-			emoji: '/emojies/workDay.svg',
-			hoursWorked: '08:00',
-		};
-	});
+	const days = worktime?.days.map((day) => ({
+		value: moment(day.date),
+		emoji: day.emoji,
+		hoursWorked: day.hours,
+	}));
 
 	const handleSelectDate = (day: moment.Moment) => {
 		selectDay(day);
@@ -20,7 +23,7 @@ export default function DayNavigation() {
 
 	return (
 		<div className='flex justify-between items-center space-x-2'>
-			{days.map((day) => (
+			{days?.map((day) => (
 				<div
 					key={day.value.unix()}
 					onClick={() => handleSelectDate(day.value)}
@@ -34,7 +37,10 @@ export default function DayNavigation() {
 						{day.value.format('DD')}
 					</span>
 
+					{day.emoji}
+					{/* 
 					<img src={day.emoji} alt='emoji' className='h-6 w-6' />
+					 */}
 
 					<span className='font-semibold text-2xl capitalize'>
 						{day.value.format('dd')}
@@ -45,4 +51,6 @@ export default function DayNavigation() {
 			))}
 		</div>
 	);
-}
+};
+
+export default DayNavigation;

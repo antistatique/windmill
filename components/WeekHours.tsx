@@ -1,46 +1,12 @@
-import { useQuery } from 'react-query';
 import moment from 'moment';
 
 import Worktime from '@/interfaces/worktime';
 
-import useStore from '@/stores/date';
-import { useEffect, useState } from 'react';
+type Props = {
+	worktime: Worktime | null;
+};
 
-const WeekHours = () => {
-	const { week } = useStore();
-
-	const [index, setIndex] = useState(0);
-	const summaryQuery = useQuery('summary', async () => {
-		const response = await fetch('/api/summary');
-		const data = await response.json();
-		return data.index;
-	});
-
-	const [worktime, setWorktime] = useState<Worktime | null>(null);
-	const worktimeQuery = useQuery(['worktime', week], async () => {
-		if (!index) {
-			return;
-		}
-
-		const response = await fetch(`/api/worktime/${week}?index=${index}`);
-		const data = await response.json();
-		return data;
-	});
-
-	useEffect(() => {
-		const storedIndex = localStorage.getItem('index');
-
-		if (storedIndex) {
-			setIndex(Number(storedIndex));
-		} else if (summaryQuery.data) {
-			localStorage.setItem('index', summaryQuery.data);
-			setIndex(summaryQuery.data);
-		}
-
-		worktimeQuery.refetch();
-		setWorktime(worktimeQuery.data!);
-	}, [summaryQuery.data, worktimeQuery.data]);
-
+const WeekHours = ({worktime}: Props) => {
 	const haveToJustify = worktime
 		? worktime.need_justification &&
 		  moment().week(worktime.week_number).day(5).isSameOrBefore(moment())

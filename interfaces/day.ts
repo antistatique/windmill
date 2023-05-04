@@ -1,4 +1,7 @@
+import { Moment } from 'moment';
+
 export default interface Day {
+	date: Moment;
 	emoji: string;
 	hours: number;
 	hours_hundred: number;
