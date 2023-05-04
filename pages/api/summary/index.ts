@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
 import { google } from 'googleapis';
 
 import Summary from '@/interfaces/summary';
-import { getSession } from 'next-auth/react';
 
 type Error = {
 	message: string;
