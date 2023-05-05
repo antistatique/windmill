@@ -1,8 +1,8 @@
-import { google } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
 import Summary from '@/interfaces/summary';
+import googleSheetClient from '@/services/googleSheetClient';
 
 type Error = {
   message: string;
@@ -18,16 +18,11 @@ export default async function handler(
   }
 
   const session = await getSession({ req });
+  const client = await googleSheetClient(session);
 
-  const auth = new google.auth.OAuth2();
-  auth.setCredentials({ access_token: session?.accessToken });
-
-  const sheets = google.sheets({ version: 'v4', auth });
-  const range = `résumé-2023!A:P`;
-
-  const response = await sheets.spreadsheets.values.get({
+  const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
-    range,
+    range: 'résumé-2023!A:P',
   });
 
   const rows = response.data.values;

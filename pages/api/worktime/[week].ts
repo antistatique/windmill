@@ -1,10 +1,10 @@
-import { google } from 'googleapis';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
 import mapEmojiToStatus from '@/helpers/mapEmojiToStatus';
 import Worktime from '@/interfaces/worktime';
+import googleSheetClient from '@/services/googleSheetClient';
 
 type Error = {
   message: string;
@@ -19,11 +19,6 @@ export default async function handler(
     return;
   }
 
-  const session = await getSession({ req });
-
-  const auth = new google.auth.OAuth2();
-  auth.setCredentials({ access_token: session?.accessToken });
-
   const week = Number(req.query.week);
   const index = Number(req.query.index);
 
@@ -33,12 +28,12 @@ export default async function handler(
   }
   const weekLine = index + week - 1;
 
-  const sheets = google.sheets({ version: 'v4', auth });
-  const range = `saisie-2023!A${weekLine}:AV${weekLine}`;
+  const session = await getSession({ req });
+  const client = await googleSheetClient(session);
 
-  const response = await sheets.spreadsheets.values.get({
+  const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
-    range,
+    range: `saisie-2023!A${weekLine}:AV${weekLine}`,
   });
 
   if (!response.data.values) {
