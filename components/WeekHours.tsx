@@ -1,50 +1,53 @@
 import moment from 'moment';
+import Image from 'next/image';
 
 import Worktime from '@/interfaces/worktime';
 
 type Props = {
-	worktime: Worktime | null;
+  worktime: Worktime | null;
 };
 
-const WeekHours = ({worktime}: Props) => {
-	const haveToJustify = worktime
-		? worktime.need_justification &&
-		  moment().week(worktime.week_number).day(5).isSameOrBefore(moment())
-		: false;
+const WeekHours = ({ worktime }: Props) => {
+  const haveToJustify = worktime
+    ? worktime.need_justification &&
+      moment().week(worktime.week_number).day(5).isSameOrBefore(moment())
+    : false;
 
-	return (
-		<div className='py-3 px-4 flex justify-between items-center bg-background rounded-xl'>
-			<div>
-				<span>Heures</span>
-				<div className='-my-1 font-semibold'>
-					<span className='text-2xl'>{worktime?.hours_done}</span>
-					<span className='text-base'> / {worktime?.hours_todo}</span>
-				</div>
-			</div>
+  return (
+    <div className="flex items-center justify-between rounded-xl bg-background px-4 py-3">
+      <div>
+        <span>Heures</span>
+        <div className="-my-1 font-semibold">
+          <span className="text-2xl">{worktime?.hours_done}</span>
+          <span className="text-base"> / {worktime?.hours_todo}</span>
+        </div>
+      </div>
 
-			<div className='flex space-x-3'>
-				{haveToJustify && (
-					<span className='p-2 bg-white rounded-full'>
-						<img
-							src='/emojies/thinking_face.svg'
-							alt='Thinking face emoji'
-							className='h-6 w-6'
-						/>
-					</span>
-				)}
+      <div className="flex space-x-3">
+        {haveToJustify && (
+          <span className="rounded-full bg-white p-2">
+            <Image
+              src="/emojies/thinking_face.svg"
+              alt="Thinking face emoji"
+              width={24}
+              height={24}
+            />
+          </span>
+        )}
 
-				<button
-					className={`py-1 px-5 rounded-lg font-semibold text-xl ${
-						haveToJustify
-							? 'bg-pink hover:bg-pink-dark text-white'
-							: 'bg-white hover:outline outline-3 outline-westar'
-					}`}
-				>
-					Justifier
-				</button>
-			</div>
-		</div>
-	);
+        <button
+          type="button"
+          className={`rounded-lg px-5 py-1 text-xl font-semibold ${
+            haveToJustify
+              ? 'bg-pink text-white hover:bg-pink-dark'
+              : 'bg-white outline-3 outline-westar hover:outline'
+          }`}
+        >
+          Justifier
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default WeekHours;

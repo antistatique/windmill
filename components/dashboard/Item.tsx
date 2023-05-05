@@ -1,13 +1,15 @@
-type props = {
-	label: string;
-	value: string;
+import React from 'react';
+
+type Props = {
+  label: string;
+  value: string;
 };
 
-const Item = ({ label, value }: props) => (
-	<div className='p-3 flex'>
-		<span className='grow'>{label}</span>
-		<span className='font-semibold'>{value}</span>
-	</div>
+const Item = ({ label, value }: Props) => (
+  <div className="flex p-3">
+    <span className="grow">{label}</span>
+    <span className="font-semibold">{value}</span>
+  </div>
 );
 
 export default Item;

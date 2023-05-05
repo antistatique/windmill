@@ -1,14 +1,17 @@
+import React from 'react';
 import { signOut } from 'next-auth/react';
 
-const Page2 = () => {
-	return (
-		<main>
-			<h1 className='text-xl'>Page 2</h1>
-			<button onClick={() => signOut()} className='px-2 bg-pink rounded'>
-				sign out
-			</button>
-		</main>
-	);
-};
+const Page2 = () => (
+  <main>
+    <h1 className="text-xl">Page 2</h1>
+    <button
+      type="button"
+      onClick={() => signOut()}
+      className="rounded bg-pink px-2"
+    >
+      sign out
+    </button>
+  </main>
+);
 
 export default Page2;
