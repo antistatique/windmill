@@ -1,4 +1,5 @@
 import moment from 'moment';
+import Image from 'next/image';
 
 import Worktime from '@/interfaces/worktime';
 import useStore from '@/stores/date';
@@ -21,7 +22,7 @@ const DayNavigation = ({ worktime }: Props) => {
         const value = date;
         const isCurrentDay = date.isSame(moment(), 'day');
         const isPastDay = date.isBefore(moment(), 'day');
-        const { emoji } = day;
+        const { status } = day;
         const hoursDone = moment.utc(
           moment.duration(day.hours_done, 'hours').asMilliseconds()
         );
@@ -45,7 +46,12 @@ const DayNavigation = ({ worktime }: Props) => {
               {value.format('DD')}
             </span>
 
-            <span className="text-2xl">{emoji}</span>
+            <Image
+              src={`/emojies/${status}.svg`}
+              alt="Thinking face emoji"
+              width={24}
+              height={24}
+            />
 
             <div
               className={`flex flex-col items-center ${

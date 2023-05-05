@@ -1,8 +1,10 @@
 import { Moment } from 'moment';
 
+import { Statues } from '@/helpers/mapEmojiToStatus';
+
 export default interface Day {
   date: Moment;
-  emoji: string;
+  status: Statues;
   hours_done: number;
   hours_todo: number;
   total: number;
