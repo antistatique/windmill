@@ -1,41 +1,13 @@
 import { useState } from 'react';
-import { useMutation } from 'react-query';
-
-import useStore from '@/stores/date';
 
 type Props = {
+  onJustify: (justification: string) => void;
   onClose: () => void;
-  value: string | undefined;
+  value: string;
 };
 
-const HoursJustification = ({ onClose, value }: Props) => {
-  const { week } = useStore();
-
+const HoursJustification = ({ onJustify, onClose, value }: Props) => {
   const [justification, setJustification] = useState(value);
-
-  // Post to API
-
-  const postJustification = async (data: string) => {
-    const response = await fetch(`api/justification/${week}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ justification: data }),
-    });
-    const summary = await response.json();
-    return summary;
-  };
-
-  const { mutate } = useMutation('justify', postJustification, {
-    onSuccess: () => {
-      onClose();
-    },
-  });
-
-  const handleJustify = () => {
-    mutate(justification || '');
-  };
 
   return (
     <div
@@ -66,7 +38,7 @@ const HoursJustification = ({ onClose, value }: Props) => {
         />
 
         <button
-          onClick={handleJustify}
+          onClick={() => onJustify(justification)}
           type="button"
           className="w-full rounded-lg bg-pink px-4 py-2 font-semibold text-white"
         >

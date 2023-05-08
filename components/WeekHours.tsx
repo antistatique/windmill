@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import moment from 'moment';
 import Image from 'next/image';
 
@@ -6,7 +7,7 @@ import HoursJustification from '@/components/HoursJustification';
 import Worktime from '@/interfaces/worktime';
 
 type Props = {
-  worktime: Worktime | null;
+  worktime: Worktime;
 };
 
 const WeekHours = ({ worktime }: Props) => {
@@ -23,6 +24,31 @@ const WeekHours = ({ worktime }: Props) => {
     }
 
     setIsModalOpen(true);
+  };
+
+  const postJustification = async (data: string) => {
+    const response = await fetch(`api/justification/${worktime?.week_number}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ justification: data }),
+    });
+    const summary = await response.json();
+    return summary;
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation('justify', postJustification, {
+    onSuccess: () => {
+      setIsModalOpen(false);
+      queryClient.invalidateQueries('worktime');
+    },
+  });
+
+  const onJustify = (justification: string) => {
+    mutate(justification);
   };
 
   return (
@@ -64,6 +90,7 @@ const WeekHours = ({ worktime }: Props) => {
 
       {isModalOpen && (
         <HoursJustification
+          onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
           value={worktime?.justification}
         />
