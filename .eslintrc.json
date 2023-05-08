@@ -46,12 +46,8 @@
 				"aspects": ["invalidHref"]
 			}
 		],
-		"jsx-a11y/control-has-associated-label": [
-			2,
-			{
-				"ignoreElements": ["link"]
-			}
-		],
+		"jsx-a11y/control-has-associated-label": "off",
+		"jsx-a11y/label-has-associated-control": "off",
 		"jsx-a11y/href-no-hash": "off",
 		"max-len": 0,
 		"no-alert": 0,

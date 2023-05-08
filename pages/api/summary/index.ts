@@ -18,7 +18,7 @@ export default async function handler(
   }
 
   const session = await getSession({ req });
-  const client = await googleSheetClient(session);
+  const client = await googleSheetClient(session?.accessToken as string);
 
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
