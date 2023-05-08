@@ -1,44 +1,42 @@
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { getToken } from 'next-auth/jwt';
 
 import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
+import ApiError from '@/interfaces/apiError';
 import Worktime from '@/interfaces/worktime';
 import googleSheetClient from '@/services/googleSheetClient';
 
-type Error = {
-  message: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Worktime | Error>
+  res: NextApiResponse<Worktime | ApiError>
 ) {
   if (req.method !== 'GET') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
   const week = Number(req.query.week);
   const index = Number(req.query.index);
 
   if (Number.isNaN(week) || Number.isNaN(index)) {
-    res.status(400).json({ message: 'Bad request' });
-    return;
+    return res.status(400).json({ message: 'Bad request' });
   }
   const weekLine = index + week - 1;
 
-  const session = await getSession({ req });
-  const client = await googleSheetClient(session?.accessToken as string);
+  const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+  if (!jwt) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const client = await googleSheetClient(jwt.accessToken as string);
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range: `saisie-2023!A${weekLine}:AV${weekLine}`,
   });
 
   if (!response.data.values) {
-    res.status(404).json({ message: 'No data found' });
-    return;
+    return res.status(404).json({ message: 'No data found' });
   }
 
   const values = response.data.values[0];
@@ -113,5 +111,5 @@ export default async function handler(
     justification: values[47],
   };
 
-  res.status(200).json(worktime);
+  return res.status(200).json(worktime);
 }

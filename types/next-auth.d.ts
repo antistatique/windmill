@@ -17,4 +17,11 @@ declare module 'next-auth' {
   interface Account {
     expires_in: number;
   }
+
+  interface User {
+    id: number;
+    name: string;
+    email: string;
+    image: string;
+  }
 }

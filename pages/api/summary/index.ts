@@ -1,25 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { User } from 'next-auth';
+import { getToken } from 'next-auth/jwt';
 
+import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
 
-type Error = {
-  message: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Summary | Error>
+  res: NextApiResponse<Summary | ApiError>
 ) {
   if (req.method !== 'GET') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const session = await getSession({ req });
-  const client = await googleSheetClient(session?.accessToken as string);
+  const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const user = jwt?.user as User;
 
+  if (!jwt || !user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const client = await googleSheetClient(jwt.accessToken as string);
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range: 'résumé-2023!A:P',
@@ -27,8 +29,7 @@ export default async function handler(
 
   const rows = response.data.values;
   if (!rows?.length) {
-    res.status(404).json({ message: 'No data found' });
-    return;
+    return res.status(404).json({ message: 'No data found' });
   }
 
   const summary = rows
@@ -48,7 +49,7 @@ export default async function handler(
       email: row[12],
       index: row[15],
     }))
-    .filter(row => row.email === session?.user?.email)[0];
+    .filter(row => row.email === user.email)[0];
 
-  res.status(200).json(summary);
+  return res.status(200).json(summary);
 }
