@@ -2,7 +2,7 @@ import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import mapEmojiToStatus from '@/helpers/mapEmojiToStatus';
+import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 import Worktime from '@/interfaces/worktime';
 import googleSheetClient from '@/services/googleSheetClient';
 
@@ -53,7 +53,7 @@ export default async function handler(
     days: [
       {
         date: moment(weekStart).add(0, 'days'),
-        status: mapEmojiToStatus(values[4]),
+        status: getStatusFromEmoji(values[4]),
         hours_todo: values[5],
         hours_done: values[6],
         total: values[7],
@@ -64,7 +64,7 @@ export default async function handler(
       },
       {
         date: moment(weekStart).add(1, 'days'),
-        status: mapEmojiToStatus(values[12]),
+        status: getStatusFromEmoji(values[12]),
         hours_todo: values[13],
         hours_done: values[14],
         total: values[15],
@@ -75,7 +75,7 @@ export default async function handler(
       },
       {
         date: moment(weekStart).add(2, 'days'),
-        status: mapEmojiToStatus(values[20]),
+        status: getStatusFromEmoji(values[20]),
         hours_todo: values[21],
         hours_done: values[22],
         total: values[23],
@@ -86,7 +86,7 @@ export default async function handler(
       },
       {
         date: moment(weekStart).add(3, 'days'),
-        status: mapEmojiToStatus(values[28]),
+        status: getStatusFromEmoji(values[28]),
         hours_todo: values[29],
         hours_done: values[30],
         total: values[31],
@@ -97,7 +97,7 @@ export default async function handler(
       },
       {
         date: moment(weekStart).add(4, 'days'),
-        status: mapEmojiToStatus(values[36]),
+        status: getStatusFromEmoji(values[36]),
         hours_todo: values[37],
         hours_done: values[38],
         total: values[39],

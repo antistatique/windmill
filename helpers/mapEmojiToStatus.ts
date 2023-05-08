@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-shadow
-export enum Statues {
+export enum Statuses {
   WORKING = 'flexed_biceps',
   HOLIDAY = 'beach_with_umbrella',
   PUBLIC_HOLIDAY = 'switzerland_flag',
@@ -8,23 +8,17 @@ export enum Statues {
   FORMATION = 'graduation_cap',
 }
 
-const mapEmojiToStatus = (emoji: string): Statues => {
-  switch (emoji) {
-    case '💪':
-      return Statues.WORKING;
-    case '😷':
-      return Statues.SICK;
-    case '✈️':
-      return Statues.HOLIDAY;
-    case '🇨🇭':
-      return Statues.PUBLIC_HOLIDAY;
-    case '💤':
-      return Statues.DAY_OFF;
-    case '🎓':
-      return Statues.FORMATION;
-    default:
-      throw new Error('Emoji not found');
-  }
+const statusesMap: {
+  [key: string]: string;
+} = {
+  '💪': Statuses.WORKING,
+  '😷': Statuses.SICK,
+  '✈️': Statuses.HOLIDAY,
+  '🇨🇭': Statuses.PUBLIC_HOLIDAY,
+  '💤': Statuses.DAY_OFF,
+  '🎓': Statuses.FORMATION,
 };
 
-export default mapEmojiToStatus;
+const getStatusFromEmoji = (emoji: string) => statusesMap[emoji];
+
+export default getStatusFromEmoji;
