@@ -1,12 +1,20 @@
 import { useState } from 'react';
 
+import Spinner from '@/components/icons/spinner';
+
 type Props = {
   onJustify: (justification: string) => void;
   onClose: () => void;
+  isLoading: boolean;
   value: string;
 };
 
-const HoursJustification = ({ onJustify, onClose, value }: Props) => {
+const HoursJustification = ({
+  onJustify,
+  onClose,
+  isLoading,
+  value,
+}: Props) => {
   const [justification, setJustification] = useState(value);
 
   return (
@@ -43,6 +51,9 @@ const HoursJustification = ({ onJustify, onClose, value }: Props) => {
           className="w-full rounded-lg bg-pink px-4 py-2 font-semibold text-white"
         >
           Valider
+          {isLoading && (
+            <Spinner className="ml-2 inline h-5 w-5 animate-spin text-white" />
+          )}
         </button>
       </div>
     </div>

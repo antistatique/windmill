@@ -17,6 +17,7 @@ const WeekHours = ({ worktime }: Props) => {
     : false;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isJustifying, setIsJustifying] = useState(false);
 
   const handleOpenJustifyModal = () => {
     if (!haveToJustify) {
@@ -41,9 +42,17 @@ const WeekHours = ({ worktime }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation('justify', postJustification, {
+    onMutate: () => {
+      setIsJustifying(true);
+    },
     onSuccess: () => {
-      setIsModalOpen(false);
       queryClient.invalidateQueries('worktime');
+
+      setIsJustifying(false);
+      setIsModalOpen(false);
+    },
+    onError: () => {
+      setIsJustifying(false);
     },
   });
 
@@ -92,6 +101,7 @@ const WeekHours = ({ worktime }: Props) => {
         <HoursJustification
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
+          isLoading={isJustifying}
           value={worktime?.justification}
         />
       )}
