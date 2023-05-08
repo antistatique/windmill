@@ -1,10 +1,9 @@
 import { google } from 'googleapis';
-import { Session } from 'next-auth';
 
-const googleSheetClient = async (session: Session | null) => {
+const googleSheetClient = async (token: string) => {
   const auth = new google.auth.OAuth2();
 
-  auth.setCredentials({ access_token: session?.accessToken });
+  auth.setCredentials({ access_token: token });
 
   const sheets = google.sheets({ version: 'v4', auth });
   return sheets;

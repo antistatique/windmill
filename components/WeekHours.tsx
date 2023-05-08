@@ -17,7 +17,7 @@ const WeekHours = ({ worktime }: Props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleJustify = () => {
+  const handleOpenJustifyModal = () => {
     if (!haveToJustify) {
       return;
     }
@@ -50,7 +50,7 @@ const WeekHours = ({ worktime }: Props) => {
 
           <button
             type="button"
-            onClick={handleJustify}
+            onClick={handleOpenJustifyModal}
             className={`rounded-lg px-5 py-1 text-xl font-semibold ${
               haveToJustify
                 ? 'bg-pink text-white hover:bg-pink-dark'
