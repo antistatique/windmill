@@ -1,3 +1,4 @@
+import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
@@ -5,6 +6,41 @@ import { getToken } from 'next-auth/jwt';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
+
+const getSummary = async (client: sheets_v4.Sheets, user: User) => {
+  const response = await client.spreadsheets.values.get({
+    spreadsheetId: process.env.SHEET_ID,
+    range: 'résumé-2023!A:P',
+  });
+
+  const rows = response.data.values;
+
+  const summary = rows
+    ?.map(row => ({
+      name: row[0],
+      diff_valid: row[1],
+      vacation: row[2],
+      formation: row[3],
+      formation_expenses: row[4],
+      sick: row[5],
+      overtime: row[6],
+      working_percent: row[7],
+      remaining_overtime: row[8],
+      vacation_sold: row[9],
+      previous_year_vacation_sold: row[10],
+      remaining_days_to_take: row[11],
+      email: row[12],
+      index: Number(row[15]),
+    }))
+    .filter((row: { email: string }) => row.email === user.email)[0];
+
+  return summary;
+};
+
+export const getIndex = async (client: sheets_v4.Sheets, user: User) => {
+  const response = await getSummary(client, user);
+  return response?.index;
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,34 +58,11 @@ export default async function handler(
   }
 
   const client = await googleSheetClient(jwt.accessToken as string);
-  const response = await client.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID,
-    range: 'résumé-2023!A:P',
-  });
+  const summary = await getSummary(client, user);
 
-  const rows = response.data.values;
-  if (!rows?.length) {
+  if (!summary) {
     return res.status(404).json({ message: 'No data found' });
   }
-
-  const summary = rows
-    .map(row => ({
-      name: row[0],
-      diff_valid: row[1],
-      vacation: row[2],
-      formation: row[3],
-      formation_expenses: row[4],
-      sick: row[5],
-      overtime: row[6],
-      working_percent: row[7],
-      remaining_overtime: row[8],
-      vacation_sold: row[9],
-      previous_year_vacation_sold: row[10],
-      remaining_days_to_take: row[11],
-      email: row[12],
-      index: row[15],
-    }))
-    .filter(row => row.email === user.email)[0];
 
   return res.status(200).json(summary);
 }
