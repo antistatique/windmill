@@ -3,11 +3,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 
+import { getUsers, setUsers } from '@/helpers/userIndex';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
 
-const getSummary = async (client: sheets_v4.Sheets, user: User) => {
+const getSummaries = async (client: sheets_v4.Sheets) => {
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range: 'résumé-2023!A:P',
@@ -15,7 +16,7 @@ const getSummary = async (client: sheets_v4.Sheets, user: User) => {
 
   const rows = response.data.values;
 
-  const summary = rows
+  const summaries = rows
     ?.map(row => ({
       name: row[0],
       diff_valid: row[1],
@@ -32,14 +33,26 @@ const getSummary = async (client: sheets_v4.Sheets, user: User) => {
       email: row[12],
       index: Number(row[15]),
     }))
-    .filter((row: { email: string }) => row.email === user.email)[0];
+    .slice(1); // Remove header
 
-  return summary;
+  return summaries;
 };
 
 export const getIndex = async (client: sheets_v4.Sheets, user: User) => {
-  const response = await getSummary(client, user);
-  return response?.index;
+  let users = await getUsers();
+
+  if (!users) {
+    console.log('No users cache found, fetching from Google Sheets');
+
+    const summaries = await getSummaries(client);
+    users = summaries?.map(sum => ({ index: sum.index, email: sum.email }));
+
+    // Cache all users so others don't have to fetch them from Google Sheets
+    await setUsers(users);
+  }
+
+  const index = users?.find((u: User) => u.email === user.email)?.index;
+  return index;
 };
 
 export default async function handler(
@@ -58,7 +71,8 @@ export default async function handler(
   }
 
   const client = await googleSheetClient(jwt.accessToken as string);
-  const summary = await getSummary(client, user);
+  const summaries = await getSummaries(client);
+  const summary = summaries?.find(sum => sum.email === user.email);
 
   if (!summary) {
     return res.status(404).json({ message: 'No data found' });
