@@ -2,6 +2,11 @@ import React from 'react';
 import { useQuery } from 'react-query';
 
 import Section from '@/components/dashboard/Section';
+import {
+  FORMATION_BUDGET,
+  FORMATION_EXPENSE_BUDGET,
+  HOURS_PER_DAY,
+} from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
 import Summary from '@/interfaces/summary';
 
@@ -17,12 +22,9 @@ const Dashboard = () => {
   if (summaryQuery.isLoading) return <div>Loading...</div>;
 
   const remainingVacationDays = summary.vacation_sold - summary.vacation;
-  const remainingOverTimeDays = summary.remaining_overtime / 8.4;
+  const remainingOverTimeDays = summary.remaining_overtime / HOURS_PER_DAY;
 
   const currentYear = new Date().getFullYear();
-
-  const formationBudget = 5;
-  const formationExpenseBudget = 1200;
 
   return (
     <main>
@@ -85,11 +87,11 @@ const Dashboard = () => {
             },
             {
               label: 'Temps de formation',
-              value: `${summary.formation} / ${formationBudget} j`,
+              value: `${summary.formation} / ${FORMATION_BUDGET} j`,
             },
             {
               label: 'Budget de formation CHF',
-              value: `${summary.formation_expenses} / ${formationExpenseBudget}`,
+              value: `${summary.formation_expenses} / ${FORMATION_EXPENSE_BUDGET}`,
             },
           ]}
         />
