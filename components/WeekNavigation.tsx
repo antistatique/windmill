@@ -3,17 +3,17 @@ import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
-  const { date, week, inc, dec } = useStore();
+  const { date, week, incWeek, decWeek } = useStore();
 
   const canGoToPreviousWeek = week - 1 > 0;
   const canGoToNextWeek = week + 1 <= date.weeksInYear();
 
   const handlePreviousWeek = () => {
-    if (canGoToPreviousWeek) dec();
+    if (canGoToPreviousWeek) decWeek();
   };
 
   const handleNextWeek = () => {
-    if (canGoToNextWeek) inc();
+    if (canGoToNextWeek) incWeek();
   };
 
   return (

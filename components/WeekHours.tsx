@@ -4,13 +4,11 @@ import moment from 'moment';
 import Image from 'next/image';
 
 import HoursJustification from '@/components/HoursJustification';
-import Worktime from '@/interfaces/worktime';
+import useStore from '@/stores/date';
 
-type Props = {
-  worktime: Worktime;
-};
+const WeekHours = () => {
+  const { worktime } = useStore();
 
-const WeekHours = ({ worktime }: Props) => {
   const haveToJustify = worktime
     ? worktime.need_justification &&
       moment().week(worktime.week_number).day(5).isSameOrBefore(moment())

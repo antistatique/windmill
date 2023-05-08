@@ -1,35 +1,48 @@
 import moment from 'moment';
 import { create } from 'zustand';
 
+import Worktime from '@/interfaces/worktime';
+
 interface DateState {
-  date: moment.Moment;
   week: number;
-  inc: () => void;
-  dec: () => void;
-  selectDay: (date: moment.Moment) => void;
+  incWeek: () => void;
+  decWeek: () => void;
+
+  date: moment.Moment;
+  setDate: (date: moment.Moment) => void;
+
+  worktime: Worktime;
+  setWorktime: (worktime: Worktime) => void;
 }
 
 const dateStore = create<DateState>(set => ({
-  date: moment(),
   week: moment().week(),
-  inc: () =>
+  incWeek: () =>
     set(({ week }) => ({
       date: moment()
         .week(week + 1)
         .startOf('week'),
       week: week + 1,
     })),
-  dec: () =>
+  decWeek: () =>
     set(({ week }) => ({
       date: moment()
         .week(week - 1)
         .startOf('week'),
       week: week - 1,
     })),
-  selectDay: (date: moment.Moment) =>
+
+  date: moment(),
+  setDate: (date: moment.Moment) =>
     set(() => ({
       date,
       week: date.week(),
+    })),
+
+  worktime: {} as Worktime,
+  setWorktime: (worktime: Worktime) =>
+    set(() => ({
+      worktime,
     })),
 }));
 

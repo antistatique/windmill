@@ -3,13 +3,12 @@ import { useQuery } from 'react-query';
 import DaySelection from '@/components/DaySelection';
 import WeekHours from '@/components/WeekHours';
 import WeekNavigation from '@/components/WeekNavigation';
-import Worktime from '@/interfaces/worktime';
 import useStore from '@/stores/date';
 
 import 'moment/locale/fr';
 
 const Index = () => {
-  const { date, week } = useStore();
+  const { date, week, setWorktime } = useStore();
 
   const summaryQuery = useQuery('summary', async () => {
     const storedIndex = localStorage.getItem('index');
@@ -25,16 +24,15 @@ const Index = () => {
   });
   const index: number = summaryQuery.data;
 
-  const worktimeQuery = useQuery(['worktime', week, index], async () => {
+  useQuery(['worktime', week, index], async () => {
     if (!index) {
-      return null;
+      return;
     }
 
     const response = await fetch(`/api/worktime/${week}?index=${index}`);
     const data = await response.json();
-    return data;
+    setWorktime(data);
   });
-  const worktime: Worktime = worktimeQuery.data;
 
   return (
     <main className="space-y-4">
@@ -43,12 +41,12 @@ const Index = () => {
           <WeekNavigation />
         </div>
         <div className="p-4">
-          <WeekHours worktime={worktime} />
+          <WeekHours />
         </div>
       </div>
 
       <div className="p-4">
-        <DaySelection worktime={worktime} />
+        <DaySelection />
       </div>
 
       {/* Dev */}

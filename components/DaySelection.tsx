@@ -1,18 +1,13 @@
 import moment from 'moment';
 import Image from 'next/image';
 
-import Worktime from '@/interfaces/worktime';
 import useStore from '@/stores/date';
 
-type Props = {
-  worktime: Worktime;
-};
-
-const DayNavigation = ({ worktime }: Props) => {
-  const { date: selectedDay, selectDay } = useStore();
+const DayNavigation = () => {
+  const { date: selectedDay, setDate, worktime } = useStore();
 
   const handleSelectDate = (day: moment.Moment) => {
-    selectDay(day);
+    setDate(day);
   };
 
   const days = worktime.days?.map(day => {
