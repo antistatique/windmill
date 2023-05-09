@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 
-import { getUsers, setUsers } from '@/helpers/userIndex';
+import { getUsers, setUsers } from '@/helpers/usersCache';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
@@ -38,14 +38,26 @@ const getSummaries = async (client: sheets_v4.Sheets) => {
   return summaries;
 };
 
-export const getIndex = async (client: sheets_v4.Sheets, user: User) => {
-  let users = await getUsers();
+export const getIndex = async (
+  client: sheets_v4.Sheets,
+  user: User,
+  force = false
+) => {
+  let users;
+
+  if (!force) {
+    users = await getUsers();
+  }
 
   if (!users) {
     console.log('No users cache found, fetching from Google Sheets');
 
     const summaries = await getSummaries(client);
     users = summaries?.map(sum => ({ index: sum.index, email: sum.email }));
+
+    if (!users) {
+      return null;
+    }
 
     // Cache all users so others don't have to fetch them from Google Sheets
     await setUsers(users);

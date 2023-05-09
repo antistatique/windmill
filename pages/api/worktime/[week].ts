@@ -12,7 +12,7 @@ import googleSheetClient from '@/services/googleSheetClient';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Worktime | ApiError>
-) {
+): Promise<Worktime | ApiError | void> {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -51,7 +51,7 @@ export default async function handler(
 
   const worktime: Worktime = {
     week_start: weekStart,
-    week_number: values[1],
+    week_number: Number(values[1]),
     name: values[2],
     email: values[3],
     days: [
@@ -116,6 +116,20 @@ export default async function handler(
     need_justification: Boolean(values[46]),
     justification: values[47],
   };
+
+  if (worktime.email !== user.email || worktime.week_number !== week) {
+    // There is an error between the cached index and the spreadsheet index, we should update the cache here
+    const remoteIndex = await getIndex(client, user, true);
+
+    // Verify is the index was truly wrong
+    if (index === remoteIndex) {
+      console.log('Error between the cached index and the spreadsheet');
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Retry the request
+    return handler(req, res);
+  }
 
   return res.status(200).json(worktime);
 }
