@@ -1,38 +1,23 @@
+import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
+import { User } from 'next-auth';
+import { getToken } from 'next-auth/jwt';
 
+import { getUsers, setUsers } from '@/helpers/usersCache';
+import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
 
-type Error = {
-  message: string;
-};
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Summary | Error>
-) {
-  if (req.method !== 'GET') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
-  }
-
-  const session = await getSession({ req });
-  const client = await googleSheetClient(session?.accessToken as string);
-
+const getSummaries = async (client: sheets_v4.Sheets) => {
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range: 'résumé-2023!A:P',
   });
 
   const rows = response.data.values;
-  if (!rows?.length) {
-    res.status(404).json({ message: 'No data found' });
-    return;
-  }
 
-  const summary = rows
-    .map(row => ({
+  const summaries = rows
+    ?.map(row => ({
       name: row[0],
       diff_valid: row[1],
       vacation: row[2],
@@ -46,9 +31,64 @@ export default async function handler(
       previous_year_vacation_sold: row[10],
       remaining_days_to_take: row[11],
       email: row[12],
-      index: row[15],
+      index: Number(row[15]),
     }))
-    .filter(row => row.email === session?.user?.email)[0];
+    .slice(1); // Remove header
 
-  res.status(200).json(summary);
+  return summaries;
+};
+
+export const getIndex = async (
+  client: sheets_v4.Sheets,
+  user: User,
+  force = false
+) => {
+  let users;
+
+  if (!force) {
+    users = await getUsers();
+  }
+
+  if (!users) {
+    console.log('No users cache found, fetching from Google Sheets');
+
+    const summaries = await getSummaries(client);
+    users = summaries?.map(sum => ({ index: sum.index, email: sum.email }));
+
+    if (!users) {
+      return null;
+    }
+
+    // Cache all users so others don't have to fetch them from Google Sheets
+    await setUsers(users);
+  }
+
+  const index = users?.find((u: User) => u.email === user.email)?.index;
+  return index;
+};
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Summary | ApiError>
+) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const user = jwt?.user as User;
+
+  if (!jwt || !user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const client = await googleSheetClient(jwt.accessToken as string);
+  const summaries = await getSummaries(client);
+  const summary = summaries?.find(sum => sum.email === user.email);
+
+  if (!summary) {
+    return res.status(404).json({ message: 'No data found' });
+  }
+
+  return res.status(200).json(summary);
 }

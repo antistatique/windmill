@@ -10,27 +10,10 @@ import 'moment/locale/fr';
 const Index = () => {
   const { date, week, setWorktime } = useStore();
 
-  const summaryQuery = useQuery('summary', async () => {
-    const storedIndex = localStorage.getItem('index');
-
-    if (storedIndex) {
-      return storedIndex;
-    }
-
-    const response = await fetch('/api/summary');
+  useQuery(['worktime', week], async () => {
+    const response = await fetch(`/api/worktime/${week}`);
     const data = await response.json();
-    localStorage.setItem('index', data.index);
-    return data.index;
-  });
-  const index: number = summaryQuery.data;
 
-  useQuery(['worktime', week, index], async () => {
-    if (!index) {
-      return;
-    }
-
-    const response = await fetch(`/api/worktime/${week}?index=${index}`);
-    const data = await response.json();
     setWorktime(data);
   });
 
