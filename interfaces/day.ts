@@ -1,7 +1,5 @@
-import { Moment } from 'moment';
-
 export default interface Day {
-  date: Moment;
+  date: Date;
   status: string;
   hours_done: number;
   hours_todo: number;

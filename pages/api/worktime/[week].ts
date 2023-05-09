@@ -56,7 +56,7 @@ export default async function handler(
     email: values[3],
     days: [
       {
-        date: moment(weekStart).add(0, 'days'),
+        date: moment(weekStart).toDate(),
         status: getStatusFromEmoji(values[4]),
         hours_todo: values[5],
         hours_done: values[6],
@@ -67,7 +67,7 @@ export default async function handler(
         pm_stop: values[11],
       },
       {
-        date: moment(weekStart).add(1, 'days'),
+        date: moment(weekStart).add(1, 'days').toDate(),
         status: getStatusFromEmoji(values[12]),
         hours_todo: values[13],
         hours_done: values[14],
@@ -78,7 +78,7 @@ export default async function handler(
         pm_stop: values[19],
       },
       {
-        date: moment(weekStart).add(2, 'days'),
+        date: moment(weekStart).add(2, 'days').toDate(),
         status: getStatusFromEmoji(values[20]),
         hours_todo: values[21],
         hours_done: values[22],
@@ -89,7 +89,7 @@ export default async function handler(
         pm_stop: values[27],
       },
       {
-        date: moment(weekStart).add(3, 'days'),
+        date: moment(weekStart).add(3, 'days').toDate(),
         status: getStatusFromEmoji(values[28]),
         hours_todo: values[29],
         hours_done: values[30],
@@ -100,7 +100,7 @@ export default async function handler(
         pm_stop: values[35],
       },
       {
-        date: moment(weekStart).add(4, 'days'),
+        date: moment(weekStart).add(4, 'days').toDate(),
         status: getStatusFromEmoji(values[36]),
         hours_todo: values[37],
         hours_done: values[38],

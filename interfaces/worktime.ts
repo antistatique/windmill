@@ -1,4 +1,4 @@
-import Day from './day';
+import Day from '@/interfaces/day';
 
 export default interface Worktime {
   week_start: string;
