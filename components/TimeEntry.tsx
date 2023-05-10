@@ -22,57 +22,49 @@ const TimeEntry = () => {
   }, [day]);
 
   const amStopIsValid = () => {
-    // Value is not set yet
     if (!amStop) {
-      return true;
+      return amStart && pmStart
+        ? "L'heure de fin de matinée doit être définie."
+        : null;
     }
 
     if (!amStart) {
-      console.log('The morning start time must be set first.');
-      return false;
+      return "L'heure de début de matinée doit être définie. ";
     }
 
     if (amStop <= amStart) {
-      console.log('The morning stop time must be greater than the start time.');
-      return false;
+      return "L'heure de fin doit être supérieure à l'heure de début.";
     }
 
-    return true;
+    return null;
   };
 
   const pmStartIsValid = () => {
-    // Value is not set yet
     if (!pmStart) {
-      return true;
+      return null;
     }
 
     if (amStop && pmStart <= amStop) {
-      console.log(
-        'The start time must be greater than the morning stop time if defined.'
-      );
-      return false;
+      return "L'heure de début d'après-midi doit être supérieure à l'heure de fin de matinée.";
     }
 
-    return true;
+    return null;
   };
 
   const pmStopIsValid = () => {
-    // Value is not set yet
     if (!pmStop) {
-      return true;
+      return null;
     }
 
     if (!pmStart) {
-      console.log('The afternoon start time must be set first.');
-      return false;
+      return "L'heure de début d'après-midi doit être définie.";
     }
 
     if (pmStop <= pmStart) {
-      console.log('The stop time must be greater than the start time.');
-      return false;
+      return "L'heure de fin doit être supérieure à l'heure de début.";
     }
 
-    return true;
+    return null;
   };
 
   return (
@@ -83,7 +75,8 @@ const TimeEntry = () => {
         <TimeInput
           label="À"
           value={amStop}
-          isValid={amStopIsValid()}
+          disabled={!amStart}
+          error={amStopIsValid()}
           onChange={setAmStop}
         />
       </div>
@@ -93,13 +86,15 @@ const TimeEntry = () => {
         <TimeInput
           label="De"
           value={pmStart}
-          isValid={pmStartIsValid()}
+          disabled={!pmStart && !!amStart && !amStop}
+          error={pmStartIsValid()}
           onChange={setPmStart}
         />
         <TimeInput
           label="À"
           value={pmStop}
-          isValid={pmStopIsValid()}
+          disabled={!pmStart}
+          error={pmStopIsValid()}
           onChange={setPmStop}
         />
       </div>

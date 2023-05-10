@@ -17,9 +17,17 @@ module.exports = {
       },
       yellow: '#FFF618',
       westar: '#DED6CF',
+      error: '#FF531D',
+      disabled: '#E5E5E5',
       background: '#F1ECE8',
     },
+    fontFamily: {
+      inter: ['Inter', 'sans-serif'],
+    },
     extend: {
+      height: {
+        0.75: '3px',
+      },
       outlineWidth: {
         3: '3px',
       },
