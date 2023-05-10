@@ -25,19 +25,19 @@ const WeekHours = () => {
     setIsModalOpen(true);
   };
 
-  const postJustification = async (data: string) => {
-    await fetch(`api/justification/${week?.week_number}`, {
+  const justificationQuery = async (justification: string) => {
+    await fetch(`api/weeks/${week?.week_number}/justifications`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ justification: data }),
+      body: JSON.stringify({ justification }),
     });
   };
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation('justify', postJustification, {
+  const { mutate } = useMutation(justificationQuery, {
     onMutate: () => {
       setIsJustifying(true);
     },
