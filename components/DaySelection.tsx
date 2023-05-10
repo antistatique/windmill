@@ -5,13 +5,13 @@ import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
 const DaySelection = () => {
-  const { day: selectedDay, setDay, worktime } = useStore();
+  const { day: selectedDay, setDay, week } = useStore();
 
   const handleSelectDate = (day: Day) => {
     setDay(day);
   };
 
-  const days = worktime.days?.map(day => {
+  const days = week.days?.map(day => {
     const date = moment(day.date);
 
     return {

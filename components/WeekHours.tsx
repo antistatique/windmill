@@ -7,11 +7,11 @@ import HoursJustification from '@/components/HoursJustification';
 import useStore from '@/stores/date';
 
 const WeekHours = () => {
-  const { worktime } = useStore();
+  const { week } = useStore();
 
-  const haveToJustify = worktime
-    ? worktime.need_justification &&
-      moment().week(worktime.week_number).day(5).isSameOrBefore(moment())
+  const haveToJustify = week
+    ? week.need_justification &&
+      moment().week(week.week_number).day(5).isSameOrBefore(moment())
     : false;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +26,7 @@ const WeekHours = () => {
   };
 
   const postJustification = async (data: string) => {
-    await fetch(`api/justification/${worktime?.week_number}`, {
+    await fetch(`api/justification/${week?.week_number}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const WeekHours = () => {
       setIsJustifying(true);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries('worktime');
+      queryClient.invalidateQueries('week');
 
       setIsJustifying(false);
       setIsModalOpen(false);
@@ -62,8 +62,8 @@ const WeekHours = () => {
         <div>
           <span>Heures</span>
           <div className="-my-1 font-semibold">
-            <span className="text-2xl">{worktime?.hours_done}</span>
-            <span className="text-base"> / {worktime?.hours_todo}</span>
+            <span className="text-2xl">{week?.hours_done}</span>
+            <span className="text-base"> / {week?.hours_todo}</span>
           </div>
         </div>
 
@@ -98,7 +98,7 @@ const WeekHours = () => {
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
           isLoading={isJustifying}
-          value={worktime?.justification}
+          value={week?.justification}
         />
       )}
     </>
