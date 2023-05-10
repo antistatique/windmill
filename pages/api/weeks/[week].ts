@@ -5,21 +5,21 @@ import { getToken } from 'next-auth/jwt';
 
 import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 import ApiError from '@/interfaces/apiError';
-import Worktime from '@/interfaces/worktime';
+import Week from '@/interfaces/week';
 import { getIndex } from '@/pages/api/summary/index';
 import googleSheetClient from '@/services/googleSheetClient';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Worktime | ApiError>
-): Promise<Worktime | ApiError | void> {
+  res: NextApiResponse<Week | ApiError>
+): Promise<Week | ApiError | void> {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const week = Number(req.query.week);
+  const weekNumber = Number(req.query.week);
 
-  if (Number.isNaN(week)) {
+  if (Number.isNaN(weekNumber)) {
     return res.status(400).json({ message: 'Bad request' });
   }
 
@@ -37,7 +37,7 @@ export default async function handler(
     return res.status(404).json({ message: 'No data found' });
   }
 
-  const weekLine = index + week - 1;
+  const weekLine = index + weekNumber - 1;
 
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
@@ -49,7 +49,7 @@ export default async function handler(
   const values = response.data.values[0];
   const weekStart = values[0];
 
-  const worktime: Worktime = {
+  const week: Week = {
     week_start: weekStart,
     week_number: Number(values[1]),
     name: values[2],
@@ -117,7 +117,7 @@ export default async function handler(
     justification: values[47],
   };
 
-  if (worktime.email !== user.email || worktime.week_number !== week) {
+  if (week.email !== user.email || week.week_number !== weekNumber) {
     // There is an error between the cached index and the spreadsheet index, we should update the cache here
     const remoteIndex = await getIndex(client, user, true);
 
@@ -131,5 +131,5 @@ export default async function handler(
     return handler(req, res);
   }
 
-  return res.status(200).json(worktime);
+  return res.status(200).json(week);
 }

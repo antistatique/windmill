@@ -9,10 +9,10 @@ import useDateStore from '@/stores/date';
 import 'moment/locale/fr';
 
 const Index = () => {
-  const { week, setWorktime } = useDateStore();
+  const { weekNumber, setWorktime } = useDateStore();
 
-  useQuery(['worktime', week], async () => {
-    const response = await fetch(`/api/worktime/${week}`);
+  useQuery(['worktime', weekNumber], async () => {
+    const response = await fetch(`/api/weeks/${weekNumber}`);
     const data = await response.json();
 
     setWorktime(data);

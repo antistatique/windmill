@@ -26,15 +26,13 @@ const WeekHours = () => {
   };
 
   const postJustification = async (data: string) => {
-    const response = await fetch(`api/justification/${worktime?.week_number}`, {
+    await fetch(`api/justification/${worktime?.week_number}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ justification: data }),
     });
-    const summary = await response.json();
-    return summary;
   };
 
   const queryClient = useQueryClient();

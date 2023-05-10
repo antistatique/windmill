@@ -2,10 +2,10 @@ import moment from 'moment';
 import { create } from 'zustand';
 
 import Day from '@/interfaces/day';
-import Worktime from '@/interfaces/worktime';
+import Worktime from '@/interfaces/week';
 
 interface DateState {
-  week: number;
+  weekNumber: number;
   incWeek: () => void;
   decWeek: () => void;
 
@@ -17,21 +17,21 @@ interface DateState {
 }
 
 const useDateStore = create<DateState>(set => ({
-  week: moment().week(),
+  weekNumber: moment().week(),
   incWeek: () =>
-    set(({ week }) => ({
-      week: week + 1,
+    set(({ weekNumber }) => ({
+      weekNumber: weekNumber + 1,
     })),
   decWeek: () =>
-    set(({ week }) => ({
-      week: week - 1,
+    set(({ weekNumber }) => ({
+      weekNumber: weekNumber - 1,
     })),
 
   day: undefined,
   setDay: (day: Day) =>
     set(() => ({
       day,
-      week: moment(day.date).week(),
+      weekNumber: moment(day.date).week(),
     })),
 
   worktime: {} as Worktime,
