@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
+import moment from 'moment';
 
+import RemoveIcon from '@/components/icons/remove';
+import TimeInput from '@/components/TimeInput';
 import useStore from '@/stores/date';
 
-import TimeInput from './TimeInput';
-
 const TimeEntry = () => {
-  const { day } = useStore();
+  const { week, day } = useStore();
 
   const [amStart, setAmStart] = useState('');
   const [amStop, setAmStop] = useState('');
@@ -67,6 +69,36 @@ const TimeEntry = () => {
     return null;
   };
 
+  const worktimeQuery = async (worktime: string[]) => {
+    const date = moment(day?.date).weekday();
+    await fetch(`api/weeks/${week?.week_number}/worktimes/${date}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ worktime }),
+    });
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation(worktimeQuery, {
+    onMutate: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries('week');
+    },
+    onError: () => {},
+  });
+
+  const handleRemove = () => {
+    setAmStart('');
+    setAmStop('');
+    setPmStart('');
+    setPmStop('');
+
+    mutate(['', '', '', '']);
+  };
+
   return (
     <div className="space-y-4 font-semibold">
       <div className="flex flex-col space-y-2">
@@ -97,6 +129,16 @@ const TimeEntry = () => {
           error={pmStopIsValid()}
           onChange={setPmStop}
         />
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={handleRemove}
+          className="rounded-lg bg-white p-4 text-pink shadow"
+        >
+          <RemoveIcon />
+        </button>
       </div>
     </div>
   );
