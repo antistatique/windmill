@@ -29,11 +29,11 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="px-4">
         <DaySelection />
       </div>
 
-      <div className="p-4">
+      <div className="px-4">
         <TimeEntry />
       </div>
     </main>

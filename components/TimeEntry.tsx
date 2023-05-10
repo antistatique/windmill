@@ -1,77 +1,39 @@
 import { useEffect, useState } from 'react';
 
+import DEFAULT_TIME_ENTRY from '@/configs/worktime';
 import useStore from '@/stores/date';
 
+import TimeInput from './TimeInput';
+
 const TimeEntry = () => {
-  const { worktime, day: selectedDay } = useStore();
+  const { day } = useStore();
 
-  const DEFAULT_VALUE = '00:00';
-
-  const [amStart, setAmStart] = useState(DEFAULT_VALUE);
-  const [amStop, setAmStop] = useState(DEFAULT_VALUE);
-  const [pmStart, setPmStart] = useState(DEFAULT_VALUE);
-  const [pmStop, setPmStop] = useState(DEFAULT_VALUE);
+  const [amStart, setAmStart] = useState(DEFAULT_TIME_ENTRY);
+  const [amStop, setAmStop] = useState(DEFAULT_TIME_ENTRY);
+  const [pmStart, setPmStart] = useState(DEFAULT_TIME_ENTRY);
+  const [pmStop, setPmStop] = useState(DEFAULT_TIME_ENTRY);
 
   useEffect(() => {
-    if (!worktime.days) return;
+    if (!day) return;
 
-    const currentDay = worktime.days.find(d => d.date === selectedDay?.date);
-
-    if (!currentDay) return;
-
-    setAmStart(currentDay.am_start);
-    setAmStop(currentDay.am_stop);
-    setPmStart(currentDay.pm_start);
-    setPmStop(currentDay.pm_stop);
-  }, [selectedDay, worktime.days]);
+    setAmStart(day.am_start);
+    setAmStop(day.am_stop);
+    setPmStart(day.pm_start);
+    setPmStop(day.pm_stop);
+  }, [day]);
 
   return (
-    <div className="space-y-8 font-semibold">
+    <div className="space-y-4 font-semibold">
       <div className="flex flex-col space-y-2">
         <h2>Matin</h2>
-        <input
-          type="time"
-          name="am-start"
-          id="am-start"
-          value={amStart || DEFAULT_VALUE}
-          onChange={e => setAmStart(e.target.value)}
-          placeholder={DEFAULT_VALUE}
-          className="grow cursor-pointer rounded-lg px-2 py-3 text-center before:mx-2 before:content-['À']"
-        />
-
-        <input
-          type="time"
-          name="am-end"
-          id="am-end"
-          value={amStop || DEFAULT_VALUE}
-          onChange={e => setAmStop(e.target.value)}
-          placeholder={DEFAULT_VALUE}
-          className="grow cursor-pointer rounded-lg px-2 py-3 text-center before:mx-2 before:content-['À']"
-        />
+        <TimeInput label="De" value={amStart} onChange={setAmStart} />
+        <TimeInput label="À" value={amStop} onChange={setAmStop} />
       </div>
 
       <div className="flex flex-col space-y-2">
         <h2>Après-midi</h2>
-
-        <input
-          type="time"
-          name="pm-start"
-          id="pm-start"
-          value={pmStart || DEFAULT_VALUE}
-          onChange={e => setPmStart(e.target.value)}
-          placeholder={DEFAULT_VALUE}
-          className="grow cursor-pointer rounded-lg px-2 py-3 text-center before:mx-2 before:content-['À']"
-        />
-
-        <input
-          type="time"
-          name="pm-end"
-          id="pm-end"
-          value={pmStop || DEFAULT_VALUE}
-          onChange={e => setPmStop(e.target.value)}
-          placeholder={DEFAULT_VALUE}
-          className="grow cursor-pointer rounded-lg px-2 py-3 text-center before:mx-2 before:content-['À']"
-        />
+        <TimeInput label="De" value={pmStart} onChange={setPmStart} />
+        <TimeInput label="À" value={pmStop} onChange={setPmStop} />
       </div>
     </div>
   );
