@@ -1,12 +1,13 @@
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import moment from 'moment';
 
 import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
-  const { date, week, incWeek, decWeek } = useStore();
+  const { day, weekNumber, incWeek, decWeek } = useStore();
 
-  const canGoToPreviousWeek = week - 1 > 0;
-  const canGoToNextWeek = week + 1 <= date.weeksInYear();
+  const canGoToPreviousWeek = weekNumber - 1 > 0;
+  const canGoToNextWeek = weekNumber + 1 <= moment(day?.date).weeksInYear();
 
   const handlePreviousWeek = () => {
     if (canGoToPreviousWeek) decWeek();
@@ -31,9 +32,9 @@ const WeekNavigation = () => {
 
       <div className="flex flex-col items-center">
         <span className="text-xl font-semibold capitalize">
-          {date.locale('fr').format('MMMM YYYY')}
+          {moment(day?.date).locale('fr').format('MMMM YYYY')}
         </span>
-        <span className="text-sm">Semaine {week}</span>
+        <span className="text-sm">Semaine {weekNumber}</span>
       </div>
 
       <button

@@ -1,49 +1,61 @@
 import moment from 'moment';
 import { create } from 'zustand';
 
-import Worktime from '@/interfaces/worktime';
+import Day from '@/interfaces/day';
+import Week from '@/interfaces/week';
 
 interface DateState {
-  week: number;
+  weekNumber: number;
   incWeek: () => void;
   decWeek: () => void;
 
-  date: moment.Moment;
-  setDate: (date: moment.Moment) => void;
+  day: Day | undefined;
+  setDay: (day: Day) => void;
 
-  worktime: Worktime;
-  setWorktime: (worktime: Worktime) => void;
+  week: Week;
+  setWeek: (week: Week) => void;
 }
 
-const dateStore = create<DateState>(set => ({
-  week: moment().week(),
+const useDateStore = create<DateState>(set => ({
+  weekNumber: moment().week(),
   incWeek: () =>
-    set(({ week }) => ({
-      date: moment()
-        .week(week + 1)
-        .startOf('week'),
-      week: week + 1,
+    set(({ weekNumber }) => ({
+      weekNumber: weekNumber + 1,
     })),
   decWeek: () =>
-    set(({ week }) => ({
-      date: moment()
-        .week(week - 1)
-        .startOf('week'),
-      week: week - 1,
+    set(({ weekNumber }) => ({
+      weekNumber: weekNumber - 1,
     })),
 
-  date: moment(),
-  setDate: (date: moment.Moment) =>
+  day: undefined,
+  setDay: (day: Day) =>
     set(() => ({
-      date,
-      week: date.week(),
+      day,
+      weekNumber: moment(day.date).week(),
     })),
 
-  worktime: {} as Worktime,
-  setWorktime: (worktime: Worktime) =>
-    set(() => ({
-      worktime,
-    })),
+  week: {} as Week,
+  setWeek: (week: Week) =>
+    set(state => {
+      // If the week number is the same, keep the current day
+      let day =
+        week.week_number === state.week.week_number ? state.day : week.days[0];
+
+      // Set the current day the first time
+      if (!state.day) {
+        const currentDate = moment();
+        const currentDay = week.days.find((d: Day) =>
+          moment(d.date).isSame(currentDate, 'day')
+        );
+
+        if (currentDay) day = currentDay;
+      }
+
+      return {
+        day,
+        week,
+      };
+    }),
 }));
 
-export default dateStore;
+export default useDateStore;

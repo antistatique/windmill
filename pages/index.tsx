@@ -1,20 +1,21 @@
 import { useQuery } from 'react-query';
 
 import DaySelection from '@/components/DaySelection';
+import TimeEntry from '@/components/TimeEntry';
 import WeekHours from '@/components/WeekHours';
 import WeekNavigation from '@/components/WeekNavigation';
-import useStore from '@/stores/date';
+import useDateStore from '@/stores/date';
 
 import 'moment/locale/fr';
 
 const Index = () => {
-  const { date, week, setWorktime } = useStore();
+  const { weekNumber, setWeek } = useDateStore();
 
-  useQuery(['worktime', week], async () => {
-    const response = await fetch(`/api/worktime/${week}`);
+  useQuery(['week', weekNumber], async () => {
+    const response = await fetch(`/api/weeks/${weekNumber}`);
     const data = await response.json();
 
-    setWorktime(data);
+    setWeek(data);
   });
 
   return (
@@ -28,16 +29,13 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="px-4">
         <DaySelection />
       </div>
 
-      {/* Dev */}
-      <span className="block">
-        {date.locale('fr').format('dddd Do MMMM YYYY')}
-      </span>
-      <span className="block">{week}</span>
-      {/* Dev */}
+      <div className="px-4">
+        <TimeEntry />
+      </div>
     </main>
   );
 };
