@@ -1,20 +1,45 @@
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import moment from 'moment';
 
+import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
-  const { day, weekNumber, incWeek, decWeek } = useStore();
+  const {
+    week,
+    weekNumber,
+    incWeekNumber,
+    decWeekNumber,
+    setWeekNumber,
+    day,
+    setDay,
+  } = useStore();
+
+  const currentWeekNumber = moment().week();
+  const isCurrentWeek = weekNumber === currentWeekNumber;
+  const isCurrentDay = moment(day?.date).isSame(moment(), 'day');
 
   const canGoToPreviousWeek = weekNumber - 1 > 0;
   const canGoToNextWeek = weekNumber + 1 <= moment(day?.date).weeksInYear();
 
   const handlePreviousWeek = () => {
-    if (canGoToPreviousWeek) decWeek();
+    if (canGoToPreviousWeek) decWeekNumber();
   };
 
   const handleNextWeek = () => {
-    if (canGoToNextWeek) incWeek();
+    if (canGoToNextWeek) incWeekNumber();
+  };
+
+  const handleToday = () => {
+    if (isCurrentWeek) {
+      const currentDay = week.days.find((d: Day) =>
+        moment(d.date).isSame(moment(), 'day')
+      );
+
+      setDay(currentDay || week.days[0]);
+    } else {
+      setWeekNumber(currentWeekNumber);
+    }
   };
 
   return (
@@ -34,7 +59,20 @@ const WeekNavigation = () => {
         <span className="text-xl font-semibold capitalize">
           {moment(day?.date).locale('fr').format('MMMM YYYY')}
         </span>
-        <span className="text-sm">Semaine {weekNumber}</span>
+
+        <div className="text space-x-4">
+          <span>Semaine {weekNumber}</span>
+
+          {!isCurrentDay && (
+            <button
+              type="button"
+              onClick={handleToday}
+              className="font-semibold text-pink"
+            >
+              Aujourd'hui
+            </button>
+          )}
+        </div>
       </div>
 
       <button

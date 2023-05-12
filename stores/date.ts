@@ -6,8 +6,9 @@ import Week from '@/interfaces/week';
 
 interface DateState {
   weekNumber: number;
-  incWeek: () => void;
-  decWeek: () => void;
+  incWeekNumber: () => void;
+  decWeekNumber: () => void;
+  setWeekNumber: (weekNumber: number) => void;
 
   day: Day | undefined;
   setDay: (day: Day) => void;
@@ -18,15 +19,18 @@ interface DateState {
 
 const useDateStore = create<DateState>(set => ({
   weekNumber: moment().week(),
-  incWeek: () =>
+  incWeekNumber: () =>
     set(({ weekNumber }) => ({
       weekNumber: weekNumber + 1,
     })),
-  decWeek: () =>
+  decWeekNumber: () =>
     set(({ weekNumber }) => ({
       weekNumber: weekNumber - 1,
     })),
-
+  setWeekNumber: (weekNumber: number) =>
+    set(() => ({
+      weekNumber,
+    })),
   day: undefined,
   setDay: (day: Day) =>
     set(() => ({
@@ -37,22 +41,21 @@ const useDateStore = create<DateState>(set => ({
   week: {} as Week,
   setWeek: (week: Week) =>
     set(state => {
-      // If the week number is the same, keep the current day
-      let day =
-        week.week_number === state.week.week_number ? state.day : week.days[0];
+      let day;
 
-      // Set the current day the first time
-      if (!state.day) {
-        const currentDate = moment();
-        const currentDay = week.days.find((d: Day) =>
-          moment(d.date).isSame(currentDate, 'day')
+      // If it's the same week, keep the current day
+      if (week.week_number === state.week.week_number) {
+        day = state.day;
+      }
+      // If it's the current week, set the current day
+      else if (state.weekNumber === moment().week()) {
+        day = week.days.find((d: Day) =>
+          moment(d.date).isSame(moment(), 'day')
         );
-
-        if (currentDay) day = currentDay;
       }
 
       return {
-        day,
+        day: day || week.days[0],
         week,
       };
     }),
