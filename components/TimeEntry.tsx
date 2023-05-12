@@ -23,7 +23,7 @@ const TimeEntry = () => {
     }
   }, [day]);
 
-  const amStopIsValid = () => {
+  const amStopError = () => {
     if (!amStop) {
       return amStart && pmStart
         ? "L'heure de fin de matinée doit être définie."
@@ -41,7 +41,7 @@ const TimeEntry = () => {
     return null;
   };
 
-  const pmStartIsValid = () => {
+  const pmStartError = () => {
     if (!pmStart) {
       return null;
     }
@@ -53,7 +53,7 @@ const TimeEntry = () => {
     return null;
   };
 
-  const pmStopIsValid = () => {
+  const pmStopError = () => {
     if (!pmStop) {
       return null;
     }
@@ -69,6 +69,8 @@ const TimeEntry = () => {
     return null;
   };
 
+  const canSave = !amStopError() && !pmStartError() && !pmStopError();
+
   const worktimeQuery = async (worktime: string[]) => {
     const date = moment(day?.date).weekday();
     await fetch(`api/weeks/${week?.week_number}/worktimes/${date}`, {
@@ -83,12 +85,46 @@ const TimeEntry = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(worktimeQuery, {
-    onMutate: () => {},
     onSuccess: () => {
       queryClient.invalidateQueries('week');
     },
-    onError: () => {},
   });
+
+  const handleAmStartChange = (value: string) => {
+    setAmStart(value);
+
+    if (canSave) {
+      console.log('saving worktime');
+      mutate([value, amStop, pmStart, pmStop]);
+    }
+  };
+
+  const handleAmStopChange = (value: string) => {
+    setAmStop(value);
+
+    if (canSave) {
+      console.log('saving worktime');
+      mutate([amStart, value, pmStart, pmStop]);
+    }
+  };
+
+  const handlePmStartChange = (value: string) => {
+    setPmStart(value);
+
+    if (canSave) {
+      console.log('saving worktime');
+      mutate([amStart, amStop, value, pmStop]);
+    }
+  };
+
+  const handlePmStopChange = (value: string) => {
+    setPmStop(value);
+
+    if (canSave) {
+      console.log('saving worktime');
+      mutate([amStart, amStop, pmStart, value]);
+    }
+  };
 
   const handleRemove = () => {
     setAmStart('');
@@ -103,13 +139,13 @@ const TimeEntry = () => {
     <div className="space-y-4 font-semibold">
       <div className="flex flex-col space-y-2">
         <h2>Matin</h2>
-        <TimeInput label="De" value={amStart} onChange={setAmStart} />
+        <TimeInput label="De" value={amStart} onChange={handleAmStartChange} />
         <TimeInput
           label="À"
           value={amStop}
           disabled={!amStart}
-          error={amStopIsValid()}
-          onChange={setAmStop}
+          error={amStopError()}
+          onChange={handleAmStopChange}
         />
       </div>
 
@@ -119,15 +155,15 @@ const TimeEntry = () => {
           label="De"
           value={pmStart}
           disabled={!pmStart && !!amStart && !amStop}
-          error={pmStartIsValid()}
-          onChange={setPmStart}
+          error={pmStartError()}
+          onChange={handlePmStartChange}
         />
         <TimeInput
           label="À"
           value={pmStop}
           disabled={!pmStart}
-          error={pmStopIsValid()}
-          onChange={setPmStop}
+          error={pmStopError()}
+          onChange={handlePmStopChange}
         />
       </div>
 
