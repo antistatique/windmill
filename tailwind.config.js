@@ -19,7 +19,10 @@ module.exports = {
       westar: '#DED6CF',
       error: '#FF531D',
       disabled: '#E5E5E5',
-      background: '#F1ECE8',
+      background: {
+        DEFAULT: '#F1ECE8',
+        dark: '#DED6CF',
+      },
     },
     fontFamily: {
       inter: ['Inter', 'sans-serif'],

@@ -16,18 +16,20 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <SessionProvider session={pageProps.session}>
-      <div className="flex min-h-screen flex-col">
-        <div className="grow">
-          <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
-          </QueryClientProvider>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background-dark">
+        <div className="flex h-screen max-w-2xl grow flex-col overflow-auto bg-background md:rounded-xl">
+          <div className="grow">
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+            </QueryClientProvider>
+          </div>
 
-        {!withoutNav.includes(path) && (
-          <header className="sticky bottom-0 shadow">
-            <Nav />
-          </header>
-        )}
+          {!withoutNav.includes(path) && (
+            <header className="sticky bottom-0 shadow">
+              <Nav />
+            </header>
+          )}
+        </div>
       </div>
     </SessionProvider>
   );
