@@ -2,6 +2,7 @@ import { MdError } from 'react-icons/md';
 import moment from 'moment';
 
 import ClockIcon from '@/components/icons/clock';
+import RemoveIcon from '@/components/icons/remove';
 
 type Props = {
   label: string;
@@ -20,12 +21,14 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
   return (
     <>
       <label
-        className={`flex w-full items-center rounded-lg px-4 shadow
+        className={`flex w-full items-center rounded-lg px-2 shadow
         ${disabled ? 'bg-disabled' : 'cursor-pointer bg-white'}
         ${error ? 'outline outline-3 outline-error' : ''}
       `}
       >
-        <label className="pointer-events-none text-blue">{label}</label>
+        <label className="pointer-events-none w-12 px-2 text-blue">
+          {label}
+        </label>
 
         <div className="w-full grow text-center">
           <input
@@ -40,15 +43,27 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
           />
         </div>
 
-        {!disabled && (
-          <button
-            type="button"
-            onClick={handleSetCurrentTime}
-            className="text-gray hover:text-blue"
-          >
-            <ClockIcon  />
-          </button>
-        )}
+        <div className="flex w-12 items-center justify-end">
+          {value && (
+            <button
+              type="button"
+              onClick={() => onChange('')}
+              className="p-2 text-2xl text-gray hover:text-blue"
+            >
+              <RemoveIcon />
+            </button>
+          )}
+
+          {!disabled && !value && (
+            <button
+              type="button"
+              onClick={handleSetCurrentTime}
+              className="p-2 text-gray hover:text-blue"
+            >
+              <ClockIcon />
+            </button>
+          )}
+        </div>
       </label>
 
       {error && (

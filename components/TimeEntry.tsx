@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import moment from 'moment';
 
-import RemoveIcon from '@/components/icons/remove';
+import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
 import useStore from '@/stores/date';
 
@@ -173,7 +173,7 @@ const TimeEntry = () => {
           onClick={handleRemove}
           className="rounded-lg bg-white p-4 text-pink shadow"
         >
-          <RemoveIcon />
+          <TrashIcon />
         </button>
       </div>
     </div>
