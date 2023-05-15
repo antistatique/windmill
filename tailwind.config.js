@@ -25,6 +25,9 @@ module.exports = {
       inter: ['Inter', 'sans-serif'],
     },
     extend: {
+      screens: {
+        em: '375px',
+      },
       height: {
         0.75: '3px',
       },

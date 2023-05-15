@@ -19,9 +19,9 @@ const Index = () => {
   });
 
   return (
-    <main className="space-y-4">
-      <div className="bg-white shadow">
-        <div className="p-8">
+    <main className="space-y-4 pb-4">
+      <div className="space-y-4 bg-white shadow em:space-y-8">
+        <div className="px-8 pt-8">
           <WeekNavigation />
         </div>
         <div className="p-4">
@@ -29,7 +29,7 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="px-4">
+      <div>
         <DaySelection />
       </div>
 

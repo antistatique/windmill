@@ -10,18 +10,29 @@ type Props = {
 
 const TimeInput = ({ label, value, disabled, error, onChange }: Props) => (
   <>
-    <input
-      type="time"
-      data-before={label}
-      value={value || '00:00'}
-      onChange={event => onChange(event.target.value)}
-      disabled={disabled}
-      className={`grow  rounded-lg px-2 py-3 text-center shadow before:ml-2 before:w-6 before:text-left before:text-blue before:content-[attr(data-before)] ${
-        !value ? 'text-gray' : ''
-      } ${!disabled ? 'cursor-pointer' : 'bg-disabled'} ${
-        error ? 'outline outline-3 outline-error' : ''
-      }`}
-    />
+    <label
+      className={`relative flex w-full items-center justify-center rounded-lg shadow
+        ${disabled ? 'bg-disabled' : 'cursor-pointer bg-white'}
+        ${error ? 'outline outline-3 outline-error' : ''}
+      `}
+    >
+      <div
+        data-before={label}
+        className="w-full grow text-center before:absolute before:left-2 before:top-3 before:text-blue before:content-[attr(data-before)]"
+      >
+        <input
+          type="time"
+          value={value || '00:00'}
+          onChange={event => onChange(event.target.value)}
+          disabled={disabled}
+          className={`w-[70px] py-3 text-center
+            ${!value ? 'text-gray' : ''}
+            ${disabled ? 'bg-disabled' : 'bg-white'}
+          `}
+        />
+      </div>
+    </label>
+
     {error && (
       <span className="pb-2 font-normal text-error">
         <MdError className="mr-2 inline" />

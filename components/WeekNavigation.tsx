@@ -60,7 +60,7 @@ const WeekNavigation = () => {
           {moment(day?.date).locale('fr').format('MMMM YYYY')}
         </span>
 
-        <div className="text space-x-4">
+        <div className="text flex flex-col gap-x-4 em:flex-row">
           <span>Semaine {weekNumber}</span>
 
           {!isCurrentDay && (

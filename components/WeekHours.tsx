@@ -58,7 +58,7 @@ const WeekHours = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between rounded-xl bg-background px-4 py-3">
+      <div className="flex flex-col justify-between gap-4 rounded-xl bg-background px-4 py-3 em:flex-row em:items-center">
         <div>
           <span>Heures</span>
           <div className="-my-1 font-semibold">
@@ -82,7 +82,7 @@ const WeekHours = () => {
           <button
             type="button"
             onClick={handleOpenJustifyModal}
-            className={`rounded-lg px-5 py-1 text-xl font-semibold ${
+            className={`w-full rounded-lg px-5 py-1 text-xl font-semibold em:w-auto ${
               haveToJustify
                 ? 'bg-pink text-white hover:bg-pink-dark'
                 : 'bg-white outline-3 outline-westar hover:outline'

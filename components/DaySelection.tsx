@@ -27,14 +27,14 @@ const DaySelection = () => {
   });
 
   return (
-    <div className="flex items-center justify-between space-x-2">
+    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 pb-4 em:pb-2">
       {days?.map(
         ({ day, value, isCurrentDay, isPastDay, status, hoursDone }) => (
           <button
             type="button"
             key={value.unix()}
             onClick={() => handleSelectDate(day)}
-            className={`flex grow cursor-pointer flex-col items-center space-y-1 rounded-xl bg-white p-2 shadow  ${
+            className={`flex grow cursor-pointer flex-col items-center justify-center space-y-1 rounded-xl bg-white px-1 py-2 shadow sm:px-2  ${
               value.date() === moment(selectedDay?.date).date()
                 ? 'outline outline-3 -outline-offset-2 outline-pink'
                 : ''
@@ -60,11 +60,13 @@ const DaySelection = () => {
                 isPastDay || isCurrentDay ? 'text-blue' : 'text-gray'
               }`}
             >
-              <span className="text-2xl font-semibold capitalize">
+              <span className="text-xl font-semibold capitalize sm:text-2xl">
                 {value.format('dd')}
               </span>
 
-              <span className="font-semibold">{hoursDone.format('HH:mm')}</span>
+              <span className="w-12 font-semibold">
+                {hoursDone.format('HH:mm')}
+              </span>
             </div>
           </button>
         )

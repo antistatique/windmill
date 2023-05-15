@@ -27,7 +27,7 @@ const Dashboard = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <main>
+    <main className="space-y-8 pb-4">
       <div className="flex h-64 flex-col items-center justify-center space-y-4 bg-pink text-center font-semibold text-white">
         <h1 className="text-4xl">{summary?.name}</h1>
 
@@ -47,7 +47,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="space-y-8 px-3 py-6">
+      <div className="space-y-8 px-4">
         <Section
           label="Budget congés / vacances"
           items={[

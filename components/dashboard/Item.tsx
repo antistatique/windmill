@@ -7,7 +7,7 @@ type Props = {
 
 const Item = ({ label, value }: Props) => (
   <div className="flex p-3">
-    <span className="grow">{label}</span>
+    <span className="grow overflow-hidden text-ellipsis">{label}</span>
     <span className="font-semibold">{value}</span>
   </div>
 );
