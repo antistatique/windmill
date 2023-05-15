@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 
-import { getUsers, setUsers } from '@/helpers/usersCache';
+import { getUsersInCache, setUsersInCache } from '@/helpers/usersCache';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import googleSheetClient from '@/services/googleSheetClient';
@@ -46,7 +46,7 @@ export const getIndex = async (
   let users;
 
   if (!force) {
-    users = await getUsers();
+    users = await getUsersInCache();
   }
 
   if (!users) {
@@ -60,11 +60,10 @@ export const getIndex = async (
     }
 
     // Cache all users so others don't have to fetch them from Google Sheets
-    await setUsers(users);
+    await setUsersInCache(users);
   }
 
-  const index = users?.find((u: User) => u.email === user.email)?.index;
-  return index;
+  return users?.find((u: User) => u.email === user.email)?.index;
 };
 
 export default async function handler(

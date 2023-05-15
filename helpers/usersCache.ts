@@ -1,31 +1,29 @@
 import fs from 'fs';
 import path from 'path';
 
-const MEMBERS_CACHE_PATH = 'configs/users.json';
+const FILE_PATH = 'configs/users.json';
 
 type User = {
   index: number;
   email: string;
 };
 
-export const getUsers = async () => {
-  let users;
-
+const getUsersInCache = async () => {
   try {
-    users = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), MEMBERS_CACHE_PATH), 'utf8')
+    const users = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), FILE_PATH), 'utf8')
     );
+    return users;
   } catch (error) {
     console.log('Could not read users cache', error);
+    return null;
   }
-
-  return users;
 };
 
-export const setUsers = async (users: User[]) => {
+const setUsersInCache = async (users: User[]) => {
   try {
     fs.writeFileSync(
-      path.join(process.cwd(), MEMBERS_CACHE_PATH),
+      path.join(process.cwd(), FILE_PATH),
       JSON.stringify(users),
       'utf8'
     );
@@ -33,3 +31,5 @@ export const setUsers = async (users: User[]) => {
     console.log('Could not write users cache', error);
   }
 };
+
+export { getUsersInCache, setUsersInCache };
