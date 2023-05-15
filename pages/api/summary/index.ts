@@ -43,27 +43,37 @@ export const getIndex = async (
   user: User,
   force = false
 ) => {
-  let users;
+  let index;
 
   if (!force) {
-    users = await getUsersInCache();
+    const users = await getUsersInCache();
+    index = users?.find((u: User) => u.email === user.email)?.index;
   }
 
-  if (!users) {
-    console.log('No users cache found, fetching from Google Sheets');
+  if (!index) {
+    console.log('User not found in cache, fetching from Google Sheets');
 
     const summaries = await getSummaries(client);
-    users = summaries?.map(sum => ({ index: sum.index, email: sum.email }));
+    const users = summaries?.map(sum => ({
+      index: sum.index,
+      email: sum.email,
+    }));
 
     if (!users) {
-      return null;
+      throw new Error('No users found in Google Sheets');
+    }
+
+    index = users?.find(u => u.email === user.email)?.index;
+
+    if (!index) {
+      throw new Error(`User ${user.email} not found in Google Sheets`);
     }
 
     // Cache all users so others don't have to fetch them from Google Sheets
     await setUsersInCache(users);
   }
 
-  return users?.find((u: User) => u.email === user.email)?.index;
+  return index;
 };
 
 export default async function handler(
