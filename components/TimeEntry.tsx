@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import debounce from 'lodash.debounce';
 import moment from 'moment';
 
-import RemoveIcon from '@/components/icons/remove';
+import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
 import useStore from '@/stores/date';
 
@@ -71,16 +73,24 @@ const TimeEntry = () => {
 
   const canSave = !amStopError() && !pmStartError() && !pmStopError();
 
-  const worktimeQuery = async (worktime: string[]) => {
-    const date = moment(day?.date).weekday();
-    await fetch(`api/weeks/${week?.week_number}/worktimes/${date}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ worktime }),
-    });
-  };
+  const date = moment(day?.date).weekday();
+
+  const worktimeQuery = useCallback(
+    async (worktime: string[]) => {
+      if (!canSave) {
+        return;
+      }
+
+      await fetch(`api/weeks/${week?.week_number}/worktimes/${date}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ worktime }),
+      });
+    },
+    [canSave, date, week?.week_number]
+  );
 
   const queryClient = useQueryClient();
 
@@ -90,62 +100,33 @@ const TimeEntry = () => {
     },
   });
 
-  const handleAmStartChange = (value: string) => {
-    setAmStart(value);
+  const debouncedWorktimeQuery = useMemo(
+    () => debounce(mutate, 1000),
+    [mutate]
+  );
 
-    if (canSave) {
-      console.log('saving worktime');
-      mutate([value, amStop, pmStart, pmStop]);
-    }
-  };
-
-  const handleAmStopChange = (value: string) => {
-    setAmStop(value);
-
-    if (canSave) {
-      console.log('saving worktime');
-      mutate([amStart, value, pmStart, pmStop]);
-    }
-  };
-
-  const handlePmStartChange = (value: string) => {
-    setPmStart(value);
-
-    if (canSave) {
-      console.log('saving worktime');
-      mutate([amStart, amStop, value, pmStop]);
-    }
-  };
-
-  const handlePmStopChange = (value: string) => {
-    setPmStop(value);
-
-    if (canSave) {
-      console.log('saving worktime');
-      mutate([amStart, amStop, pmStart, value]);
-    }
-  };
+  useEffect(() => {
+    debouncedWorktimeQuery([amStart, amStop, pmStart, pmStop]);
+  }, [amStart, amStop, pmStart, pmStop, debouncedWorktimeQuery]);
 
   const handleRemove = () => {
     setAmStart('');
     setAmStop('');
     setPmStart('');
     setPmStop('');
-
-    mutate(['', '', '', '']);
   };
 
   return (
     <div className="space-y-4 font-semibold">
       <div className="flex flex-col space-y-2">
         <h2>Matin</h2>
-        <TimeInput label="De" value={amStart} onChange={handleAmStartChange} />
+        <TimeInput label="De" value={amStart} onChange={setAmStart} />
         <TimeInput
           label="À"
           value={amStop}
           disabled={!amStart}
           error={amStopError()}
-          onChange={handleAmStopChange}
+          onChange={setAmStop}
         />
       </div>
 
@@ -156,14 +137,14 @@ const TimeEntry = () => {
           value={pmStart}
           disabled={!pmStart && !!amStart && !amStop}
           error={pmStartError()}
-          onChange={handlePmStartChange}
+          onChange={setPmStart}
         />
         <TimeInput
           label="À"
           value={pmStop}
           disabled={!pmStart}
           error={pmStopError()}
-          onChange={handlePmStopChange}
+          onChange={setPmStop}
         />
       </div>
 
@@ -173,7 +154,7 @@ const TimeEntry = () => {
           onClick={handleRemove}
           className="rounded-lg bg-white p-4 text-pink shadow"
         >
-          <RemoveIcon />
+          <TrashIcon />
         </button>
       </div>
     </div>
