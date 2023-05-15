@@ -48,7 +48,10 @@ const HoursJustification = ({
         <button
           onClick={() => onJustify(justification)}
           type="button"
-          className="w-full rounded-lg bg-pink px-4 py-2 font-semibold text-white"
+          disabled={isLoading}
+          className={`w-full rounded-lg px-4 py-2 font-semibold text-white ${
+            isLoading ? 'bg-pink-dark' : 'bg-pink'
+          }`}
         >
           Valider
           {isLoading && (
