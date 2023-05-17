@@ -6,6 +6,7 @@ const Page2 = () => (
   <>
     <Head>
       <title>Windmill - Page 2</title>
+      <meta name="description" content="Not implemented yet" />
     </Head>
 
     <main className="space-y-4 p-4">

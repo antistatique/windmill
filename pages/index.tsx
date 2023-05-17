@@ -23,6 +23,7 @@ const Index = () => {
     <>
       <Head>
         <title>Windmill - Saisie</title>
+        <meta name="description" content="Saisie des heures par semaine" />
       </Head>
 
       <main className="space-y-4 pb-4">

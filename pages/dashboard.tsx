@@ -30,7 +30,8 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>Windmill - Dasboard</title>
+        <title>Windmill - Dashboard</title>
+        <meta name="description" content="Résumé des congés" />
       </Head>
 
       <main className="space-y-8 pb-4">
