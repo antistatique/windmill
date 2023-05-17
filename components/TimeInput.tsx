@@ -50,6 +50,7 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
             <button
               type="button"
               onClick={() => onChange('')}
+              aria-label="Supprimer l'heure"
               className="p-3 text-2xl text-gray hover:text-blue"
             >
               <RemoveIcon />
@@ -60,6 +61,7 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
             <button
               type="button"
               onClick={handleSetCurrentTime}
+              aria-label="Remplir avec l'heure actuelle"
               className="p-3 text-gray hover:text-blue"
             >
               <ClockIcon />

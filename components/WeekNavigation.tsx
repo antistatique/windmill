@@ -48,6 +48,7 @@ const WeekNavigation = () => {
         type="button"
         onClick={handlePreviousWeek}
         disabled={!canGoToPreviousWeek}
+        aria-label="Semaine précédente"
         className={`flex h-12 w-12 items-center justify-center text-gray ${
           canGoToPreviousWeek ? 'hover:text-blue' : ''
         }`}
@@ -79,6 +80,7 @@ const WeekNavigation = () => {
         type="button"
         onClick={handleNextWeek}
         disabled={!canGoToNextWeek}
+        aria-label="Semaine suivante"
         className={`flex h-12 w-12 items-center justify-center text-gray ${
           canGoToNextWeek ? 'hover:text-blue' : ''
         }`}

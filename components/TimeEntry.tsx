@@ -152,6 +152,7 @@ const TimeEntry = () => {
         <button
           type="button"
           onClick={handleRemove}
+          aria-label="Supprimer les heures"
           className="rounded-lg bg-white p-4 text-pink shadow"
         >
           <TrashIcon />
