@@ -4,6 +4,7 @@ import moment from 'moment';
 import Image from 'next/image';
 
 import HoursJustification from '@/components/HoursJustification';
+import formatToTime from '@/helpers/hoursToTime';
 import useStore from '@/stores/date';
 
 const WeekHours = () => {
@@ -61,9 +62,12 @@ const WeekHours = () => {
       <div className="flex flex-col justify-between gap-4 rounded-xl bg-background px-4 py-3 em:flex-row em:items-center">
         <div>
           <span>Heures</span>
-          <div className="-my-1 font-semibold">
-            <span className="text-2xl">{week?.hours_done}</span>
-            <span className="text-base"> / {week?.hours_todo}</span>
+          <div className="-my-1 space-x-1 font-semibold">
+            <span className="text-2xl">
+              {formatToTime(week?.hours_done).time}
+            </span>
+            <span>/</span>
+            <span>{formatToTime(week?.hours_todo).time}</span>
           </div>
         </div>
 
