@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { DAYS_COLUMN } from '@/configs/worktime';
 import authorize from '@/middlewares/authorize';
+import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
 
 interface CustomNextApiRequest extends NextApiRequest {
@@ -40,4 +41,4 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
   return res.status(200).json(response.data);
 };
 
-export default authorize(weekHandler(handler));
+export default authorize(indexHandler(weekHandler(handler)));

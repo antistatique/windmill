@@ -3,12 +3,13 @@ import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
-import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
+import getIndex from '@/libs/usersCache';
 import ApiError from '@/interfaces/apiError';
 import Week from '@/interfaces/week';
 import authorize from '@/middlewares/authorize';
+import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
-import { getIndex } from '@/pages/api/summary/index';
+import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 
 interface CustomNextApiRequest extends NextApiRequest {
   weekNumber: number;
@@ -126,4 +127,4 @@ const handler = async (
   return res.status(200).json(week);
 };
 
-export default authorize(weekHandler(handler));
+export default authorize(indexHandler(weekHandler(handler)));

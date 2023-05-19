@@ -6,8 +6,6 @@ interface CustomNextApiRequest extends NextApiRequest {
 
 const weekHandler =
   (handler: any) => async (req: CustomNextApiRequest, res: NextApiResponse) => {
-    console.log('week middleware');
-
     const week = Number(req.query.week);
 
     if (Number.isNaN(week)) {
