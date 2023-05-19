@@ -1,41 +1,31 @@
+import { sheets_v4 } from 'googleapis';
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
-import { getToken } from 'next-auth/jwt';
 
 import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 import ApiError from '@/interfaces/apiError';
 import Week from '@/interfaces/week';
+import authorize from '@/middlewares/authorize';
+import weekHandler from '@/middlewares/week';
 import { getIndex } from '@/pages/api/summary/index';
-import googleSheetClient from '@/services/googleSheetClient';
 
-export default async function handler(
-  req: NextApiRequest,
+interface CustomNextApiRequest extends NextApiRequest {
+  weekNumber: number;
+  user: User;
+  index: number;
+  client: sheets_v4.Sheets;
+}
+
+const handler = async (
+  req: CustomNextApiRequest,
   res: NextApiResponse<Week | ApiError>
-): Promise<Week | ApiError | void> {
+): Promise<Week | ApiError | void> => {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const weekNumber = Number(req.query.week);
-
-  if (Number.isNaN(weekNumber)) {
-    return res.status(400).json({ message: 'Bad request' });
-  }
-
-  const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const user = jwt?.user as User;
-
-  if (!jwt) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  const client = await googleSheetClient(jwt.accessToken as string);
-  const index = await getIndex(client, user);
-
-  if (!index) {
-    return res.status(404).json({ message: 'No data found' });
-  }
+  const { weekNumber, user, index, client } = req;
 
   const weekLine = index + weekNumber - 1;
 
@@ -46,6 +36,7 @@ export default async function handler(
   if (!response.data.values) {
     return res.status(404).json({ message: 'No data found' });
   }
+
   const values = response.data.values[0];
   const weekStart = values[0];
 
@@ -117,6 +108,7 @@ export default async function handler(
     justification: values[47],
   };
 
+  // Check data consistency
   if (week.email !== user.email || week.week_number !== weekNumber) {
     // There is an error between the cached index and the spreadsheet index, we should update the cache here
     const remoteIndex = await getIndex(client, user, true);
@@ -132,4 +124,6 @@ export default async function handler(
   }
 
   return res.status(200).json(week);
-}
+};
+
+export default authorize(weekHandler(handler));

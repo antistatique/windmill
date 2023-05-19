@@ -76,10 +76,10 @@ export const getIndex = async (
   return index;
 };
 
-export default async function handler(
+const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Summary | ApiError>
-) {
+) => {
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -100,4 +100,6 @@ export default async function handler(
   }
 
   return res.status(200).json(summary);
-}
+};
+
+export default handler;
