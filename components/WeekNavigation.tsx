@@ -1,45 +1,52 @@
+import { useState } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { useQuery } from 'react-query';
 import moment from 'moment';
 
-import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
-  const {
-    week,
-    weekNumber,
-    incWeekNumber,
-    decWeekNumber,
-    setWeekNumber,
-    day,
-    setDay,
-  } = useStore();
+  const { week, setWeek, day, setDay } = useStore();
+  const [weekNumber, setWeekNumber] = useState(week?.week_number);
 
-  const currentWeekNumber = moment().week();
-  const isCurrentWeek = weekNumber === currentWeekNumber;
+  useQuery(['week', weekNumber], async () => {
+    const response = await fetch(`/api/weeks/${weekNumber}`);
+    const data = await response.json();
+    setWeek(data);
+  });
+
+  const isCurrentWeek = weekNumber === moment().week();
   const isCurrentDay = moment(day?.date).isSame(moment(), 'day');
 
   const canGoToPreviousWeek = weekNumber - 1 > 0;
   const canGoToNextWeek = weekNumber + 1 <= moment(day?.date).weeksInYear();
 
   const handlePreviousWeek = () => {
-    if (canGoToPreviousWeek) decWeekNumber();
+    if (canGoToPreviousWeek) {
+      setWeekNumber(weekNumber - 1);
+    }
   };
 
   const handleNextWeek = () => {
-    if (canGoToNextWeek) incWeekNumber();
+    if (canGoToNextWeek) {
+      setWeekNumber(weekNumber + 1);
+    }
   };
 
   const handleToday = () => {
     if (isCurrentWeek) {
-      const currentDay = week.days.find((d: Day) =>
+      const currentDay = week?.days?.find(d =>
         moment(d.date).isSame(moment(), 'day')
       );
 
-      setDay(currentDay || week.days[0]);
-    } else {
-      setWeekNumber(currentWeekNumber);
+      if (currentDay) {
+        setDay(currentDay);
+      }
+
+      return;
     }
+
+    setWeekNumber(moment().week());
   };
 
   return (

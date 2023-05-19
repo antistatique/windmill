@@ -11,7 +11,7 @@ const DaySelection = () => {
     setDay(day);
   };
 
-  const days = week.days?.map(day => {
+  const days = week?.days?.map(day => {
     const date = moment(day.date);
 
     return {
@@ -20,9 +20,7 @@ const DaySelection = () => {
       isCurrentDay: date.isSame(moment(), 'day'),
       isPastDay: date.isBefore(moment(), 'day'),
       status: day.status,
-      hoursDone: moment.utc(
-        moment.duration(day.hours_done, 'hours').asMilliseconds()
-      ),
+      hoursDone: day.total,
     };
   });
 
@@ -64,9 +62,7 @@ const DaySelection = () => {
                 {value.format('dd')}
               </span>
 
-              <span className="w-12 font-semibold">
-                {hoursDone.format('HH:mm')}
-              </span>
+              <span className="w-12 font-semibold">{hoursDone}</span>
             </div>
           </button>
         )

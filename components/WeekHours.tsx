@@ -12,7 +12,7 @@ const WeekHours = () => {
 
   const haveToJustify = week
     ? week.need_justification &&
-      moment().week(week.week_number).day(5).isSameOrBefore(moment())
+      moment().week(week?.week_number).day(5).isSameOrBefore(moment())
     : false;
 
   const [isModalOpen, setIsModalOpen] = useState(false);

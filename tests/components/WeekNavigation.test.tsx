@@ -1,9 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { act, render, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import moment from 'moment';
 
 import WeekNavigation from '@/components/WeekNavigation';
-import { Statuses } from '@/helpers/mapEmojiToStatus';
 import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
@@ -13,86 +19,64 @@ const { setDay } = useStore.getState();
 
 const renderComponent = () => {
   act(() => {
-    render(<WeekNavigation />);
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <WeekNavigation />
+      </QueryClientProvider>
+    );
   });
 };
 
 describe('week navigation', () => {
-  it('should display the current week as default', () => {
-    act(() => {
-      render(<WeekNavigation />);
-    });
+  it('should display the current week as default', async () => {
+    renderComponent();
 
-    const date = moment();
+    const exceptedDate = moment().locale('fr').format('MMMM YYYY');
+    const exceptedWeek = `Semaine ${moment().week()}`;
 
-    const exceptedDate = date.locale('fr').format('MMMM YYYY');
-    const exceptedWeek = `Semaine ${date.week()}`;
-
-    expect(screen.getByText(exceptedDate)).toBeInTheDocument();
-    expect(screen.getByText(exceptedWeek)).toBeInTheDocument();
+    expect(await screen.findByText(exceptedWeek)).toBeInTheDocument();
+    expect(await screen.findByText(exceptedDate)).toBeInTheDocument();
   });
 
-  it('should decrease the week when clicking on the left arrow', () => {
+  it('should decrease the week when clicking on the left arrow', async () => {
     renderComponent();
 
     const date = moment().subtract(1, 'week');
-
     const exceptedWeek = `Semaine ${date.week()}`;
 
-    const leftArrow = screen.getByLabelText('Semaine précédente');
+    const previousWeekBtn = await screen.findByLabelText('Semaine précédente');
+    fireEvent.click(previousWeekBtn);
 
-    act(() => {
-      leftArrow.click();
-    });
-
-    expect(screen.getByText(exceptedWeek)).toBeInTheDocument();
+    expect(await screen.findByText(exceptedWeek)).toBeInTheDocument();
   });
 
-  it('should increase the week when clicking on the right arrow', () => {
+  it('should increase the week when clicking on the right arrow', async () => {
     renderComponent();
 
     const date = moment().add(1, 'week');
-
     const exceptedWeek = `Semaine ${date.week()}`;
 
-    const rightArrow = screen.getByLabelText('Semaine suivante');
+    const nextWeekBtn = await screen.findByLabelText('Semaine suivante');
+    fireEvent.click(nextWeekBtn);
 
-    act(() => {
-      rightArrow.click();
-    });
-
-    expect(screen.getByText(exceptedWeek)).toBeInTheDocument();
+    expect(await screen.findByText(exceptedWeek)).toBeInTheDocument();
   });
 
   describe('today button', () => {
-    it('should not display the today button when date is current date', () => {
+    it('should not display the today button when date is current date', async () => {
       renderComponent();
 
-      const button = screen.queryByText("Aujourd'hui");
-
-      expect(button).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText("Aujourd'hui")).not.toBeInTheDocument();
+      });
     });
 
-    it('should display the today button when date is not today', () => {
-      const day: Day = {
-        date: moment().subtract(1, 'week').toDate(),
-        status: Statuses.WORKING,
-        hours_done: 0,
-        hours_todo: 8,
-        total: 0,
-        am_start: '',
-        am_stop: '',
-        pm_start: '',
-        pm_stop: '',
-      };
-
-      setDay(day);
+    it('should display the today button when date is not today', async () => {
+      setDay({ date: moment().subtract(1, 'week').toDate() } as Day);
 
       renderComponent();
 
-      const button = screen.getByText("Aujourd'hui");
-
-      expect(button).toBeInTheDocument();
+      expect(await screen.findByText("Aujourd'hui")).toBeInTheDocument();
     });
   });
 });

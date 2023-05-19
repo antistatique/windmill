@@ -1,6 +1,6 @@
 import Day from '@/interfaces/day';
 
-export default interface Worktime {
+export default interface Week {
   week_start: string;
   week_number: number;
   name: string;
