@@ -2,7 +2,6 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import Head from 'next/head';
 
-import Section from '@/components/dashboard/Section';
 import {
   FORMATION_BUDGET,
   FORMATION_EXPENSE_BUDGET,
@@ -10,6 +9,7 @@ import {
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
 import Summary from '@/interfaces/summary';
+import Section from '@/pages/dashboard/Section';
 
 const Dashboard = () => {
   const summaryQuery = useQuery('summary', async () => {
