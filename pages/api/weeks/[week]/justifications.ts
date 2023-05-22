@@ -1,6 +1,7 @@
 import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { JUSTIFICATION_COLUMN, SHEET_NAME } from '@/configs/worktime';
 import authorize from '@/middlewares/authorize';
 import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
@@ -23,7 +24,7 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
 
   const response = await client.spreadsheets.values.update({
     spreadsheetId: process.env.SHEET_ID,
-    range: `saisie-2023!AV${weekLine}`,
+    range: `${SHEET_NAME}!${JUSTIFICATION_COLUMN + weekLine}`,
     valueInputOption: 'USER_ENTERED',
     requestBody: {
       values: [[justification]],

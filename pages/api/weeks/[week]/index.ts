@@ -3,13 +3,14 @@ import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
-import getIndex from '@/libs/usersCache';
+import { RANGE_END, RANGE_START, SHEET_NAME } from '@/configs/worktime';
+import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 import ApiError from '@/interfaces/apiError';
 import Week from '@/interfaces/week';
+import getIndex from '@/libs/usersCache';
 import authorize from '@/middlewares/authorize';
 import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
-import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 
 interface CustomNextApiRequest extends NextApiRequest {
   weekNumber: number;
@@ -29,10 +30,12 @@ const handler = async (
   const { weekNumber, user, index, client } = req;
 
   const weekLine = index + weekNumber - 1;
+  const startAt = RANGE_START + weekLine;
+  const endAt = RANGE_END + weekLine;
 
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
-    range: `saisie-2023!A${weekLine}:AV${weekLine}`,
+    range: `${SHEET_NAME}!${startAt}:${endAt}`,
   });
   if (!response.data.values) {
     return res.status(404).json({ message: 'No data found' });

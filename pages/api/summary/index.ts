@@ -2,6 +2,7 @@ import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
+import { RANGE_END, RANGE_START, SHEET_NAME } from '@/configs/dashboard';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import authorize from '@/middlewares/authorize';
@@ -9,7 +10,7 @@ import authorize from '@/middlewares/authorize';
 export const getSummaries = async (client: sheets_v4.Sheets) => {
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
-    range: 'résumé-2023!A:P',
+    range: `${SHEET_NAME}!${RANGE_START}:${RANGE_END}`,
   });
 
   const rows = response.data.values;
