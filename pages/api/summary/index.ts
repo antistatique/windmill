@@ -7,7 +7,21 @@ import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import authorize from '@/middlewares/authorize';
 
-export const getSummaries = async (client: sheets_v4.Sheets) => {
+interface CustomNextApiRequest extends NextApiRequest {
+  user: User;
+  client: sheets_v4.Sheets;
+}
+
+const handler = async (
+  req: CustomNextApiRequest,
+  res: NextApiResponse<Summary | ApiError>
+) => {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  const { user, client } = req;
+
   const response = await client.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
     range: `${SHEET_NAME}!${RANGE_START}:${RANGE_END}`,
@@ -34,25 +48,6 @@ export const getSummaries = async (client: sheets_v4.Sheets) => {
     }))
     .slice(1); // Remove header
 
-  return summaries;
-};
-
-interface CustomNextApiRequest extends NextApiRequest {
-  user: User;
-  client: sheets_v4.Sheets;
-}
-
-const handler = async (
-  req: CustomNextApiRequest,
-  res: NextApiResponse<Summary | ApiError>
-) => {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
-  const { user, client } = req;
-
-  const summaries = await getSummaries(client);
   const summary = summaries?.find(sum => sum.email === user.email);
 
   if (!summary) {
