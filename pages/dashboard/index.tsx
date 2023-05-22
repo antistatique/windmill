@@ -8,22 +8,22 @@ import {
   HOURS_PER_DAY,
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
-import Summary from '@/interfaces/summary';
 import Section from '@/pages/dashboard/Section';
+import Skeleton from '@/pages/dashboard/Skeleton';
 
 const Dashboard = () => {
-  const summaryQuery = useQuery('summary', async () => {
+  const { data: summary, isLoading } = useQuery('summary', async () => {
     const response = await fetch('/api/summary');
     const data = await response.json();
     return data;
   });
 
-  const summary: Summary = summaryQuery.data;
-
-  if (summaryQuery.isLoading) return <div>Loading...</div>;
-
-  const remainingVacationDays = summary.vacation_sold - summary.vacation;
-  const remainingOverTimeDays = summary.remaining_overtime / HOURS_PER_DAY;
+  const remainingVacationDays = summary
+    ? summary.vacation_sold - summary.vacation
+    : 0;
+  const remainingOverTimeDays = summary
+    ? summary.remaining_overtime / HOURS_PER_DAY
+    : 0;
 
   const currentYear = new Date().getFullYear();
 
@@ -35,24 +35,31 @@ const Dashboard = () => {
       </Head>
 
       <main className="space-y-8 pb-4">
-        <div className="flex h-64 flex-col items-center justify-center space-y-4 bg-pink text-center font-semibold text-white">
-          <h1 className="text-4xl">{summary?.name}</h1>
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          <div className="flex h-64 flex-col items-center justify-center space-y-4 bg-pink text-center font-semibold text-white">
+            <h1 className="text-4xl">{summary?.name}</h1>
 
-          <span className="rounded-xl bg-yellow px-4 py-2 text-blue">
-            {`Il te reste ${pluralize(
-              summary.remaining_days_to_take,
-              'jour'
-            )} à poser`}
-          </span>
+            <span className="rounded-xl bg-yellow px-4 py-2 text-blue">
+              {`Il te reste ${pluralize(
+                summary.remaining_days_to_take,
+                'jour'
+              )} à poser`}
+            </span>
 
-          <div>
-            <p>{`${pluralize(remainingVacationDays, 'jour')} de vacances`}</p>
-            <p>
-              {`${pluralize(Number(remainingOverTimeDays.toFixed(2)), 'jour')} 
-						(${summary.remaining_overtime}h) supplémentaires`}
-            </p>
+            <div>
+              <p>{`${pluralize(remainingVacationDays, 'jour')} de vacances`}</p>
+              <p>
+                {`${pluralize(
+                  Number(remainingOverTimeDays.toFixed(2)),
+                  'jour'
+                )} 
+                (${summary.remaining_overtime}h) supplémentaires`}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="space-y-8 px-4">
           <Section
@@ -60,15 +67,18 @@ const Dashboard = () => {
             items={[
               {
                 label: `Budget année en cours ${currentYear}`,
-                value: `${summary.vacation_sold} j`,
+                value: summary?.vacation_sold,
+                metric: 'j',
               },
               {
                 label: `Solde année précedente ${currentYear - 1}`,
-                value: `${summary.previous_year_vacation_sold} j`,
+                value: summary?.previous_year_vacation_sold,
+                metric: 'j',
               },
               {
                 label: 'Heures supplémentaires totales',
-                value: `${summary.remaining_overtime} h`,
+                value: summary?.remaining_overtime,
+                metric: 'h',
               },
             ]}
           />
@@ -77,11 +87,13 @@ const Dashboard = () => {
             items={[
               {
                 label: 'Vacances posées',
-                value: `${summary.vacation} j`,
+                value: summary?.vacation,
+                metric: 'j',
               },
               {
                 label: 'Jours supplémentaires récupérés',
-                value: `${summary.overtime} j`,
+                value: summary?.overtime,
+                metric: 'j',
               },
             ]}
           />
@@ -90,15 +102,18 @@ const Dashboard = () => {
             items={[
               {
                 label: 'Absences justifiées',
-                value: `${1} j`,
+                value: '',
+                metric: 'j',
               },
               {
                 label: 'Temps de formation',
-                value: `${summary.formation} / ${FORMATION_BUDGET} j`,
+                value: summary?.formation,
+                metric: `/ ${FORMATION_BUDGET}`,
               },
               {
                 label: 'Budget de formation CHF',
-                value: `${summary.formation_expenses} / ${FORMATION_EXPENSE_BUDGET}`,
+                value: summary?.formation_expenses,
+                metric: `/ ${FORMATION_EXPENSE_BUDGET}`,
               },
             ]}
           />

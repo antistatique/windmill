@@ -38,7 +38,7 @@ describe('week navigation', () => {
     expect(await screen.findByText(exceptedDate)).toBeInTheDocument();
   });
 
-  it('should decrease the week when clicking on the left arrow', async () => {
+  it('should decrease the week when clicking on previous week button', async () => {
     renderComponent();
 
     const date = moment().subtract(1, 'week');
@@ -50,7 +50,7 @@ describe('week navigation', () => {
     expect(await screen.findByText(exceptedWeek)).toBeInTheDocument();
   });
 
-  it('should increase the week when clicking on the right arrow', async () => {
+  it('should increase the week when clicking on next week button', async () => {
     renderComponent();
 
     const date = moment().add(1, 'week');

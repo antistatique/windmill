@@ -25,7 +25,7 @@ const useDateStore = create<DateState>(set => ({
       let day;
 
       // If it's the same week, keep the current day
-      if (week.week_number === state.week?.week_number) {
+      if (day && week.week_number === state.week?.week_number) {
         day = state.day;
       }
       // If it's the current week, set the current day

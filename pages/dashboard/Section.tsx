@@ -7,6 +7,7 @@ type Props = {
   items: {
     label: string;
     value: string;
+    metric?: string;
   }[];
 };
 

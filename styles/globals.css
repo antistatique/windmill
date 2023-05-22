@@ -8,6 +8,10 @@ body {
 	@apply bg-background text-blue font-inter font-normal;
 }
 
+.skeleton {
+	@apply animate-pulse bg-gray rounded-lg h-6;
+}
+
 input:focus {
 	@apply outline-none;
 }
