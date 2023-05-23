@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import { signOut } from 'next-auth/react';
 
@@ -7,7 +7,7 @@ import LogoutIcon from '@/components/icons/logout';
 const Parameters = () => {
   const options = [5, 10, 15, 20, 30, 45, 60];
 
-  const selected = 15;
+  const [selected, setSelected] = useState(options[2]);
 
   return (
     <>
@@ -38,6 +38,7 @@ const Parameters = () => {
               <button
                 key={option}
                 type="button"
+                onClick={() => setSelected(option)}
                 className={`rounded-xl bg-white py-4 font-semibold outline-3 drop-shadow 
                 ${
                   selected === option
