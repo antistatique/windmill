@@ -15,11 +15,20 @@ type Props = {
 const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
   const canUpdateQuickly = !disabled && value;
 
-  const handleAddQuickTime = () => {
+  const handleIncrementTime = () => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
     const newMomentValue = momentValue.add(15, 'minutes');
+
+    onChange(newMomentValue.format('HH:mm'));
+  };
+
+  const handleDecrementTime = () => {
+    if (!canUpdateQuickly) return;
+
+    const momentValue = moment(value, 'HH:mm');
+    const newMomentValue = momentValue.subtract(15, 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };
@@ -43,6 +52,17 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
           </label>
 
           <div className="w-full grow text-center">
+            {canUpdateQuickly && (
+              <button
+                type="button"
+                aria-label="Retrait rapide de temps"
+                onClick={handleDecrementTime}
+                className="p-3 text-gray hover:text-blue"
+              >
+                -
+              </button>
+            )}
+
             <input
               type="time"
               value={value || '00:00'}
@@ -58,7 +78,7 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
               <button
                 type="button"
                 aria-label="Ajout rapide de temps"
-                onClick={handleAddQuickTime}
+                onClick={handleIncrementTime}
                 className="p-3 text-gray hover:text-blue"
               >
                 +
