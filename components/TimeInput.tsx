@@ -5,7 +5,7 @@ import ClockIcon from '@/components/icons/clock';
 import MinusIcon from '@/components/icons/minus';
 import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
-import { TIME_MINUTES_INCREMENT } from '@/configs/worktime';
+import nudge from '@/helpers/nudge';
 
 type Props = {
   id: string;
@@ -23,7 +23,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.add(TIME_MINUTES_INCREMENT, 'minutes');
+    const newMomentValue = momentValue.add(nudge(), 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };
@@ -32,10 +32,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.subtract(
-      TIME_MINUTES_INCREMENT,
-      'minutes'
-    );
+    const newMomentValue = momentValue.subtract(nudge(), 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };

@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { signOut } from 'next-auth/react';
 
 import LogoutIcon from '@/components/icons/logout';
+import getNudge from '@/helpers/nudge';
 
 const Parameters = () => {
-  const options = [5, 10, 15, 20, 30, 45, 60];
+  const nudges = [5, 10, 15, 20, 30, 45, 60];
 
-  const [selected, setSelected] = useState(options[2]);
+  const [nudge, setNudge] = useState(0);
+
+  useEffect(() => {
+    setNudge(getNudge());
+  }, [nudge]);
+
+  const handleSelect = (option: number) => {
+    localStorage.setItem('nudge', option.toString());
+    setNudge(option);
+  };
 
   return (
     <>
@@ -34,19 +44,19 @@ const Parameters = () => {
           </h2>
 
           <div className="grid grid-cols-3 gap-4">
-            {options.map(option => (
+            {nudges.map(n => (
               <button
-                key={option}
+                key={n}
                 type="button"
-                onClick={() => setSelected(option)}
+                onClick={() => handleSelect(n)}
                 className={`rounded-xl bg-white py-4 font-semibold outline-3 drop-shadow 
                 ${
-                  selected === option
-                    ? 'outline outline-pink'
+                  n === nudge
+                    ? 'text-pink outline outline-pink'
                     : 'outline-westar hover:outline'
                 }`}
               >
-                {option}'
+                {n}'
               </button>
             ))}
           </div>
