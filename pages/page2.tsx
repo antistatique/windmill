@@ -10,7 +10,7 @@ const Page2 = () => (
     </Head>
 
     <main className="space-y-4 p-4">
-      <h1 className="text-xl">Not implemented yet</h1>
+      <h1 className="text-xl">Not implemented yet 2</h1>
       <button
         type="button"
         onClick={() => signOut()}

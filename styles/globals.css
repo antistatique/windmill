@@ -20,10 +20,3 @@ input:focus {
 input[type="time"]::-webkit-calendar-picker-indicator {
 	display: none;
 }
-
-/* Remove arrow icon from time input on mobile browsers */
-input[type="time"] {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-}

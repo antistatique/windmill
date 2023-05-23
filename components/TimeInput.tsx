@@ -59,13 +59,13 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
             {label}
           </label>
 
-          <div className="flex w-full items-center justify-center">
+          <div className="relative flex w-full items-center justify-center">
             {canUpdateQuickly && (
               <button
                 type="button"
                 aria-label="Retrait rapide de temps"
                 onClick={handleDecrementTime}
-                className="hidden p-3 hover:text-pink xsm:block"
+                className="absolute -ml-36 hidden p-3 hover:text-pink xsm:block"
               >
                 <MinusIcon />
               </button>
@@ -77,7 +77,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
               value={value || '00:00'}
               onChange={event => onChange(event.target.value)}
               disabled={disabled}
-              className={`w-[70px] py-3 text-center tabular-nums ${
+              className={`h-12 w-[69px] text-center tabular-nums ${
                 !value ? 'text-gray' : ''
               } ${disabled ? 'bg-disabled' : 'bg-white'}`}
             />
@@ -87,7 +87,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
                 type="button"
                 aria-label="Ajout rapide de temps"
                 onClick={handleIncrementTime}
-                className="hidden p-3 hover:text-pink xsm:block"
+                className="absolute -mr-36 hidden p-3 hover:text-pink xsm:block"
               >
                 <PlusIcon />
               </button>
