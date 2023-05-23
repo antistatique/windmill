@@ -44,6 +44,18 @@ const fetchIndexes = async (client: sheets_v4.Sheets) => {
     range: `${SHEET_NAME}!${RANGE_START}:${RANGE_END}`,
   });
 
+  // Log in the google sheet when the cache was last updated
+  const timestamps = new Date().toLocaleString('fr-FR');
+
+  await client.spreadsheets.values.append({
+    spreadsheetId: process.env.SHEET_ID,
+    range: `log!A1`,
+    valueInputOption: 'USER_ENTERED',
+    requestBody: {
+      values: [[timestamps]],
+    },
+  });
+
   const emails = response.data.values?.slice(1).flat(); // Remove header
 
   if (!emails) {
