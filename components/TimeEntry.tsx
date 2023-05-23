@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import debounce from 'lodash.debounce';
 import moment from 'moment';
 
@@ -120,8 +119,9 @@ const TimeEntry = () => {
     <div className="space-y-4 font-semibold">
       <div className="flex flex-col space-y-2">
         <h2>Matin</h2>
-        <TimeInput label="De" value={amStart} onChange={setAmStart} />
+        <TimeInput id="0" label="De" value={amStart} onChange={setAmStart} />
         <TimeInput
+          id="1"
           label="À"
           value={amStop}
           disabled={!amStart}
@@ -133,6 +133,7 @@ const TimeEntry = () => {
       <div className="flex flex-col space-y-2">
         <h2>Après-midi</h2>
         <TimeInput
+          id="2"
           label="De"
           value={pmStart}
           disabled={!pmStart && !!amStart && !amStop}
@@ -140,6 +141,7 @@ const TimeEntry = () => {
           onChange={setPmStart}
         />
         <TimeInput
+          id="3"
           label="À"
           value={pmStop}
           disabled={!pmStart}
