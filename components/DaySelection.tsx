@@ -25,7 +25,7 @@ const DaySelection = () => {
   });
 
   return (
-    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 pb-4 em:pb-2">
+    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 pb-4 2xsm:pb-2">
       {days?.map(
         ({ day, value, isCurrentDay, isPastDay, status, hoursDone }) => (
           <button

@@ -2,9 +2,13 @@ import { MdError } from 'react-icons/md';
 import moment from 'moment';
 
 import ClockIcon from '@/components/icons/clock';
+import MinusIcon from '@/components/icons/minus';
+import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
+import { TIME_MINUTES_INCREMENT } from '@/configs/worktime';
 
 type Props = {
+  id: string;
   label: string;
   value: string;
   disabled?: boolean;
@@ -12,9 +16,33 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
+const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
+  const canUpdateQuickly = !disabled && value;
+
+  const handleIncrementTime = () => {
+    if (!canUpdateQuickly) return;
+
+    const momentValue = moment(value, 'HH:mm');
+    const newMomentValue = momentValue.add(TIME_MINUTES_INCREMENT, 'minutes');
+
+    onChange(newMomentValue.format('HH:mm'));
+  };
+
+  const handleDecrementTime = () => {
+    if (!canUpdateQuickly) return;
+
+    const momentValue = moment(value, 'HH:mm');
+    const newMomentValue = momentValue.subtract(
+      TIME_MINUTES_INCREMENT,
+      'minutes'
+    );
+
+    onChange(newMomentValue.format('HH:mm'));
+  };
+
   const handleSetCurrentTime = () => {
     if (disabled) return;
+
     onChange(moment().format('HH:mm'));
   };
 
@@ -26,22 +54,44 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
           ${error ? 'outline outline-3 outline-error' : ''}
       `}
       >
-        <label className="flex grow items-center">
+        <label htmlFor={`time-${id}`} className="flex grow items-center">
           <label className="pointer-events-none w-12 px-4 text-blue">
             {label}
           </label>
 
-          <div className="w-full grow text-center">
+          <div className="flex w-full items-center justify-center">
+            {canUpdateQuickly && (
+              <button
+                type="button"
+                aria-label="Retrait rapide de temps"
+                onClick={handleDecrementTime}
+                className="hidden p-3 hover:text-pink xsm:block"
+              >
+                <MinusIcon />
+              </button>
+            )}
+
             <input
+              id={`time-${id}`}
               type="time"
               value={value || '00:00'}
               onChange={event => onChange(event.target.value)}
               disabled={disabled}
-              className={`w-[70px] py-3 text-center
-            ${!value ? 'text-gray' : ''}
-            ${disabled ? 'bg-disabled' : 'bg-white'}
-          `}
+              className={`w-[70px] py-3 text-center tabular-nums ${
+                !value ? 'text-gray' : ''
+              } ${disabled ? 'bg-disabled' : 'bg-white'}`}
             />
+
+            {canUpdateQuickly && (
+              <button
+                type="button"
+                aria-label="Ajout rapide de temps"
+                onClick={handleIncrementTime}
+                className="hidden p-3 hover:text-pink xsm:block"
+              >
+                <PlusIcon />
+              </button>
+            )}
           </div>
         </label>
 

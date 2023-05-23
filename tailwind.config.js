@@ -29,7 +29,8 @@ module.exports = {
     },
     extend: {
       screens: {
-        em: '375px',
+        xsm: '350px',
+        '2xsm': '375px',
       },
       height: {
         0.75: '3px',

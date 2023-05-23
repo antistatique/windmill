@@ -5,7 +5,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
 body {
-	@apply bg-background text-blue font-inter font-normal;
+	@apply bg-background text-blue font-inter tabular-nums;
 }
 
 .skeleton {
