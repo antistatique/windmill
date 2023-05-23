@@ -55,9 +55,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
       `}
       >
         <label htmlFor={`time-${id}`} className="flex grow items-center">
-          <label className="pointer-events-none w-12 px-4 text-blue">
-            {label}
-          </label>
+          <label className="pointer-events-none w-12 px-4">{label}</label>
 
           <div className="relative flex w-full items-center justify-center">
             {canUpdateQuickly && (
