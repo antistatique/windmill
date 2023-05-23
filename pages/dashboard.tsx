@@ -2,14 +2,14 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import Head from 'next/head';
 
+import Section from '@/components/dashboard/Section';
+import Skeleton from '@/components/dashboard/Skeleton';
 import {
   FORMATION_BUDGET,
   FORMATION_EXPENSE_BUDGET,
   HOURS_PER_DAY,
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
-import Section from '@/pages/dashboard/Section';
-import Skeleton from '@/pages/dashboard/Skeleton';
 
 const Dashboard = () => {
   const { data: summary, isLoading } = useQuery('summary', async () => {

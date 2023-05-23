@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Item from '@/pages/dashboard/Item';
+import Item from '@/components/dashboard/Item';
 
 type Props = {
   label: string;
