@@ -7,3 +7,5 @@ export const RANGE_END = 'AV';
 export const DAYS_COLUMN = ['I', 'Q', 'Y', 'AG', 'AO'];
 
 export const JUSTIFICATION_COLUMN = 'AV';
+
+export const TIME_MINUTES_INCREMENT = 15;

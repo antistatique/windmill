@@ -5,6 +5,7 @@ import ClockIcon from '@/components/icons/clock';
 import MinusIcon from '@/components/icons/minus';
 import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
+import { TIME_MINUTES_INCREMENT } from '@/configs/worktime';
 
 type Props = {
   id: string;
@@ -22,7 +23,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.add(15, 'minutes');
+    const newMomentValue = momentValue.add(TIME_MINUTES_INCREMENT, 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };
@@ -31,7 +32,10 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.subtract(15, 'minutes');
+    const newMomentValue = momentValue.subtract(
+      TIME_MINUTES_INCREMENT,
+      'minutes'
+    );
 
     onChange(newMomentValue.format('HH:mm'));
   };
