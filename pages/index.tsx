@@ -15,7 +15,7 @@ const Index = () => (
     </Head>
 
     <main className="space-y-4 pb-4">
-      <div className="space-y-4 bg-white shadow em:space-y-8">
+      <div className="space-y-4 bg-white shadow 2xsm:space-y-8">
         <div className="px-8 pt-8">
           <WeekNavigation />
         </div>

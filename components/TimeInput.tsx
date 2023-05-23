@@ -61,7 +61,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
                 type="button"
                 aria-label="Retrait rapide de temps"
                 onClick={handleDecrementTime}
-                className="p-3 hover:text-pink"
+                className="hidden p-3 hover:text-pink xsm:block"
               >
                 <MinusIcon />
               </button>
@@ -83,7 +83,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
                 type="button"
                 aria-label="Ajout rapide de temps"
                 onClick={handleIncrementTime}
-                className="p-3 hover:text-pink"
+                className="hidden p-3 hover:text-pink xsm:block"
               >
                 <PlusIcon />
               </button>
