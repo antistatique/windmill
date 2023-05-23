@@ -13,6 +13,17 @@ type Props = {
 };
 
 const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
+  const canUpdateQuickly = !disabled && value;
+
+  const handleAddQuickTime = () => {
+    if (!canUpdateQuickly) return;
+
+    const momentValue = moment(value, 'HH:mm');
+    const newMomentValue = momentValue.add(15, 'minutes');
+
+    onChange(newMomentValue.format('HH:mm'));
+  };
+
   const handleSetCurrentTime = () => {
     if (disabled) return;
     onChange(moment().format('HH:mm'));
@@ -42,6 +53,17 @@ const TimeInput = ({ label, value, disabled, error, onChange }: Props) => {
             ${disabled ? 'bg-disabled' : 'bg-white'}
           `}
             />
+
+            {canUpdateQuickly && (
+              <button
+                type="button"
+                aria-label="Ajout rapide de temps"
+                onClick={handleAddQuickTime}
+                className="p-3 text-gray hover:text-blue"
+              >
+                +
+              </button>
+            )}
           </div>
         </label>
 
