@@ -19,8 +19,8 @@ const routes = [
     icon: <DashboardIcon />,
   },
   {
-    name: 'Settings',
-    path: '/page2',
+    name: 'Parameters',
+    path: '/parameters',
     aria: 'Paramètres',
     icon: <SettingsIcon />,
   },
