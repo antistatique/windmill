@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Item from '@/components/dashboard/Item';
 
 type Props = {
