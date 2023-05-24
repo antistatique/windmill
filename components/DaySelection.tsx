@@ -7,7 +7,7 @@ import useStore from '@/stores/date';
 const DaySelection = () => {
   const { day: selectedDay, setDay, week } = useStore();
 
-  const handleSelectDate = (day: Day) => {
+  const handleDaySelection = (day: Day) => {
     setDay(day);
   };
 
@@ -31,7 +31,7 @@ const DaySelection = () => {
           <button
             type="button"
             key={value.unix()}
-            onClick={() => handleSelectDate(day)}
+            onClick={() => handleDaySelection(day)}
             className={`flex grow cursor-pointer flex-col items-center justify-center space-y-1 rounded-xl bg-white px-1 py-2 shadow sm:px-2  ${
               value.date() === moment(selectedDay?.date).date()
                 ? 'outline outline-3 -outline-offset-2 outline-pink'
@@ -48,7 +48,7 @@ const DaySelection = () => {
 
             <Image
               src={`/emojies/${status}.svg`}
-              alt="Thinking face emoji"
+              alt="Emoji représentent le statut du jour"
               width={24}
               height={24}
             />

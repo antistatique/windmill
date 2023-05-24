@@ -80,9 +80,7 @@ describe('week hours', () => {
     });
 
     it("should not display emoji if it's current week but this isn't last working day of the week", () => {
-      act(() => {
-        setWeek({ ...week, need_justification: true });
-      });
+      setWeek({ ...week, need_justification: true });
       Date.now = jest.fn(() => date.weekday(1).toDate().getTime());
 
       renderComponent();
@@ -92,9 +90,7 @@ describe('week hours', () => {
     });
 
     it("should display emoji if week need justification and it's the last working day of the current week", () => {
-      act(() => {
-        setWeek({ ...week, need_justification: true });
-      });
+      setWeek({ ...week, need_justification: true });
       Date.now = jest.fn(() => date.weekday(5).toDate().getTime());
 
       renderComponent();
@@ -104,9 +100,7 @@ describe('week hours', () => {
     });
 
     it("should display emoji if week need justification and it's a past week", () => {
-      act(() => {
-        setWeek({ ...week, week_number: 1, need_justification: true });
-      });
+      setWeek({ ...week, week_number: 1, need_justification: true });
       Date.now = jest.fn(() => date.week(2).weekday(1).toDate().getTime());
 
       renderComponent();
