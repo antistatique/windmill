@@ -7,7 +7,7 @@ import { DEFAULT_NUDGE_MINUTES } from '@/configs/worktime';
 
 import '@testing-library/jest-dom';
 
-describe('week navigation', () => {
+describe('nudge', () => {
   it('should show default nudge as selected when no local storage', () => {
     getItemMock.mockReturnValue(null);
 
