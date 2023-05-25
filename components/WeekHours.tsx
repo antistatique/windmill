@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import moment from 'moment';
 import Image from 'next/image';
 
-import HoursJustification from '@/components/HoursJustification';
+import WeekJustification from '@/components/WeekJustification';
 import { hoursToTime } from '@/helpers/time';
 import useWeek from '@/hooks/week';
 
@@ -16,7 +16,6 @@ const WeekHours = () => {
     : false;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isJustifying, setIsJustifying] = useState(false);
 
   const handleOpenJustifyModal = () => {
     setIsModalOpen(true);
@@ -34,18 +33,10 @@ const WeekHours = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(justificationQuery, {
-    onMutate: () => {
-      setIsJustifying(true);
-    },
+  const { mutate, isLoading } = useMutation(justificationQuery, {
     onSuccess: () => {
       queryClient.invalidateQueries('week');
-
-      setIsJustifying(false);
       setIsModalOpen(false);
-    },
-    onError: () => {
-      setIsJustifying(false);
     },
   });
 
@@ -94,10 +85,10 @@ const WeekHours = () => {
       </div>
 
       {isModalOpen && (
-        <HoursJustification
+        <WeekJustification
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
-          isLoading={isJustifying}
+          isLoading={isLoading}
           value={week?.justification || ''}
         />
       )}
