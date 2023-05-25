@@ -4,13 +4,11 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import moment from 'moment';
 
 import WeekHours from '@/components/WeekHours';
+import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
-import useStore from '@/stores/date';
 
 import '@testing-library/jest-dom';
-
-const { setWeek } = useStore.getState();
 
 const date = moment('2023-01-01').startOf('week');
 
@@ -23,6 +21,9 @@ const week: Week = {
   need_justification: false,
 } as Week;
 
+const mockedUseWeek = useWeek as jest.Mock;
+jest.mock('../../hooks/week');
+
 const renderComponent = () => {
   render(
     <QueryClientProvider client={new QueryClient()}>
@@ -32,19 +33,28 @@ const renderComponent = () => {
 };
 
 beforeEach(() => {
-  setWeek(week);
+  mockedUseWeek.mockImplementation(() => ({
+    status: 'success',
+    data: week,
+  }));
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 describe('week hours', () => {
   it('should display the hours of the week todo', () => {
     renderComponent();
 
+    expect(useWeek).toHaveBeenCalled();
     expect(screen.getByText('08:00')).toBeInTheDocument();
   });
 
   it('should display the hours of the week done', () => {
     renderComponent();
 
+    expect(useWeek).toHaveBeenCalled();
     expect(screen.getByText('42:00')).toBeInTheDocument();
   });
 });
@@ -70,7 +80,10 @@ describe('justification', () => {
   });
 
   it("should not display emoji if it's current week but this isn't last working day of the week", () => {
-    setWeek({ ...week, need_justification: true });
+    mockedUseWeek.mockImplementation(() => ({
+      status: 'success',
+      data: { ...week, need_justification: true },
+    }));
     Date.now = jest.fn(() => date.weekday(1).toDate().getTime());
 
     renderComponent();
@@ -83,7 +96,10 @@ describe('justification', () => {
   });
 
   it("should display emoji if week need justification and it's the last working day of the current week", () => {
-    setWeek({ ...week, need_justification: true });
+    mockedUseWeek.mockImplementation(() => ({
+      status: 'success',
+      data: { ...week, need_justification: true },
+    }));
     Date.now = jest.fn(() => date.weekday(5).toDate().getTime());
 
     renderComponent();
@@ -96,7 +112,10 @@ describe('justification', () => {
   });
 
   it("should display emoji if week need justification and it's a past week", () => {
-    setWeek({ ...week, week_number: 1, need_justification: true });
+    mockedUseWeek.mockImplementation(() => ({
+      status: 'success',
+      data: { ...week, week_number: 1, need_justification: true },
+    }));
     Date.now = jest.fn(() => date.week(2).weekday(1).toDate().getTime());
 
     renderComponent();
@@ -127,7 +146,10 @@ describe('justification', () => {
     it('should display the justification text', () => {
       const justification = 'justification test value';
 
-      setWeek({ ...week, justification });
+      mockedUseWeek.mockImplementation(() => ({
+        status: 'success',
+        data: { ...week, justification },
+      }));
 
       renderComponent();
 

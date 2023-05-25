@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import DaySelection from '@/components/DaySelection';
 import { Statuses } from '@/helpers/mapEmojiToStatus';
+import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 import useStore from '@/stores/date';
@@ -11,49 +12,55 @@ import useStore from '@/stores/date';
 import 'moment/locale/fr';
 import '@testing-library/jest-dom';
 
-const { setWeek, setDay } = useStore.getState();
+const { setDay } = useStore.getState();
+
+const date = moment('2023-01-01').startOf('week');
+
+const days = [
+  {
+    date: date.toDate(),
+    status: Statuses.WORKING,
+    hours_done: 8.0,
+    hours_todo: 8.4,
+  } as Day,
+  {
+    date: date.weekday(1).toDate(),
+    status: Statuses.FORMATION,
+    hours_done: 0,
+    hours_todo: 0,
+  },
+  {
+    date: date.weekday(2).toDate(),
+    status: Statuses.DAY_OFF,
+    hours_done: 8.4,
+    hours_todo: 8.4,
+  },
+  {
+    date: date.weekday(3).toDate(),
+    status: Statuses.SICK,
+    hours_done: 0,
+    hours_todo: 8.4,
+  },
+  {
+    date: date.weekday(4).toDate(),
+    status: Statuses.PUBLIC_HOLIDAY,
+    hours_done: 0,
+    hours_todo: 0,
+  },
+];
+
+const mockedUseWeek = useWeek as jest.Mock;
+jest.mock('../../hooks/week');
+
+beforeEach(() => {
+  mockedUseWeek.mockImplementation(() => ({
+    status: 'success',
+    data: { days } as Week,
+  }));
+  setDay(days[0] as Day);
+});
 
 describe('day selection', () => {
-  const date = moment('2023-01-01').startOf('week');
-
-  const days = [
-    {
-      date: date.toDate(),
-      status: Statuses.WORKING,
-      hours_done: 8.0,
-      hours_todo: 8.4,
-    } as Day,
-    {
-      date: date.weekday(1).toDate(),
-      status: Statuses.FORMATION,
-      hours_done: 0,
-      hours_todo: 0,
-    },
-    {
-      date: date.weekday(2).toDate(),
-      status: Statuses.DAY_OFF,
-      hours_done: 8.4,
-      hours_todo: 8.4,
-    },
-    {
-      date: date.weekday(3).toDate(),
-      status: Statuses.SICK,
-      hours_done: 0,
-      hours_todo: 8.4,
-    },
-    {
-      date: date.weekday(4).toDate(),
-      status: Statuses.PUBLIC_HOLIDAY,
-      hours_done: 0,
-      hours_todo: 0,
-    },
-  ];
-
-  beforeEach(() => {
-    setWeek({ days } as Week);
-    setDay(days[0] as Day);
-  });
-
   it('should display the days of the week', () => {
     render(<DaySelection />);
 
