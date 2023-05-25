@@ -1,4 +1,3 @@
-import { useQuery } from 'react-query';
 import Head from 'next/head';
 
 import Section from '@/components/dashboard/Section';
@@ -9,13 +8,10 @@ import {
   HOURS_PER_DAY,
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
+import useSummary from '@/hooks/summary';
 
 const Dashboard = () => {
-  const { data: summary, isLoading } = useQuery('summary', async () => {
-    const response = await fetch('/api/summary');
-    const data = await response.json();
-    return data;
-  });
+  const { data: summary, isLoading } = useSummary();
 
   const remainingVacationDays = summary
     ? summary.vacation_sold - summary.vacation
