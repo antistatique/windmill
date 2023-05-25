@@ -19,10 +19,6 @@ const WeekHours = () => {
   const [isJustifying, setIsJustifying] = useState(false);
 
   const handleOpenJustifyModal = () => {
-    if (!haveToJustify) {
-      return;
-    }
-
     setIsModalOpen(true);
   };
 
