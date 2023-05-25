@@ -1,11 +1,13 @@
 import moment from 'moment';
 import Image from 'next/image';
 
+import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
 const DaySelection = () => {
-  const { day: selectedDay, setDay, week } = useStore();
+  const { data: week } = useWeek();
+  const { day: selectedDay, setDay } = useStore();
 
   const handleDaySelection = (day: Day) => {
     setDay(day);

@@ -1,4 +1,4 @@
-const convertHoursToTime = (hours: number) => {
+const hoursToTime = (hours: number) => {
   const formattedHours = Math.floor(hours);
   const formattedMinutes = Math.round((hours - formattedHours) * 60);
 
@@ -13,4 +13,10 @@ const convertHoursToTime = (hours: number) => {
   };
 };
 
-export default convertHoursToTime;
+const timeToHours = (time: string) => {
+  const [hours, minutes] = time.split(':');
+
+  return Number(hours) + Number(minutes) / 60;
+};
+
+export { hoursToTime, timeToHours };

@@ -4,11 +4,11 @@ import moment from 'moment';
 import Image from 'next/image';
 
 import HoursJustification from '@/components/HoursJustification';
-import formatToTime from '@/helpers/hoursToTime';
-import useStore from '@/stores/date';
+import { hoursToTime } from '@/helpers/time';
+import useWeek from '@/hooks/week';
 
 const WeekHours = () => {
-  const { week } = useStore();
+  const { data: week } = useWeek();
 
   const haveToJustify = week
     ? week.need_justification &&
@@ -60,10 +60,10 @@ const WeekHours = () => {
           <span>Heures</span>
           <div className="-my-1 space-x-1 font-semibold">
             <span className="text-2xl">
-              {formatToTime(week?.hours_done).time}
+              {week ? hoursToTime(week?.hours_done).time : '00:00'}
             </span>
             <span>/</span>
-            <span>{formatToTime(week?.hours_todo).time}</span>
+            <span>{week ? hoursToTime(week?.hours_todo).time : '00:00'}</span>
           </div>
         </div>
 
@@ -98,7 +98,7 @@ const WeekHours = () => {
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
           isLoading={isJustifying}
-          value={week?.justification}
+          value={week?.justification || ''}
         />
       )}
     </>
