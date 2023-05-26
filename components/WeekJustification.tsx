@@ -30,7 +30,7 @@ const HoursJustification = ({
         onKeyDown={() => {}}
         tabIndex={0}
         role="button"
-        className="space-y-8 rounded bg-white p-8"
+        className="space-y-8 rounded-lg bg-white px-8 py-6"
       >
         <label htmlFor="justification" className="text-2xl font-semibold">
           Justifier vos heures
@@ -49,13 +49,13 @@ const HoursJustification = ({
           onClick={() => onJustify(justification)}
           type="button"
           disabled={isLoading}
-          className={`w-full rounded-lg px-4 py-2 font-semibold text-white ${
+          className={`relative flex w-full items-center justify-center rounded-lg py-3 font-semibold text-white ${
             isLoading ? 'bg-pink-dark' : 'bg-pink'
           }`}
         >
           Valider
           {isLoading && (
-            <Spinner className="ml-2 inline h-5 w-5 animate-spin text-white" />
+            <Spinner className="absolute right-6 hidden h-5 w-5 animate-spin text-white xsm:block" />
           )}
         </button>
       </div>

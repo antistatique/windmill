@@ -7,11 +7,13 @@ import moment from 'moment';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
+import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
 const TimeEntry = () => {
-  const { week, day } = useStore();
+  const { data: week } = useWeek();
+  const { day } = useStore();
 
   const [worktime, setWorktime] = useState<string[]>([]);
   const [amStart, amStop, pmStart, pmStop] = worktime;
@@ -93,8 +95,40 @@ const TimeEntry = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(worktimeQuery, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('week');
+    onMutate: async ({ newWorktime }) => {
+      // Cancel any outgoing re fetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ['week'] });
+
+      // Snapshot the previous value
+      const previousWeek = queryClient.getQueryData(['week']);
+
+      // Optimistically update to the new value
+      if (!week || !day) {
+        return { previousWeek };
+      }
+
+      const [newAmStart, newAmStop, newPmStart, newPmStop] = newWorktime;
+
+      const index = week.days.findIndex(d => d.date === day?.date);
+
+      week.days[index].am_start = newAmStart;
+      week.days[index].am_stop = newAmStop;
+      week.days[index].pm_start = newPmStart;
+      week.days[index].pm_stop = newPmStop;
+
+      queryClient.setQueryData(['week'], week);
+
+      // Return a context object with the snapshotted value
+      return { previousWeek };
+    },
+    // If the mutation fails,
+    // use the context returned from onMutate to roll back
+    onError: (err, newWeek, context) => {
+      queryClient.setQueryData(['week'], context?.previousWeek);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['week'] });
     },
   });
 
@@ -103,7 +137,7 @@ const TimeEntry = () => {
       debounce((updatedDay: Day, newWorktime: string[]) => {
         const dayNumber = moment(updatedDay?.date).weekday();
         mutate({ dayNumber, newWorktime });
-      }, 1000),
+      }, 300),
     [mutate]
   );
 
@@ -117,14 +151,6 @@ const TimeEntry = () => {
       !pmStartError(newWorktime) &&
       !pmStopError(newWorktime)
     ) {
-      console.log('Saving');
-      const [newAmStart, newAmStop, newPmStart, newPmStop] = newWorktime;
-
-      day.am_start = newAmStart;
-      day.am_stop = newAmStop;
-      day.pm_start = newPmStart;
-      day.pm_stop = newPmStop;
-
       debouncedWorktimeQuery(day, newWorktime);
     }
   };

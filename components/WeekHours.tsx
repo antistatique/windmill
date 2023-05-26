@@ -3,24 +3,27 @@ import { useMutation, useQueryClient } from 'react-query';
 import moment from 'moment';
 import Image from 'next/image';
 
-import HoursJustification from '@/components/HoursJustification';
-import formatToTime from '@/helpers/hoursToTime';
-import useStore from '@/stores/date';
+import WeekJustification from '@/components/WeekJustification';
+import { hoursDoneOfWeek } from '@/helpers/hoursDone';
+import { hoursToTime } from '@/helpers/time';
+import useWeek from '@/hooks/week';
 
 const WeekHours = () => {
-  const { week } = useStore();
+  const { data: week } = useWeek();
+
+  const hoursDone = week ? hoursToTime(hoursDoneOfWeek(week)).time : '00:00';
+  const hoursTodo = week ? hoursToTime(week.hours_todo).time : '00:00';
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenJustifyModal = () => {
+    setIsModalOpen(true);
+  };
 
   const haveToJustify = week
     ? week.need_justification &&
       moment().week(week?.week_number).day(5).isSameOrBefore(moment())
     : false;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isJustifying, setIsJustifying] = useState(false);
-
-  const handleOpenJustifyModal = () => {
-    setIsModalOpen(true);
-  };
 
   const justificationQuery = async (justification: string) => {
     await fetch(`api/weeks/${week?.week_number}/justifications`, {
@@ -34,18 +37,10 @@ const WeekHours = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(justificationQuery, {
-    onMutate: () => {
-      setIsJustifying(true);
-    },
+  const { mutate, isLoading } = useMutation(justificationQuery, {
     onSuccess: () => {
       queryClient.invalidateQueries('week');
-
-      setIsJustifying(false);
       setIsModalOpen(false);
-    },
-    onError: () => {
-      setIsJustifying(false);
     },
   });
 
@@ -59,11 +54,9 @@ const WeekHours = () => {
         <div>
           <span>Heures</span>
           <div className="-my-1 space-x-1 font-semibold">
-            <span className="text-2xl">
-              {formatToTime(week?.hours_done).time}
-            </span>
+            <span className="text-2xl">{hoursDone}</span>
             <span>/</span>
-            <span>{formatToTime(week?.hours_todo).time}</span>
+            <span>{hoursTodo}</span>
           </div>
         </div>
 
@@ -94,11 +87,11 @@ const WeekHours = () => {
       </div>
 
       {isModalOpen && (
-        <HoursJustification
+        <WeekJustification
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
-          isLoading={isJustifying}
-          value={week?.justification}
+          isLoading={isLoading}
+          value={week?.justification || ''}
         />
       )}
     </>
