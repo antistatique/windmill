@@ -49,63 +49,63 @@ const handler = async (
   const date = moment(values[0]);
 
   const week: Week = {
-    week_number: Number(values[1]),
+    weekNumber: Number(values[1]),
     name: values[2],
     email: values[3],
     days: [
       {
         date: date.weekday(0).toDate(),
         status: getStatusFromEmoji(values[4]),
-        hours_todo: Number(values[5]),
-        am_start: values[8],
-        am_stop: values[9],
-        pm_start: values[10],
-        pm_stop: values[11],
+        hoursTodo: Number(values[5]),
+        amStart: values[8],
+        amStop: values[9],
+        pmStart: values[10],
+        pmStop: values[11],
       },
       {
         date: date.weekday(1).toDate(),
         status: getStatusFromEmoji(values[12]),
-        hours_todo: Number(values[13]),
-        am_start: values[16],
-        am_stop: values[17],
-        pm_start: values[18],
-        pm_stop: values[19],
+        hoursTodo: Number(values[13]),
+        amStart: values[16],
+        amStop: values[17],
+        pmStart: values[18],
+        pmStop: values[19],
       },
       {
         date: date.weekday(2).toDate(),
         status: getStatusFromEmoji(values[20]),
-        hours_todo: Number(values[21]),
-        am_start: values[24],
-        am_stop: values[25],
-        pm_start: values[26],
-        pm_stop: values[27],
+        hoursTodo: Number(values[21]),
+        amStart: values[24],
+        amStop: values[25],
+        pmStart: values[26],
+        pmStop: values[27],
       },
       {
         date: date.weekday(3).toDate(),
         status: getStatusFromEmoji(values[28]),
-        hours_todo: Number(values[29]),
-        am_start: values[32],
-        am_stop: values[33],
-        pm_start: values[34],
-        pm_stop: values[35],
+        hoursTodo: Number(values[29]),
+        amStart: values[32],
+        amStop: values[33],
+        pmStart: values[34],
+        pmStop: values[35],
       },
       {
         date: date.weekday(4).toDate(),
         status: getStatusFromEmoji(values[36]),
-        hours_todo: Number(values[37]),
-        am_start: values[40],
-        am_stop: values[41],
-        pm_start: values[42],
-        pm_stop: values[43],
+        hoursTodo: Number(values[37]),
+        amStart: values[40],
+        amStop: values[41],
+        pmStart: values[42],
+        pmStop: values[43],
       },
     ],
-    hours_todo: Number(values[45]),
-    need_justification: Boolean(values[46]),
+    hoursTodo: Number(values[45]),
+    needJustification: Boolean(values[46]),
     justification: values[47],
   };
 
   // Check data consistency
-  if (week.email !== user.email || week.week_number !== weekNumber) {
+  if (week.email !== user.email || week.weekNumber !== weekNumber) {
     // There is an error between the cached index and the spreadsheet index, we should update the cache here
     const remoteIndex = await getIndex(client, user, true);
 

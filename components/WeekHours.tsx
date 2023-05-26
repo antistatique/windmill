@@ -12,7 +12,7 @@ const WeekHours = () => {
   const { data: week } = useWeek();
 
   const hoursDone = week ? hoursToTime(hoursDoneOfWeek(week)).time : '00:00';
-  const hoursTodo = week ? hoursToTime(week.hours_todo).time : '00:00';
+  const hoursTodo = week ? hoursToTime(week.hoursTodo).time : '00:00';
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,12 +21,12 @@ const WeekHours = () => {
   };
 
   const haveToJustify = week
-    ? week.need_justification &&
-      moment().week(week?.week_number).day(5).isSameOrBefore(moment())
+    ? week.needJustification &&
+      moment().week(week?.weekNumber).day(5).isSameOrBefore(moment())
     : false;
 
   const justificationQuery = async (justification: string) => {
-    await fetch(`api/weeks/${week?.week_number}/justifications`, {
+    await fetch(`api/weeks/${week?.weekNumber}/justifications`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

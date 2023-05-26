@@ -20,7 +20,7 @@ const TimeEntry = () => {
 
   useEffect(() => {
     if (day) {
-      setWorktime([day.am_start, day.am_stop, day.pm_start, day.pm_stop]);
+      setWorktime([day.amStart, day.amStop, day.pmStart, day.pmStop]);
     }
   }, [day]);
 
@@ -81,7 +81,7 @@ const TimeEntry = () => {
     async (variables: { dayNumber: number; newWorktime: string[] }) => {
       const { dayNumber, newWorktime } = variables;
 
-      await fetch(`api/weeks/${week?.week_number}/worktimes/${dayNumber}`, {
+      await fetch(`api/weeks/${week?.weekNumber}/worktimes/${dayNumber}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const TimeEntry = () => {
         body: JSON.stringify({ worktime: newWorktime }),
       });
     },
-    [week?.week_number]
+    [week?.weekNumber]
   );
 
   const queryClient = useQueryClient();
@@ -112,10 +112,10 @@ const TimeEntry = () => {
 
       const index = week.days.findIndex(d => d.date === day?.date);
 
-      week.days[index].am_start = newAmStart;
-      week.days[index].am_stop = newAmStop;
-      week.days[index].pm_start = newPmStart;
-      week.days[index].pm_stop = newPmStop;
+      week.days[index].amStart = newAmStart;
+      week.days[index].amStop = newAmStop;
+      week.days[index].pmStart = newPmStart;
+      week.days[index].pmStop = newPmStop;
 
       queryClient.setQueryData(['week'], week);
 

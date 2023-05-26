@@ -3,11 +3,11 @@ import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 
 const hoursDoneOfDay = (day: Day) => {
-  const am = day.am_stop
-    ? timeToHours(day.am_stop) - timeToHours(day.am_start)
+  const am = day.amStop
+    ? timeToHours(day.amStop) - timeToHours(day.amStart)
     : 0;
-  const pm = day.pm_stop
-    ? timeToHours(day.pm_stop) - timeToHours(day.pm_start)
+  const pm = day.pmStop
+    ? timeToHours(day.pmStop) - timeToHours(day.pmStart)
     : 0;
   const hours = am + pm;
 
