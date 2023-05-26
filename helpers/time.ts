@@ -14,6 +14,8 @@ const hoursToTime = (hours: number) => {
 };
 
 const timeToHours = (time: string) => {
+  if (!time) return 0;
+
   const [hours, minutes] = time.split(':');
 
   return Number(hours) + Number(minutes) / 60;

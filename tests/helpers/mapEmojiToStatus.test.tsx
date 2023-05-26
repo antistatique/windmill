@@ -1,6 +1,5 @@
 import mapEmojiToStatus, { Statuses } from '@/helpers/mapEmojiToStatus';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@testing-library/jest-dom';
 
 describe('mapEmojiToStatus', () => {
