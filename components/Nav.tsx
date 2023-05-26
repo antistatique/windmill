@@ -9,16 +9,19 @@ const routes = [
   {
     name: 'Calendar',
     path: '/',
+    aria: 'Calendrier',
     icon: <CalendarIcon />,
   },
   {
     name: 'Dashboard',
     path: '/dashboard',
+    aria: 'Tableau de bord',
     icon: <DashboardIcon />,
   },
   {
-    name: 'Settings',
-    path: '/page2',
+    name: 'Parameters',
+    path: '/parameters',
+    aria: 'Paramètres',
     icon: <SettingsIcon />,
   },
 ];
@@ -32,12 +35,13 @@ const Nav = () => {
         {routes.map(route => (
           <li key={route.name}>
             <Link
+              href={route.path}
+              aria-label={route.aria}
               className={`flex h-12 w-12 items-center justify-center ${
                 router.pathname === route.path
                   ? 'cursor-default text-blue'
                   : 'text-gray hover:text-pink'
               }`}
-              href={route.path}
             >
               {route.icon}
             </Link>

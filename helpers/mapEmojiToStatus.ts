@@ -5,6 +5,7 @@ export enum Statuses {
   PUBLIC_HOLIDAY = 'switzerland_flag',
   DAY_OFF = 'zzz',
   SICK = 'face_with_medical_mask',
+  OVERTIME = 'balance',
   FORMATION = 'graduation_cap',
 }
 
@@ -16,6 +17,7 @@ const statusesMap: {
   '✈️': Statuses.HOLIDAY,
   '🇨🇭': Statuses.PUBLIC_HOLIDAY,
   '💤': Statuses.DAY_OFF,
+  '⚖️': Statuses.OVERTIME,
   '🎓': Statuses.FORMATION,
 };
 

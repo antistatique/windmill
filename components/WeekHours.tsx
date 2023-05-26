@@ -3,30 +3,30 @@ import { useMutation, useQueryClient } from 'react-query';
 import moment from 'moment';
 import Image from 'next/image';
 
-import HoursJustification from '@/components/HoursJustification';
-import useStore from '@/stores/date';
+import WeekJustification from '@/components/WeekJustification';
+import { hoursDoneOfWeek } from '@/helpers/hoursDone';
+import { hoursToTime } from '@/helpers/time';
+import useWeek from '@/hooks/week';
 
 const WeekHours = () => {
-  const { week } = useStore();
+  const { data: week } = useWeek();
 
-  const haveToJustify = week
-    ? week.need_justification &&
-      moment().week(week.week_number).day(5).isSameOrBefore(moment())
-    : false;
+  const hoursDone = week ? hoursToTime(hoursDoneOfWeek(week)).time : '00:00';
+  const hoursTodo = week ? hoursToTime(week.hoursTodo).time : '00:00';
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isJustifying, setIsJustifying] = useState(false);
 
   const handleOpenJustifyModal = () => {
-    if (!haveToJustify) {
-      return;
-    }
-
     setIsModalOpen(true);
   };
 
+  const haveToJustify = week
+    ? week.needJustification &&
+      moment().week(week?.weekNumber).day(5).isSameOrBefore(moment())
+    : false;
+
   const justificationQuery = async (justification: string) => {
-    await fetch(`api/weeks/${week?.week_number}/justifications`, {
+    await fetch(`api/weeks/${week?.weekNumber}/justifications`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,18 +37,10 @@ const WeekHours = () => {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(justificationQuery, {
-    onMutate: () => {
-      setIsJustifying(true);
-    },
+  const { mutate, isLoading } = useMutation(justificationQuery, {
     onSuccess: () => {
       queryClient.invalidateQueries('week');
-
-      setIsJustifying(false);
       setIsModalOpen(false);
-    },
-    onError: () => {
-      setIsJustifying(false);
     },
   });
 
@@ -58,12 +50,13 @@ const WeekHours = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-between gap-4 rounded-xl bg-background px-4 py-3 em:flex-row em:items-center">
+      <div className="flex flex-col justify-between gap-4 rounded-xl bg-background px-4 py-3 2xsm:flex-row 2xsm:items-center">
         <div>
           <span>Heures</span>
-          <div className="-my-1 font-semibold">
-            <span className="text-2xl">{week?.hours_done}</span>
-            <span className="text-base"> / {week?.hours_todo}</span>
+          <div className="-my-1 space-x-1 font-semibold">
+            <span className="text-2xl">{hoursDone}</span>
+            <span>/</span>
+            <span>{hoursTodo}</span>
           </div>
         </div>
 
@@ -82,7 +75,7 @@ const WeekHours = () => {
           <button
             type="button"
             onClick={handleOpenJustifyModal}
-            className={`w-full rounded-lg px-5 py-1 text-xl font-semibold em:w-auto ${
+            className={`w-full rounded-lg px-5 py-1 text-xl font-semibold 2xsm:w-auto ${
               haveToJustify
                 ? 'bg-pink text-white hover:bg-pink-dark'
                 : 'bg-white outline-3 outline-westar hover:outline'
@@ -94,11 +87,11 @@ const WeekHours = () => {
       </div>
 
       {isModalOpen && (
-        <HoursJustification
+        <WeekJustification
           onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
-          isLoading={isJustifying}
-          value={week?.justification}
+          isLoading={isLoading}
+          value={week?.justification || ''}
         />
       )}
     </>
