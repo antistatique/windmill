@@ -19,7 +19,7 @@ const WeekNavigation = () => {
   );
 
   useEffect(() => {
-    if (!week) {
+    if (!week || !week.days) {
       return;
     }
 
