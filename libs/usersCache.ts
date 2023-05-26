@@ -1,42 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { kv } from '@vercel/kv';
 import { sheets_v4 } from 'googleapis';
 import { User } from 'next-auth';
 
 import { RANGE_END, RANGE_START } from '@/configs/index';
 import { SHEET_NAME } from '@/configs/worktime';
-
-const FILE_PATH = 'configs/users.json';
-
-const getUsersInCache = async () => {
-  try {
-    const users = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), FILE_PATH), 'utf8')
-    );
-    return users;
-  } catch (error) {
-    console.log('Could not read users cache', error);
-    return null;
-  }
-};
-
-const setUsersInCache = async (
-  users: {
-    index: number;
-    email: string;
-  }[]
-) => {
-  try {
-    fs.writeFileSync(
-      path.join(process.cwd(), FILE_PATH),
-      JSON.stringify(users),
-      'utf8'
-    );
-  } catch (error) {
-    console.log('Could not write users cache', error);
-  }
-};
 
 const fetchIndexes = async (client: sheets_v4.Sheets) => {
   const response = await client.spreadsheets.values.get({
@@ -76,25 +44,24 @@ const fetchIndexes = async (client: sheets_v4.Sheets) => {
 const getIndex = async (
   client: sheets_v4.Sheets,
   user: User,
-  force = false
+  refresh = false
 ) => {
-  let index;
+  let index: number | null = await kv.hget(`user:${user.email}`, 'index');
 
-  if (!force) {
-    const users = await getUsersInCache();
-    index = users?.find((u: User) => u.email === user.email)?.index;
+  if (index && !refresh) {
+    return index;
   }
 
-  if (!index) {
-    console.log('User not found in cache, fetching from Google Sheets');
+  console.log('User not found in cache, fetching from Google Sheets');
 
-    const indexes = await fetchIndexes(client);
+  const indexes = await fetchIndexes(client);
 
-    // Cache all users so others don't have to fetch them from Google Sheets
-    await setUsersInCache(indexes);
-
-    index = indexes?.find(u => u.email === user.email)?.index;
-  }
+  indexes.forEach(async ({ index: i, email }) => {
+    if (email === user.email) {
+      index = i;
+    }
+    await kv.hset(`user:${email}`, { index: i });
+  });
 
   return index;
 };
