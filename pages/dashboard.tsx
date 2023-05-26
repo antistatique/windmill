@@ -21,7 +21,7 @@ const Dashboard = () => {
     ? summary.vacation_sold - summary.vacation
     : 0;
   const remainingOverTimeDays = summary
-    ? summary.remaining_overtime / HOURS_PER_DAY
+    ? summary.overtime_remaining / HOURS_PER_DAY
     : 0;
 
   const currentYear = new Date().getFullYear();
@@ -34,7 +34,7 @@ const Dashboard = () => {
       </Head>
 
       <main className="space-y-8 pb-4">
-        {isLoading ? (
+        {isLoading || !summary ? (
           <Skeleton />
         ) : (
           <div className="flex h-64 flex-col items-center justify-center space-y-4 bg-pink text-center font-semibold text-white">
@@ -54,7 +54,7 @@ const Dashboard = () => {
                   Number(remainingOverTimeDays.toFixed(2)),
                   'jour'
                 )} 
-                (${summary.remaining_overtime}h) supplémentaires`}
+                (${summary.overtime_remaining}h) supplémentaires`}
               </p>
             </div>
           </div>
@@ -76,7 +76,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Heures supplémentaires totales',
-                value: summary?.remaining_overtime,
+                value: summary?.overtime_remaining,
                 metric: 'h',
               },
             ]}
@@ -91,7 +91,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Jours supplémentaires récupérés',
-                value: summary?.overtime,
+                value: summary?.overtime_recovery,
                 metric: 'j',
               },
             ]}
@@ -101,7 +101,7 @@ const Dashboard = () => {
             items={[
               {
                 label: 'Absences justifiées',
-                value: '',
+                value: summary?.justified_absence,
                 metric: 'j',
               },
               {

@@ -1,6 +1,6 @@
 type Props = {
   label: string;
-  value: string;
+  value: number | undefined;
   metric?: string;
 };
 
