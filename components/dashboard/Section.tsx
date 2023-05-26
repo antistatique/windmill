@@ -1,12 +1,11 @@
-import React from 'react';
-
 import Item from '@/components/dashboard/Item';
 
 type Props = {
   label: string;
   items: {
     label: string;
-    value: string;
+    value: number | undefined;
+    metric?: string;
   }[];
 };
 

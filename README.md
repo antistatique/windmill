@@ -33,3 +33,13 @@ yarn build
 ```bash
 yarn test
 ```
+
+```bash
+yarn coverage
+```
+
+### Deployment
+
+The production build of the [main](https://github.com/antistatique/windmill/tree/main) branch is automatically deployed to [Vercel](https://windmill-as.vercel.app).
+
+The production build of the [develop](https://github.com/antistatique/windmill/tree/develop) branch is automatically deployed to [Vercel](https://windmill-git-develop-antistatique.vercel.app).

@@ -5,7 +5,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
 body {
-	@apply bg-background text-blue font-inter font-normal;
+	@apply bg-background text-blue font-inter tabular-nums;
+}
+
+.skeleton {
+	@apply animate-pulse bg-gray rounded-lg h-6;
 }
 
 input:focus {
@@ -15,11 +19,4 @@ input:focus {
 /* Remove clock icon from time input on desktop browsers */
 input[type="time"]::-webkit-calendar-picker-indicator {
 	display: none;
-}
-
-/* Remove arrow icon from time input on mobile browsers */
-input[type="time"] {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
 }
