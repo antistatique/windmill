@@ -1,9 +1,12 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
+import moment from 'moment';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { SessionProvider } from 'next-auth/react';
 
 import Nav from '@/components/Nav';
+
+import 'moment/locale/fr';
 
 import '@/styles/globals.css';
 
@@ -11,6 +14,10 @@ const withoutNav = ['/auth/signin'];
 const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps }: AppProps) => {
+  moment.updateLocale('fr', {
+    week: { dow: 1 },
+  });
+
   const router = useRouter();
   const { pathname: path } = router;
 

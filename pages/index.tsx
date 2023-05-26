@@ -5,8 +5,6 @@ import TimeEntry from '@/components/TimeEntry';
 import WeekHours from '@/components/WeekHours';
 import WeekNavigation from '@/components/WeekNavigation';
 
-import 'moment/locale/fr';
-
 const Index = () => (
   <>
     <Head>

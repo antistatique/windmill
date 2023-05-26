@@ -12,6 +12,10 @@ import authorize from '@/middlewares/authorize';
 import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
 
+moment.updateLocale('fr', {
+  week: { dow: 1 },
+});
+
 interface CustomNextApiRequest extends NextApiRequest {
   weekNumber: number;
   user: User;
