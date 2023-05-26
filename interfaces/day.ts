@@ -6,6 +6,4 @@ export default interface Day {
   am_stop: string;
   pm_start: string;
   pm_stop: string;
-  hours_done: number;
-  total: string;
 }

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import DaySelection from '@/components/DaySelection';
+import DayNavigation from '@/components/DayNavigation';
 import TimeEntry from '@/components/TimeEntry';
 import WeekHours from '@/components/WeekHours';
 import WeekNavigation from '@/components/WeekNavigation';
@@ -25,7 +25,7 @@ const Index = () => (
       </div>
 
       <div>
-        <DaySelection />
+        <DayNavigation />
       </div>
 
       <div className="px-4">

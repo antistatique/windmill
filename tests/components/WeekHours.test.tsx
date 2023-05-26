@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import WeekHours from '@/components/WeekHours';
 import useWeek from '@/hooks/week';
-import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 
 import '@testing-library/jest-dom';
@@ -13,10 +12,8 @@ import '@testing-library/jest-dom';
 const date = moment('2023-01-01').startOf('week');
 
 const week: Week = {
-  week_start: date.startOf('week').format('YYYY-MM-DD'),
   week_number: date.week(),
-  days: [] as Day[],
-  hours_done: 8.0,
+  days: [{ am_start: '08:00', am_stop: '12:00' }],
   hours_todo: 42.0,
   need_justification: false,
 } as Week;
@@ -48,7 +45,7 @@ describe('week hours', () => {
     renderComponent();
 
     expect(useWeek).toHaveBeenCalled();
-    expect(screen.getByText('08:00')).toBeInTheDocument();
+    expect(screen.getByText('04:00')).toBeInTheDocument();
   });
 
   it('should display the hours of the week done', () => {

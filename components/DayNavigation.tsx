@@ -1,17 +1,14 @@
 import moment from 'moment';
 import Image from 'next/image';
 
+import { hoursDoneOfDay } from '@/helpers/hoursDone';
+import { hoursToTime } from '@/helpers/time';
 import useWeek from '@/hooks/week';
-import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
 
-const DaySelection = () => {
+const DayNavigation = () => {
   const { data: week } = useWeek();
   const { day: selectedDay, setDay } = useStore();
-
-  const handleDaySelection = (day: Day) => {
-    setDay(day);
-  };
 
   const days = week?.days?.map(day => {
     const date = moment(day.date);
@@ -22,7 +19,7 @@ const DaySelection = () => {
       isCurrentDay: date.isSame(moment(), 'day'),
       isPastDay: date.isBefore(moment(), 'day'),
       status: day.status,
-      hoursDone: day.total,
+      hoursDone: hoursToTime(hoursDoneOfDay(day)).time,
     };
   });
 
@@ -33,7 +30,7 @@ const DaySelection = () => {
           <button
             type="button"
             key={value.unix()}
-            onClick={() => handleDaySelection(day)}
+            onClick={() => setDay(day)}
             className={`flex grow cursor-pointer flex-col items-center justify-center space-y-1 rounded-xl bg-white px-1 py-2 shadow sm:px-2  ${
               value.date() === moment(selectedDay?.date).date()
                 ? 'outline outline-3 -outline-offset-2 outline-pink'
@@ -73,4 +70,4 @@ const DaySelection = () => {
   );
 };
 
-export default DaySelection;
+export default DayNavigation;

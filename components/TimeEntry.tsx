@@ -7,7 +7,6 @@ import moment from 'moment';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
-import { hoursToTime, timeToHours } from '@/helpers/time';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import useStore from '@/stores/date';
@@ -111,27 +110,14 @@ const TimeEntry = () => {
 
       const [newAmStart, newAmStop, newPmStart, newPmStop] = newWorktime;
 
-      const amDone = newAmStop
-        ? timeToHours(newAmStop) - timeToHours(newAmStart)
-        : 0;
-      const pmDone = newPmStop
-        ? timeToHours(newPmStop) - timeToHours(newPmStart)
-        : 0;
-      const totalDone = amDone + pmDone;
-
       const index = week.days.findIndex(d => d.date === day?.date);
 
-      const newWeek = { ...week };
-      newWeek.days[index] = {
-        ...day,
-        am_start: newAmStart,
-        am_stop: newAmStop,
-        pm_start: newPmStart,
-        pm_stop: newPmStop,
-        total: hoursToTime(totalDone).time,
-      };
+      week.days[index].am_start = newAmStart;
+      week.days[index].am_stop = newAmStop;
+      week.days[index].pm_start = newPmStart;
+      week.days[index].pm_stop = newPmStop;
 
-      queryClient.setQueryData(['week'], newWeek);
+      queryClient.setQueryData(['week'], week);
 
       // Return a context object with the snapshotted value
       return { previousWeek };
@@ -141,7 +127,6 @@ const TimeEntry = () => {
     onError: (err, newWeek, context) => {
       queryClient.setQueryData(['week'], context?.previousWeek);
     },
-    // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['week'] });
     },

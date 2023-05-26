@@ -4,22 +4,26 @@ import moment from 'moment';
 import Image from 'next/image';
 
 import WeekJustification from '@/components/WeekJustification';
+import { hoursDoneOfWeek } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
 import useWeek from '@/hooks/week';
 
 const WeekHours = () => {
   const { data: week } = useWeek();
 
-  const haveToJustify = week
-    ? week.need_justification &&
-      moment().week(week?.week_number).day(5).isSameOrBefore(moment())
-    : false;
+  const hoursDone = week ? hoursToTime(hoursDoneOfWeek(week)).time : '00:00';
+  const hoursTodo = week ? hoursToTime(week.hours_todo).time : '00:00';
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenJustifyModal = () => {
     setIsModalOpen(true);
   };
+
+  const haveToJustify = week
+    ? week.need_justification &&
+      moment().week(week?.week_number).day(5).isSameOrBefore(moment())
+    : false;
 
   const justificationQuery = async (justification: string) => {
     await fetch(`api/weeks/${week?.week_number}/justifications`, {
@@ -50,11 +54,9 @@ const WeekHours = () => {
         <div>
           <span>Heures</span>
           <div className="-my-1 space-x-1 font-semibold">
-            <span className="text-2xl">
-              {week ? hoursToTime(week?.hours_done).time : '00:00'}
-            </span>
+            <span className="text-2xl">{hoursDone}</span>
             <span>/</span>
-            <span>{week ? hoursToTime(week?.hours_todo).time : '00:00'}</span>
+            <span>{hoursTodo}</span>
           </div>
         </div>
 
