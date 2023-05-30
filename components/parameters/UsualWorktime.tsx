@@ -2,24 +2,31 @@ import { useState } from 'react';
 
 import CheckIcon from '@/components/icons/check';
 import TimeEntry from '@/components/TimeEntry';
-import compareArrays from '@/helpers/compareArrays';
+import compare from '@/helpers/array';
 import getUsualWorktime from '@/helpers/usualWorktime';
 
 const UsualWorktime = () => {
   const [worktime, setWorktime] = useState(getUsualWorktime());
 
   const [isValidate, setIsValidate] = useState(false);
-  const [isSaved, setIsSaved] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
 
   const onTimeChange = (updatedWorktime: string[], isValid: boolean) => {
     setWorktime(updatedWorktime);
     setIsValidate(isValid);
 
-    setIsSaved(compareArrays(updatedWorktime, getUsualWorktime()));
+    setIsSaved(compare(updatedWorktime, getUsualWorktime()));
   };
 
   const handleSave = () => {
-    localStorage.setItem('usual_worktime', worktime.join(','));
+    const [amStart, amStop, pmStart, pmStop] = worktime;
+
+    if (!amStart && !amStop && !pmStart && !pmStop) {
+      localStorage.removeItem('usual_worktime');
+    } else {
+      localStorage.setItem('usual_worktime', worktime.join(','));
+    }
+
     setIsSaved(true);
   };
 

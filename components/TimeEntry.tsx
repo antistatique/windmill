@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/naming-convention */
+import { useRouter } from 'next/router';
+
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
+import compare from '@/helpers/array';
 import getUsualWorktime from '@/helpers/usualWorktime';
 
 type Props = {
@@ -86,7 +89,14 @@ const TimeEntry = ({
     handleTimeChange(updatedWorktime);
   };
 
+  const router = useRouter();
+
   const handleUsualWorktime = () => {
+    if (!localStorage.getItem('usual_worktime')) {
+      router.push('/parameters/usual-worktime');
+      return;
+    }
+
     handleTimeChange(getUsualWorktime());
   };
 

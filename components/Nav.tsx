@@ -20,7 +20,7 @@ const routes = [
   },
   {
     name: 'Parameters',
-    path: '/parameters',
+    path: '/parameters/nudge',
     aria: 'Paramètres',
     icon: <SettingsIcon />,
   },
