@@ -1,12 +1,12 @@
-import useNudge from '@/hooks/nudge';
+import useParameterStore from '@/stores/parameters';
 
 const Nudge = () => {
-  const [nudge, setNudge] = useNudge();
+  const { nudge, setNudge } = useParameterStore();
 
   const nudges = [5, 10, 15, 20, 30, 45, 60];
 
-  const handleSelect = (option: number) => {
-    setNudge(option);
+  const handleSelect = (n: number) => {
+    setNudge(n);
   };
 
   return (

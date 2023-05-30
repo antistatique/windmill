@@ -4,8 +4,8 @@ import ClockIcon from '@/components/icons/clock';
 import MinusIcon from '@/components/icons/minus';
 import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
-import useNudge from '@/hooks/nudge';
 import moment from '@/libs/moment.config';
+import useParameterStore from '@/stores/parameters';
 
 type Props = {
   id: string;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
-  const [nudge] = useNudge();
+  const { nudge } = useParameterStore();
 
   const canUpdateQuickly = !disabled && value;
 

@@ -3,30 +3,25 @@ import { useState } from 'react';
 import CheckIcon from '@/components/icons/check';
 import TimeEntry from '@/components/TimeEntry';
 import compare from '@/helpers/array';
-import getUsualWorktime from '@/helpers/usualWorktime';
+import useParameterStore from '@/stores/parameters';
 
 const UsualWorktime = () => {
-  const [worktime, setWorktime] = useState(getUsualWorktime());
+  const { worktime: storedWorktime, setWorktime: saveWorktime } =
+    useParameterStore();
+  const [worktime, setWorktime] = useState(storedWorktime);
 
-  const [isValidate, setIsValidate] = useState(false);
+  const [canSave, setCanSave] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const onTimeChange = (updatedWorktime: string[], isValid: boolean) => {
-    setWorktime(updatedWorktime);
-    setIsValidate(isValid);
+  const onTimeChange = (newWorktime: string[], isValid: boolean) => {
+    setWorktime(newWorktime);
 
-    setIsSaved(compare(updatedWorktime, getUsualWorktime()));
+    setCanSave(isValid);
+    setIsSaved(compare(newWorktime, storedWorktime));
   };
 
   const handleSave = () => {
-    const [amStart, amStop, pmStart, pmStop] = worktime;
-
-    if (!amStart && !amStop && !pmStart && !pmStop) {
-      localStorage.removeItem('usual_worktime');
-    } else {
-      localStorage.setItem('usual_worktime', worktime.join(','));
-    }
-
+    saveWorktime(worktime);
     setIsSaved(true);
   };
 
@@ -49,7 +44,7 @@ const UsualWorktime = () => {
         <button
           type="button"
           aria-label="Enregistrer une journée type"
-          disabled={!isValidate}
+          disabled={!canSave}
           onClick={handleSave}
           className="w-full truncate rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark disabled:opacity-50"
         >

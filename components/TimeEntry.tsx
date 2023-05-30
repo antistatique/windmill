@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
-import compare from '@/helpers/array';
-import getUsualWorktime from '@/helpers/usualWorktime';
+import useParameterStore from '@/stores/parameters';
 
 type Props = {
   worktime: string[];
@@ -19,6 +18,9 @@ const TimeEntry = ({
   onTimeChange,
 }: Props) => {
   const [amStart, amStop, pmStart, pmStop] = worktime;
+
+  const { worktime: usualWorktime, setWorktime: setUsualWorktime } =
+    useParameterStore();
 
   const amStopError = (worktimeToValidate?: string[]) => {
     const [newAmStart, newAmStop, newPmStart] = worktimeToValidate || worktime;
@@ -92,12 +94,11 @@ const TimeEntry = ({
   const router = useRouter();
 
   const handleUsualWorktime = () => {
-    if (!localStorage.getItem('usual_worktime')) {
+    if (usualWorktime.every(time => time === '')) {
       router.push('/parameters/usual-worktime');
-      return;
+    } else {
+      handleTimeChange(usualWorktime);
     }
-
-    handleTimeChange(getUsualWorktime());
   };
 
   const handleReset = () => {
