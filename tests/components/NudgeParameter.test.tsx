@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { act, render, screen } from '@testing-library/react';
 
 import { getItemMock } from '@/__mocks__/localstorage';

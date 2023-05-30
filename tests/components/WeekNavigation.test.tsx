@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
