@@ -1,20 +1,9 @@
-import { useEffect, useState } from 'react';
-
-import getNudge from '@/helpers/nudge';
+import useParameterStore from '@/stores/parameters';
 
 const Nudge = () => {
+  const { nudge, setNudge } = useParameterStore();
+
   const nudges = [5, 10, 15, 20, 30, 45, 60];
-
-  const [nudge, setNudge] = useState(0);
-
-  useEffect(() => {
-    setNudge(getNudge());
-  }, [nudge]);
-
-  const handleSelect = (option: number) => {
-    localStorage.setItem('nudge', option.toString());
-    setNudge(option);
-  };
 
   return (
     <div className="space-y-4">
@@ -25,7 +14,7 @@ const Nudge = () => {
           <button
             key={n}
             type="button"
-            onClick={() => handleSelect(n)}
+            onClick={() => setNudge(n)}
             className={`rounded-xl bg-white py-4 font-semibold outline-3 drop-shadow 
                 ${
                   n === nudge

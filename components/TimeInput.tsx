@@ -4,8 +4,8 @@ import ClockIcon from '@/components/icons/clock';
 import MinusIcon from '@/components/icons/minus';
 import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
-import nudge from '@/helpers/nudge';
 import moment from '@/libs/moment.config';
+import useParameterStore from '@/stores/parameters';
 
 type Props = {
   id: string;
@@ -17,13 +17,15 @@ type Props = {
 };
 
 const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
+  const { nudge } = useParameterStore();
+
   const canUpdateQuickly = !disabled && value;
 
   const handleIncrementTime = () => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.add(nudge(), 'minutes');
+    const newMomentValue = momentValue.add(nudge, 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };
@@ -32,7 +34,7 @@ const TimeInput = ({ id, label, value, disabled, error, onChange }: Props) => {
     if (!canUpdateQuickly) return;
 
     const momentValue = moment(value, 'HH:mm');
-    const newMomentValue = momentValue.subtract(nudge(), 'minutes');
+    const newMomentValue = momentValue.subtract(nudge, 'minutes');
 
     onChange(newMomentValue.format('HH:mm'));
   };
