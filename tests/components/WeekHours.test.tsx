@@ -1,11 +1,11 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
-import moment from 'moment';
 
 import WeekHours from '@/components/WeekHours';
 import useWeek from '@/hooks/week';
 import Week from '@/interfaces/week';
+import moment from '@/libs/moment.config';
 
 import '@testing-library/jest-dom';
 

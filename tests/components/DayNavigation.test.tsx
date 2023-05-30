@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { act, render, screen } from '@testing-library/react';
-import moment from 'moment';
 
 import DaySelection from '@/components/DayNavigation';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
+import moment from '@/libs/moment.config';
 import useStore from '@/stores/date';
 
 import 'moment/locale/fr';

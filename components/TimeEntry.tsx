@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import debounce from 'lodash.debounce';
-import moment from 'moment';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
+import moment from '@/libs/moment.config';
 import useStore from '@/stores/date';
 
 const TimeEntry = () => {

@@ -1,9 +1,9 @@
-import moment from 'moment';
 import Image from 'next/image';
 
 import { hoursDoneOfDay } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
 import useWeek from '@/hooks/week';
+import moment from '@/libs/moment.config';
 import useStore from '@/stores/date';
 
 const DayNavigation = () => {

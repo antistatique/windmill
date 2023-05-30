@@ -1,7 +1,7 @@
-import moment from 'moment';
 import { create } from 'zustand';
 
 import Day from '@/interfaces/day';
+import moment from '@/libs/moment.config';
 
 interface DateState {
   weekNumber: number;

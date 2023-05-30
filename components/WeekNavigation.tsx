@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-import moment from 'moment';
 
 import useWeek from '@/hooks/week';
-import Day from '@/interfaces/day';
+import moment from '@/libs/moment.config';
 import useStore from '@/stores/date';
 
 const WeekNavigation = () => {
@@ -13,10 +12,13 @@ const WeekNavigation = () => {
   const [previousWeekNumber, setPreviousWeekNumber] = useState(0);
 
   const isCurrentWeek = weekNumber === moment().week();
+  const isCurrentDay = day ? moment(day.date).isSame(moment(), 'day') : false;
 
-  const getCurrentDay = week?.days?.find((d: Day) =>
+  const currentDay = week?.days?.find(d =>
     moment(d.date).isSame(moment(), 'day')
   );
+
+  const showTodayButton = !isCurrentWeek || (!isCurrentDay && currentDay);
 
   useEffect(() => {
     if (!week || !week.days) {
@@ -24,24 +26,14 @@ const WeekNavigation = () => {
     }
 
     if (weekNumber !== previousWeekNumber) {
-      const currentDay = isCurrentWeek ? getCurrentDay : week.days[0];
-
-      setDay(currentDay ?? week.days[0]);
+      setDay(currentDay ?? week?.days[0]);
     }
 
     setPreviousWeekNumber(weekNumber);
-  }, [
-    getCurrentDay,
-    isCurrentWeek,
-    previousWeekNumber,
-    setDay,
-    week,
-    weekNumber,
-  ]);
-
-  const isCurrentDay = moment(day?.date).isSame(moment(), 'day');
+  }, [week]);
 
   const canGoToPreviousWeek = weekNumber - 1 > 0;
+
   const canGoToNextWeek = weekNumber + 1 <= moment(day?.date).weeksInYear();
 
   const handleWeekNumberChange = (newWeekNumber: number) => {
@@ -61,12 +53,8 @@ const WeekNavigation = () => {
   };
 
   const handleToday = () => {
-    if (isCurrentWeek) {
-      const currentDay = getCurrentDay;
-
-      if (currentDay) {
-        setDay(currentDay);
-      }
+    if (isCurrentWeek && currentDay) {
+      setDay(currentDay);
       return;
     }
 
@@ -95,7 +83,7 @@ const WeekNavigation = () => {
         <div className="text flex flex-col gap-x-4 2xsm:flex-row">
           <span>Semaine {weekNumber}</span>
 
-          {!isCurrentDay && (
+          {showTodayButton && (
             <button
               type="button"
               onClick={handleToday}

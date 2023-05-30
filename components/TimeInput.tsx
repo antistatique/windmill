@@ -1,11 +1,11 @@
 import { MdError } from 'react-icons/md';
-import moment from 'moment';
 
 import ClockIcon from '@/components/icons/clock';
 import MinusIcon from '@/components/icons/minus';
 import PlusIcon from '@/components/icons/plus';
 import RemoveIcon from '@/components/icons/remove';
 import nudge from '@/helpers/nudge';
+import moment from '@/libs/moment.config';
 
 type Props = {
   id: string;

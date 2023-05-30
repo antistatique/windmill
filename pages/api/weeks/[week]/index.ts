@@ -1,5 +1,4 @@
 import { sheets_v4 } from 'googleapis';
-import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
@@ -7,14 +6,11 @@ import { RANGE_END, RANGE_START, SHEET_NAME } from '@/configs/worktime';
 import getStatusFromEmoji from '@/helpers/mapEmojiToStatus';
 import ApiError from '@/interfaces/apiError';
 import Week from '@/interfaces/week';
+import moment from '@/libs/moment.config';
 import getIndex from '@/libs/usersCache';
 import authorize from '@/middlewares/authorize';
 import indexHandler from '@/middlewares/index';
 import weekHandler from '@/middlewares/week';
-
-moment.updateLocale('fr', {
-  week: { dow: 1 },
-});
 
 interface CustomNextApiRequest extends NextApiRequest {
   weekNumber: number;
