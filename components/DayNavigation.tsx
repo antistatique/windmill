@@ -24,14 +24,14 @@ const DayNavigation = () => {
   });
 
   return (
-    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 pb-4 2xsm:pb-2">
+    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 2xsm:py-1">
       {days?.map(
         ({ day, value, isCurrentDay, isPastDay, status, hoursDone }) => (
           <button
             type="button"
             key={value.unix()}
             onClick={() => setDay(day)}
-            className={`flex grow cursor-pointer flex-col items-center justify-center space-y-1 rounded-xl bg-white px-1 py-2 shadow sm:px-2  ${
+            className={`flex grow cursor-pointer flex-col items-center justify-center space-y-0.5 rounded-xl bg-white p-1 shadow sm:px-0${
               value.date() === moment(selectedDay?.date).date()
                 ? 'outline outline-3 -outline-offset-2 outline-pink'
                 : ''

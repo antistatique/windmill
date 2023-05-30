@@ -30,7 +30,7 @@ const Nav = () => {
 
   return (
     <nav className="bg-white py-1">
-      <ul className="flex justify-evenly">
+      <ul className="flex items-center justify-evenly">
         {routes.map(route => (
           <li key={route.name}>
             <Link

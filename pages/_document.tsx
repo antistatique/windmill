@@ -11,7 +11,7 @@ const Document = () => (
       <link rel="apple-touch-icon" href="/icon-192x192.png" />
       <meta name="theme-color" content="#fff" />
     </Head>
-    <body>
+    <body className="scroll-smooth bg-background-dark">
       <Main />
       <NextScript />
     </body>

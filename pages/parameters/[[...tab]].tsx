@@ -49,7 +49,7 @@ const Parameters = () => {
   return (
     <>
       <Head>
-        <title>Windmill - Parameters</title>
+        <title>Windmill - Paramètres</title>
         <meta name="description" content="Paramètres de l'application" />
       </Head>
 
@@ -80,9 +80,7 @@ const Parameters = () => {
           ))}
         </nav>
 
-        {activeTab && (
-          <div className="grow space-y-4">{activeTab?.component}</div>
-        )}
+        {activeTab && <div className="h-full">{activeTab?.component}</div>}
       </main>
     </>
   );

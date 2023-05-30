@@ -33,24 +33,26 @@ const UsualWorktime = () => {
         onTimeChange={onTimeChange}
       />
 
-      {isSaved ? (
-        <span className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white py-4 text-center drop-shadow">
-          <span className="text-success">
-            <CheckIcon />
+      <div className="py-4">
+        {isSaved ? (
+          <span className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white py-4 text-center drop-shadow">
+            <span className="text-success">
+              <CheckIcon />
+            </span>
+            Horaire sauvegardé
           </span>
-          Horaire sauvegardé
-        </span>
-      ) : (
-        <button
-          type="button"
-          aria-label="Enregistrer une journée type"
-          disabled={!canSave}
-          onClick={handleSave}
-          className="w-full truncate rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark disabled:opacity-50"
-        >
-          Enregistrer ma journée type
-        </button>
-      )}
+        ) : (
+          <button
+            type="button"
+            aria-label="Enregistrer une journée type"
+            disabled={!canSave}
+            onClick={handleSave}
+            className="w-full truncate rounded-lg bg-pink py-4 text-white shadow drop-shadow hover:bg-pink-dark disabled:opacity-50"
+          >
+            Enregistrer ma journée type
+          </button>
+        )}
+      </div>
     </div>
   );
 };
