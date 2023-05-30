@@ -4,6 +4,7 @@ import { signOut } from 'next-auth/react';
 
 import LogoutIcon from '@/components/icons/logout';
 import Nudge from '@/components/parameters/Nudge';
+import UsualWorktime from '@/components/parameters/UsualWorktime';
 
 const Parameters = () => {
   type Tab = {
@@ -15,13 +16,13 @@ const Parameters = () => {
   const tabs = [
     {
       name: 'Nudge',
-      aria: 'Nudge',
+      aria: 'Configuration du nudge',
       component: <Nudge />,
     },
     {
-      name: 'Autre',
-      aria: 'Autre',
-      component: <div>Autre</div>,
+      name: 'Horaire habituel',
+      aria: "Configuration d'un horaire habituel",
+      component: <UsualWorktime />,
     },
   ];
 
@@ -38,7 +39,7 @@ const Parameters = () => {
         <meta name="description" content="Paramètres de l'application" />
       </Head>
 
-      <main className="space-y-8 p-4">
+      <main className="flex h-full flex-col space-y-8 p-4">
         <div className="mt-8 flex items-center">
           <h1 className="grow text-4xl font-semibold">Paramètres</h1>
           <button
@@ -66,7 +67,7 @@ const Parameters = () => {
           ))}
         </nav>
 
-        <div className="space-y-4">{activeTab.component}</div>
+        <div className="grow space-y-4">{activeTab.component}</div>
       </main>
     </>
   );
