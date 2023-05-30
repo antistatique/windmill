@@ -6,9 +6,11 @@ import TimeEntry from '@/components/TimeEntry';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import moment from '@/libs/moment.config';
+import useStore from '@/stores/date';
 
 const DayWorktime = () => {
   const { data: week } = useWeek();
+  const { day: selectedDay } = useStore();
 
   const worktimeQuery = useCallback(
     async (variables: { day: Day; worktime: string[] }) => {
@@ -74,11 +76,27 @@ const DayWorktime = () => {
     [mutate]
   );
 
-  const onTimeChange = (day: Day, worktime: string[]) => {
-    debouncedWorktimeQuery(day, worktime);
+  const onTimeChange = (worktime: string[]) => {
+    if (!selectedDay) {
+      return;
+    }
+
+    debouncedWorktimeQuery(selectedDay, worktime);
   };
 
-  return <TimeEntry onTimeChange={onTimeChange} />;
+  return (
+    <TimeEntry
+      defaultWorktime={
+        [
+          selectedDay?.amStart,
+          selectedDay?.amStop,
+          selectedDay?.pmStart,
+          selectedDay?.pmStop,
+        ] as string[]
+      }
+      onTimeChange={onTimeChange}
+    />
+  );
 };
 
 export default DayWorktime;

@@ -4,24 +4,21 @@ import { useEffect, useState } from 'react';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
-import Day from '@/interfaces/day';
-import useStore from '@/stores/date';
 
 type Props = {
-  onTimeChange: (day: Day, worktime: string[]) => void;
+  defaultWorktime: string[];
+  onTimeChange: (worktime: string[]) => void;
 };
 
-const TimeEntry = ({ onTimeChange }: Props) => {
-  const { day } = useStore();
-
+const TimeEntry = ({ defaultWorktime, onTimeChange }: Props) => {
   const [worktime, setWorktime] = useState<string[]>([]);
   const [amStart, amStop, pmStart, pmStop] = worktime;
 
   useEffect(() => {
-    if (day) {
-      setWorktime([day.amStart, day.amStop, day.pmStart, day.pmStop]);
+    if (defaultWorktime) {
+      setWorktime(defaultWorktime);
     }
-  }, [day]);
+  }, [defaultWorktime]);
 
   const amStopError = (worktimeToValidate?: string[]) => {
     const [newAmStart, newAmStop, newPmStart] = worktimeToValidate || worktime;
@@ -77,8 +74,6 @@ const TimeEntry = ({ onTimeChange }: Props) => {
   };
 
   const handleTimeChange = (newWorktime: string[]) => {
-    if (!day) return;
-
     setWorktime(newWorktime);
 
     if (
@@ -86,7 +81,7 @@ const TimeEntry = ({ onTimeChange }: Props) => {
       !pmStartError(newWorktime) &&
       !pmStopError(newWorktime)
     ) {
-      onTimeChange(day, newWorktime);
+      onTimeChange(newWorktime);
     }
   };
 
