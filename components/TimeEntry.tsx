@@ -1,24 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useEffect, useState } from 'react';
-
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
 
 type Props = {
-  defaultWorktime: string[];
-  onTimeChange: (worktime: string[]) => void;
+  worktime: string[];
+  onTimeChange: (worktime: string[], isValid: boolean) => void;
 };
 
-const TimeEntry = ({ defaultWorktime, onTimeChange }: Props) => {
-  const [worktime, setWorktime] = useState<string[]>([]);
+const TimeEntry = ({ worktime, onTimeChange }: Props) => {
   const [amStart, amStop, pmStart, pmStop] = worktime;
-
-  useEffect(() => {
-    if (defaultWorktime) {
-      setWorktime(defaultWorktime);
-    }
-  }, [defaultWorktime]);
 
   const amStopError = (worktimeToValidate?: string[]) => {
     const [newAmStart, newAmStop, newPmStart] = worktimeToValidate || worktime;
@@ -74,15 +65,12 @@ const TimeEntry = ({ defaultWorktime, onTimeChange }: Props) => {
   };
 
   const handleTimeChange = (newWorktime: string[]) => {
-    setWorktime(newWorktime);
-
-    if (
+    const isValid =
       !amStopError(newWorktime) &&
       !pmStartError(newWorktime) &&
-      !pmStopError(newWorktime)
-    ) {
-      onTimeChange(newWorktime);
-    }
+      !pmStopError(newWorktime);
+
+    onTimeChange(newWorktime, isValid);
   };
 
   const onInputChange = (index: number, value: string) => {

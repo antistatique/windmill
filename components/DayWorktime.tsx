@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import debounce from 'lodash.debounce';
 
@@ -10,19 +10,27 @@ import useStore from '@/stores/date';
 
 const DayWorktime = () => {
   const { data: week } = useWeek();
-  const { day: selectedDay } = useStore();
+  const { day } = useStore();
+
+  const [worktime, setWorktime] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (day) {
+      setWorktime([day.amStart, day.amStop, day.pmStart, day.pmStop]);
+    }
+  }, [day]);
 
   const worktimeQuery = useCallback(
-    async (variables: { day: Day; worktime: string[] }) => {
-      const { day, worktime } = variables;
-      const dayNumber = moment(day?.date).weekday();
+    async (variables: { updatedDay: Day; updatedWorktime: string[] }) => {
+      const { updatedDay, updatedWorktime } = variables;
+      const dayNumber = moment(updatedDay?.date).weekday();
 
       await fetch(`api/weeks/${week?.weekNumber}/worktimes/${dayNumber}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ worktime }),
+        body: JSON.stringify({ worktime: updatedWorktime }),
       });
     },
     [week?.weekNumber]
@@ -31,7 +39,7 @@ const DayWorktime = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(worktimeQuery, {
-    onMutate: async ({ day, worktime }) => {
+    onMutate: async ({ updatedDay, updatedWorktime }) => {
       // Cancel any outgoing re fetches
       // (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({ queryKey: ['week'] });
@@ -44,9 +52,9 @@ const DayWorktime = () => {
         return { previousWeek };
       }
 
-      const [newAmStart, newAmStop, newPmStart, newPmStop] = worktime;
+      const [newAmStart, newAmStop, newPmStart, newPmStop] = updatedWorktime;
 
-      const index = week.days.findIndex(d => d.date === day?.date);
+      const index = week.days.findIndex(d => d.date === updatedDay?.date);
 
       week.days[index].amStart = newAmStart;
       week.days[index].amStop = newAmStop;
@@ -70,33 +78,21 @@ const DayWorktime = () => {
 
   const debouncedWorktimeQuery = useMemo(
     () =>
-      debounce((day: Day, worktime: string[]) => {
-        mutate({ day, worktime });
+      debounce((updatedDay: Day, updatedWorktime: string[]) => {
+        mutate({ updatedDay, updatedWorktime });
       }, 300),
     [mutate]
   );
 
-  const onTimeChange = (worktime: string[]) => {
-    if (!selectedDay) {
-      return;
-    }
+  const onTimeChange = (updatedWorktime: string[], isValid: boolean) => {
+    setWorktime(updatedWorktime);
 
-    debouncedWorktimeQuery(selectedDay, worktime);
+    if (day && isValid) {
+      debouncedWorktimeQuery(day, updatedWorktime);
+    }
   };
 
-  return (
-    <TimeEntry
-      defaultWorktime={
-        [
-          selectedDay?.amStart,
-          selectedDay?.amStop,
-          selectedDay?.pmStart,
-          selectedDay?.pmStop,
-        ] as string[]
-      }
-      onTimeChange={onTimeChange}
-    />
-  );
+  return <TimeEntry worktime={worktime} onTimeChange={onTimeChange} />;
 };
 
 export default DayWorktime;
