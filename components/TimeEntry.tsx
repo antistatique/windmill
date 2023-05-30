@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import debounce from 'lodash.debounce';
+import { useEffect, useState } from 'react';
 
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
-import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
-import moment from '@/libs/moment.config';
 import useStore from '@/stores/date';
 
-const TimeEntry = () => {
-  const { data: week } = useWeek();
+type Props = {
+  onTimeChange: (day: Day, worktime: string[]) => void;
+};
+
+const TimeEntry = ({ onTimeChange }: Props) => {
   const { day } = useStore();
 
   const [worktime, setWorktime] = useState<string[]>([]);
@@ -77,70 +76,6 @@ const TimeEntry = () => {
     return null;
   };
 
-  const worktimeQuery = useCallback(
-    async (variables: { dayNumber: number; newWorktime: string[] }) => {
-      const { dayNumber, newWorktime } = variables;
-
-      await fetch(`api/weeks/${week?.weekNumber}/worktimes/${dayNumber}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ worktime: newWorktime }),
-      });
-    },
-    [week?.weekNumber]
-  );
-
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation(worktimeQuery, {
-    onMutate: async ({ newWorktime }) => {
-      // Cancel any outgoing re fetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['week'] });
-
-      // Snapshot the previous value
-      const previousWeek = queryClient.getQueryData(['week']);
-
-      // Optimistically update to the new value
-      if (!week || !day) {
-        return { previousWeek };
-      }
-
-      const [newAmStart, newAmStop, newPmStart, newPmStop] = newWorktime;
-
-      const index = week.days.findIndex(d => d.date === day?.date);
-
-      week.days[index].amStart = newAmStart;
-      week.days[index].amStop = newAmStop;
-      week.days[index].pmStart = newPmStart;
-      week.days[index].pmStop = newPmStop;
-
-      queryClient.setQueryData(['week'], week);
-
-      // Return a context object with the snapshotted value
-      return { previousWeek };
-    },
-    // If the mutation fails,
-    // use the context returned from onMutate to roll back
-    onError: (err, newWeek, context) => {
-      queryClient.setQueryData(['week'], context?.previousWeek);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['week'] });
-    },
-  });
-
-  const debouncedWorktimeQuery = useMemo(
-    () =>
-      debounce((updatedDay: Day, newWorktime: string[]) => {
-        const dayNumber = moment(updatedDay?.date).weekday();
-        mutate({ dayNumber, newWorktime });
-      }, 300),
-    [mutate]
-  );
-
   const handleTimeChange = (newWorktime: string[]) => {
     if (!day) return;
 
@@ -151,12 +86,8 @@ const TimeEntry = () => {
       !pmStartError(newWorktime) &&
       !pmStopError(newWorktime)
     ) {
-      debouncedWorktimeQuery(day, newWorktime);
+      onTimeChange(day, newWorktime);
     }
-  };
-
-  const handleRemove = () => {
-    handleTimeChange(['', '', '', '']);
   };
 
   const onInputChange = (index: number, value: string) => {
@@ -164,6 +95,10 @@ const TimeEntry = () => {
     updatedWorktime[index] = value;
 
     handleTimeChange(updatedWorktime);
+  };
+
+  const handleReset = () => {
+    handleTimeChange(['', '', '', '']);
   };
 
   return (
@@ -209,7 +144,7 @@ const TimeEntry = () => {
       <div className="flex justify-end">
         <button
           type="button"
-          onClick={handleRemove}
+          onClick={handleReset}
           aria-label="Supprimer les heures"
           className="rounded-lg bg-white p-4 text-pink shadow"
         >

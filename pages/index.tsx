@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 import DayNavigation from '@/components/DayNavigation';
-import TimeEntry from '@/components/TimeEntry';
+import DayWorktime from '@/components/DayWorktime';
 import WeekHours from '@/components/WeekHours';
 import WeekNavigation from '@/components/WeekNavigation';
 
@@ -27,7 +27,7 @@ const Index = () => (
       </div>
 
       <div className="px-4">
-        <TimeEntry />
+        <DayWorktime />
       </div>
     </main>
   </>
