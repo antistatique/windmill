@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import debounce from 'lodash.debounce';
 
 import TimeEntry from '@/components/TimeEntry';
+import getUsualWorktime from '@/helpers/usualWorktime';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import moment from '@/libs/moment.config';
@@ -84,7 +85,7 @@ const DayWorktime = () => {
     [mutate]
   );
 
-  const onTimeChange = (updatedWorktime: string[], isValid: boolean) => {
+  const handleTimeChange = (updatedWorktime: string[], isValid: boolean) => {
     setWorktime(updatedWorktime);
 
     if (day && isValid) {
@@ -92,7 +93,23 @@ const DayWorktime = () => {
     }
   };
 
-  return <TimeEntry worktime={worktime} onTimeChange={onTimeChange} />;
+  const handleUsualWorktime = () => {
+    handleTimeChange(getUsualWorktime(), true);
+  };
+
+  return (
+    <div className="space-y-4">
+      <TimeEntry worktime={worktime} onTimeChange={handleTimeChange} />
+      <button
+        type="button"
+        onClick={handleUsualWorktime}
+        aria-label="Horaire habituel"
+        className="w-full rounded-lg bg-pink py-3 text-white drop-shadow hover:bg-pink-dark"
+      >
+        Horaire habituel
+      </button>
+    </div>
+  );
 };
 
 export default DayWorktime;
