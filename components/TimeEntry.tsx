@@ -19,8 +19,7 @@ const TimeEntry = ({
 }: Props) => {
   const [amStart, amStop, pmStart, pmStop] = worktime;
 
-  const { worktime: usualWorktime, setWorktime: setUsualWorktime } =
-    useParameterStore();
+  const { worktime: usualWorktime } = useParameterStore();
 
   const amStopError = (worktimeToValidate?: string[]) => {
     const [newAmStart, newAmStop, newPmStart] = worktimeToValidate || worktime;

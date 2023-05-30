@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,6 +7,8 @@ import { signOut } from 'next-auth/react';
 import LogoutIcon from '@/components/icons/logout';
 import Nudge from '@/components/parameters/Nudge';
 import UsualWorktime from '@/components/parameters/UsualWorktime';
+import useStore from '@/hooks/useStore';
+import useParameterStore from '@/stores/parameters';
 
 const Parameters = () => {
   type Tab = {
@@ -29,11 +32,19 @@ const Parameters = () => {
       component: <UsualWorktime />,
     },
   ];
-
   const router = useRouter();
   const slug = router.query.tab?.[0];
 
-  const activeTab = tabs.find((t: Tab) => t.key === slug);
+  const storedTab = useStore(useParameterStore, state => state.tab);
+  const { setTab } = useParameterStore();
+
+  const activeTab = tabs.find((t: Tab) => t.key === storedTab);
+
+  useEffect(() => {
+    if (slug) {
+      setTab(slug);
+    }
+  }, [setTab, slug]);
 
   return (
     <>

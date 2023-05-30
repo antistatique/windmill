@@ -9,6 +9,9 @@ interface ParameterState {
 
   worktime: string[];
   setWorktime: (worktime: string[]) => void;
+
+  tab: string;
+  setTab: (tab: string) => void;
 }
 
 const useParameterStore = create<ParameterState>()(
@@ -19,6 +22,9 @@ const useParameterStore = create<ParameterState>()(
 
       worktime: ['', '', '', ''],
       setWorktime: (worktime: string[]) => set({ worktime }),
+
+      tab: 'nudge',
+      setTab: (tab: string) => set({ tab }),
     }),
     {
       name: 'params',
