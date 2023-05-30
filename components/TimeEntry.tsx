@@ -2,13 +2,19 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import TrashIcon from '@/components/icons/trash';
 import TimeInput from '@/components/TimeInput';
+import getUsualWorktime from '@/helpers/usualWorktime';
 
 type Props = {
   worktime: string[];
+  withUsualWorktime?: boolean;
   onTimeChange: (worktime: string[], isValid: boolean) => void;
 };
 
-const TimeEntry = ({ worktime, onTimeChange }: Props) => {
+const TimeEntry = ({
+  worktime,
+  withUsualWorktime = true,
+  onTimeChange,
+}: Props) => {
   const [amStart, amStop, pmStart, pmStop] = worktime;
 
   const amStopError = (worktimeToValidate?: string[]) => {
@@ -80,6 +86,10 @@ const TimeEntry = ({ worktime, onTimeChange }: Props) => {
     handleTimeChange(updatedWorktime);
   };
 
+  const handleUsualWorktime = () => {
+    handleTimeChange(getUsualWorktime());
+  };
+
   const handleReset = () => {
     handleTimeChange(['', '', '', '']);
   };
@@ -124,7 +134,18 @@ const TimeEntry = ({ worktime, onTimeChange }: Props) => {
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-4">
+        {withUsualWorktime && (
+          <button
+            type="button"
+            onClick={handleUsualWorktime}
+            aria-label="Appliquer l'horaire habituel"
+            className="grow rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark"
+          >
+            Horaire habituel
+          </button>
+        )}
+
         <button
           type="button"
           onClick={handleReset}

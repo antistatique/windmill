@@ -25,10 +25,14 @@ const UsualWorktime = () => {
 
   return (
     <div className="flex h-full flex-col justify-between">
-      <TimeEntry worktime={worktime} onTimeChange={onTimeChange} />
+      <TimeEntry
+        worktime={worktime}
+        withUsualWorktime={false}
+        onTimeChange={onTimeChange}
+      />
 
       {isSaved ? (
-        <span className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white py-3 text-center drop-shadow">
+        <span className="flex w-full items-center justify-center gap-x-2 rounded-lg bg-white py-4 text-center drop-shadow">
           <span className="text-success">
             <CheckIcon />
           </span>
@@ -40,7 +44,7 @@ const UsualWorktime = () => {
           aria-label="Enregistrer une journée type"
           disabled={!isValidate}
           onClick={handleSave}
-          className="w-full rounded-lg bg-pink py-3 text-white drop-shadow hover:bg-pink-dark disabled:opacity-50"
+          className="w-full truncate rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark disabled:opacity-50"
         >
           Enregistrer ma journée type
         </button>
