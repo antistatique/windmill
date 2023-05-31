@@ -9,7 +9,7 @@ body {
 }
 
 .skeleton {
-	@apply animate-pulse bg-gray rounded-lg h-6;
+	@apply animate-pulse bg-background-dark rounded-lg h-6;
 }
 
 input:focus {
