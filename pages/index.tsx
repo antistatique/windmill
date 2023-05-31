@@ -1,9 +1,9 @@
 import Head from 'next/head';
 
-import DayNavigation from '@/components/DayNavigation';
-import TimeEntry from '@/components/TimeEntry';
-import WeekHours from '@/components/WeekHours';
-import WeekNavigation from '@/components/WeekNavigation';
+import DayNavigation from '@/components/day/DayNavigation';
+import DayWorktime from '@/components/day/DayWorktime';
+import WeekHours from '@/components/week/WeekHours';
+import WeekNavigation from '@/components/week/WeekNavigation';
 
 const Index = () => (
   <>
@@ -12,22 +12,20 @@ const Index = () => (
       <meta name="description" content="Saisie des heures par semaine" />
     </Head>
 
-    <main className="space-y-4 pb-4">
-      <div className="space-y-4 bg-white shadow 2xsm:space-y-8">
-        <div className="px-8 pt-8">
+    <main className="space-y-2 pb-4">
+      <div className="space-y-2 bg-white py-4 shadow 2xsm:space-y-8">
+        <div className="px-8">
           <WeekNavigation />
         </div>
-        <div className="p-4">
+        <div className="px-4">
           <WeekHours />
         </div>
       </div>
 
-      <div>
-        <DayNavigation />
-      </div>
+      <DayNavigation />
 
       <div className="px-4">
-        <TimeEntry />
+        <DayWorktime />
       </div>
     </main>
   </>

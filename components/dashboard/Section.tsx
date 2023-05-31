@@ -4,7 +4,7 @@ type Props = {
   label: string;
   items: {
     label: string;
-    value: number | undefined;
+    value?: string | number;
     metric?: string;
   }[];
 };

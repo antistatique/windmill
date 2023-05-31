@@ -1,14 +1,18 @@
-import moment from 'moment';
 import Image from 'next/image';
 
+import DaySkeleton from '@/components/day/DaySkeleton';
 import { hoursDoneOfDay } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
+import useStore from '@/hooks/useStore';
 import useWeek from '@/hooks/week';
-import useStore from '@/stores/date';
+import moment from '@/libs/moment.config';
+import useDateStore from '@/stores/date';
 
 const DayNavigation = () => {
   const { data: week } = useWeek();
-  const { day: selectedDay, setDay } = useStore();
+
+  const selectedDay = useStore(useDateStore, state => state.day);
+  const { setDay } = useDateStore();
 
   const days = week?.days?.map(day => {
     const date = moment(day.date);
@@ -16,25 +20,38 @@ const DayNavigation = () => {
     return {
       day,
       value: date,
-      isCurrentDay: date.isSame(moment(), 'day'),
-      isPastDay: date.isBefore(moment(), 'day'),
       status: day.status,
       hoursDone: hoursToTime(hoursDoneOfDay(day)).time,
+      isCurrentDay: date.isSame(moment(), 'day'),
+      isPastDay: date.isBefore(moment(), 'day'),
+      isSelectedDay: selectedDay ? date.isSame(selectedDay.date, 'day') : false,
     };
   });
 
+  if (!days) {
+    return <DaySkeleton />;
+  }
+
   return (
-    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 pb-4 2xsm:pb-2">
+    <div className="flex items-center justify-between space-x-2 overflow-x-auto px-4 py-2 2xsm:py-1">
       {days?.map(
-        ({ day, value, isCurrentDay, isPastDay, status, hoursDone }) => (
+        ({
+          day,
+          value,
+          status,
+          hoursDone,
+          isCurrentDay,
+          isPastDay,
+          isSelectedDay,
+        }) => (
           <button
             type="button"
             key={value.unix()}
             onClick={() => setDay(day)}
-            className={`flex grow cursor-pointer flex-col items-center justify-center space-y-1 rounded-xl bg-white px-1 py-2 shadow sm:px-2  ${
-              value.date() === moment(selectedDay?.date).date()
+            className={`flex grow cursor-pointer flex-col items-center justify-center space-y-0.5 rounded-xl bg-white p-1 shadow sm:px-0 ${
+              isSelectedDay
                 ? 'outline outline-3 -outline-offset-2 outline-pink'
-                : ''
+                : ' '
             }`}
           >
             <span

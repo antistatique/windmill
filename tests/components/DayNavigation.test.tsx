@@ -1,17 +1,16 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { act, render, screen } from '@testing-library/react';
-import moment from 'moment';
 
-import DaySelection from '@/components/DayNavigation';
+import DaySelection from '@/components/day/DayNavigation';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
-import useStore from '@/stores/date';
+import moment from '@/libs/moment.config';
+import useDateStore from '@/stores/date';
 
 import 'moment/locale/fr';
 import '@testing-library/jest-dom';
 
-const { setDay } = useStore.getState();
+const { setDay } = useDateStore.getState();
 
 const date = moment('2023-01-01').startOf('week');
 
@@ -108,7 +107,7 @@ describe('day navigation', () => {
   });
 
   it('should store the selected day in the store on click', () => {
-    const setDaySpy = jest.spyOn(useStore.getState(), 'setDay');
+    const setDaySpy = jest.spyOn(useDateStore.getState(), 'setDay');
 
     render(<DaySelection />);
 

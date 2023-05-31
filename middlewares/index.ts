@@ -15,7 +15,7 @@ const indexHandler =
     const index = await getIndex(req.client, req.user);
 
     if (!index) {
-      return res.status(404).json({ message: 'No data found' });
+      return res.status(401).json({ message: 'User not found' });
     }
 
     req.index = index;

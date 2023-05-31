@@ -1,28 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import debounce from 'lodash.debounce';
-import moment from 'moment';
+import { useRouter } from 'next/router';
 
 import TrashIcon from '@/components/icons/trash';
-import TimeInput from '@/components/TimeInput';
-import useWeek from '@/hooks/week';
-import Day from '@/interfaces/day';
-import useStore from '@/stores/date';
+import TimeInput from '@/components/time/TimeInput';
+import useParameterStore from '@/stores/parameters';
 
-const TimeEntry = () => {
-  const { data: week } = useWeek();
-  const { day } = useStore();
+type Props = {
+  worktime: string[];
+  withUsualWorktime?: boolean;
+  onTimeChange: (worktime: string[], isValid: boolean) => void;
+};
 
-  const [worktime, setWorktime] = useState<string[]>([]);
+const TimeEntry = ({
+  worktime,
+  withUsualWorktime = true,
+  onTimeChange,
+}: Props) => {
   const [amStart, amStop, pmStart, pmStop] = worktime;
 
-  useEffect(() => {
-    if (day) {
-      setWorktime([day.amStart, day.amStop, day.pmStart, day.pmStop]);
-    }
-  }, [day]);
+  const { worktime: usualWorktime } = useParameterStore();
 
   const amStopError = (worktimeToValidate?: string[]) => {
     const [newAmStart, newAmStop, newPmStart] = worktimeToValidate || worktime;
@@ -77,86 +74,13 @@ const TimeEntry = () => {
     return null;
   };
 
-  const worktimeQuery = useCallback(
-    async (variables: { dayNumber: number; newWorktime: string[] }) => {
-      const { dayNumber, newWorktime } = variables;
-
-      await fetch(`api/weeks/${week?.weekNumber}/worktimes/${dayNumber}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ worktime: newWorktime }),
-      });
-    },
-    [week?.weekNumber]
-  );
-
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation(worktimeQuery, {
-    onMutate: async ({ newWorktime }) => {
-      // Cancel any outgoing re fetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['week'] });
-
-      // Snapshot the previous value
-      const previousWeek = queryClient.getQueryData(['week']);
-
-      // Optimistically update to the new value
-      if (!week || !day) {
-        return { previousWeek };
-      }
-
-      const [newAmStart, newAmStop, newPmStart, newPmStop] = newWorktime;
-
-      const index = week.days.findIndex(d => d.date === day?.date);
-
-      week.days[index].amStart = newAmStart;
-      week.days[index].amStop = newAmStop;
-      week.days[index].pmStart = newPmStart;
-      week.days[index].pmStop = newPmStop;
-
-      queryClient.setQueryData(['week'], week);
-
-      // Return a context object with the snapshotted value
-      return { previousWeek };
-    },
-    // If the mutation fails,
-    // use the context returned from onMutate to roll back
-    onError: (err, newWeek, context) => {
-      queryClient.setQueryData(['week'], context?.previousWeek);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['week'] });
-    },
-  });
-
-  const debouncedWorktimeQuery = useMemo(
-    () =>
-      debounce((updatedDay: Day, newWorktime: string[]) => {
-        const dayNumber = moment(updatedDay?.date).weekday();
-        mutate({ dayNumber, newWorktime });
-      }, 300),
-    [mutate]
-  );
-
   const handleTimeChange = (newWorktime: string[]) => {
-    if (!day) return;
-
-    setWorktime(newWorktime);
-
-    if (
+    const isValid =
       !amStopError(newWorktime) &&
       !pmStartError(newWorktime) &&
-      !pmStopError(newWorktime)
-    ) {
-      debouncedWorktimeQuery(day, newWorktime);
-    }
-  };
+      !pmStopError(newWorktime);
 
-  const handleRemove = () => {
-    handleTimeChange(['', '', '', '']);
+    onTimeChange(newWorktime, isValid);
   };
 
   const onInputChange = (index: number, value: string) => {
@@ -164,6 +88,20 @@ const TimeEntry = () => {
     updatedWorktime[index] = value;
 
     handleTimeChange(updatedWorktime);
+  };
+
+  const router = useRouter();
+
+  const handleUsualWorktime = () => {
+    if (usualWorktime.every(time => time === '')) {
+      router.push('/parameters/usual-worktime');
+    } else {
+      handleTimeChange(usualWorktime);
+    }
+  };
+
+  const handleReset = () => {
+    handleTimeChange(['', '', '', '']);
   };
 
   return (
@@ -206,10 +144,21 @@ const TimeEntry = () => {
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-4">
+        {withUsualWorktime && (
+          <button
+            type="button"
+            onClick={handleUsualWorktime}
+            aria-label="Appliquer l'horaire habituel"
+            className="grow rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark"
+          >
+            Horaire habituel
+          </button>
+        )}
+
         <button
           type="button"
-          onClick={handleRemove}
+          onClick={handleReset}
           aria-label="Supprimer les heures"
           className="rounded-lg bg-white p-4 text-pink shadow"
         >

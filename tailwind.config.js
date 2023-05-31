@@ -17,6 +17,7 @@ module.exports = {
       },
       yellow: '#FFF618',
       westar: '#DED6CF',
+      success: '#00A355',
       error: '#FF531D',
       disabled: '#E5E5E5',
       background: {
@@ -33,6 +34,7 @@ module.exports = {
         '2xsm': '375px',
       },
       height: {
+        screen: '100dvh',
         0.75: '3px',
       },
       outlineWidth: {

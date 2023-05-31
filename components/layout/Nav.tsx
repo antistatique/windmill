@@ -5,33 +5,32 @@ import CalendarIcon from '@/components/icons/calendar';
 import DashboardIcon from '@/components/icons/dashboard';
 import SettingsIcon from '@/components/icons/settings';
 
-const routes = [
-  {
-    name: 'Calendar',
-    path: '/',
-    aria: 'Calendrier',
-    icon: <CalendarIcon />,
-  },
-  {
-    name: 'Dashboard',
-    path: '/dashboard',
-    aria: 'Tableau de bord',
-    icon: <DashboardIcon />,
-  },
-  {
-    name: 'Parameters',
-    path: '/parameters',
-    aria: 'Paramètres',
-    icon: <SettingsIcon />,
-  },
-];
-
 const Nav = () => {
   const router = useRouter();
+  const routes = [
+    {
+      name: 'Calendar',
+      path: '/',
+      aria: 'Calendrier',
+      icon: <CalendarIcon />,
+    },
+    {
+      name: 'Dashboard',
+      path: '/dashboard',
+      aria: 'Tableau de bord',
+      icon: <DashboardIcon />,
+    },
+    {
+      name: 'Parameters',
+      path: '/parameters',
+      aria: 'Paramètres',
+      icon: <SettingsIcon />,
+    },
+  ];
 
   return (
     <nav className="bg-white py-1">
-      <ul className="flex justify-evenly">
+      <ul className="flex items-center justify-evenly">
         {routes.map(route => (
           <li key={route.name}>
             <Link

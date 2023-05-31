@@ -14,10 +14,13 @@ const Dashboard = () => {
   const { data: summary, isLoading } = useSummary();
 
   const remainingVacationDays = summary
-    ? summary.vacation_sold - summary.vacation
+    ? summary.vacationBalance +
+      summary.previousYearVacationRemaining -
+      summary.vacation
     : 0;
+
   const remainingOverTimeDays = summary
-    ? summary.overtime_remaining / HOURS_PER_DAY
+    ? summary.overtimeRemaining / HOURS_PER_DAY
     : 0;
 
   const currentYear = new Date().getFullYear();
@@ -38,7 +41,7 @@ const Dashboard = () => {
 
             <span className="rounded-xl bg-yellow px-4 py-2 text-blue">
               {`Il te reste ${pluralize(
-                summary.remaining_days_to_take,
+                summary.remainingDaysToTake,
                 'jour'
               )} à poser`}
             </span>
@@ -50,7 +53,7 @@ const Dashboard = () => {
                   Number(remainingOverTimeDays.toFixed(2)),
                   'jour'
                 )} 
-                (${summary.overtime_remaining}h) supplémentaires`}
+                (${summary.overtimeRemaining}h) supplémentaires`}
               </p>
             </div>
           </div>
@@ -62,17 +65,17 @@ const Dashboard = () => {
             items={[
               {
                 label: `Budget année en cours ${currentYear}`,
-                value: summary?.vacation_sold,
+                value: summary?.vacationBalance,
                 metric: 'j',
               },
               {
                 label: `Solde année précedente ${currentYear - 1}`,
-                value: summary?.previous_year_vacation_sold,
+                value: summary?.previousYearVacationRemaining,
                 metric: 'j',
               },
               {
                 label: 'Heures supplémentaires totales',
-                value: summary?.overtime_remaining,
+                value: summary?.overtimeRemaining,
                 metric: 'h',
               },
             ]}
@@ -87,7 +90,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Jours supplémentaires récupérés',
-                value: summary?.overtime_recovery,
+                value: summary?.overtimeRecovery,
                 metric: 'j',
               },
             ]}
@@ -97,7 +100,7 @@ const Dashboard = () => {
             items={[
               {
                 label: 'Absences justifiées',
-                value: summary?.justified_absence,
+                value: summary?.justifiedAbsence,
                 metric: 'j',
               },
               {
@@ -107,7 +110,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Budget de formation CHF',
-                value: summary?.formation_expenses,
+                value: summary?.formationExpenses,
                 metric: `/ ${FORMATION_EXPENSE_BUDGET}`,
               },
             ]}

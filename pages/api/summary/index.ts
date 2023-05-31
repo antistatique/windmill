@@ -32,17 +32,17 @@ const handler = async (
   const summaries = rows
     ?.map(row => ({
       name: row[0],
+      vacation: Number(row[2]),
+      formation: Number(row[3]),
+      formationExpenses: row[4],
+      justifiedAbsence: Number(row[5]),
+      workingPercent: Number(row[7]),
+      overtimeRecovery: Number(row[6]),
+      overtimeRemaining: Number(row[8]),
+      vacationBalance: Number(row[9]),
+      previousYearVacationRemaining: Number(row[10]),
+      remainingDaysToTake: Number(row[11]),
       email: row[12],
-      vacation: row[2],
-      formation: row[3],
-      formation_expenses: row[4],
-      justified_absence: row[5],
-      working_percent: row[7],
-      overtime_recovery: row[6],
-      overtime_remaining: row[8],
-      vacation_sold: row[9],
-      previous_year_vacation_sold: row[10],
-      remaining_days_to_take: row[11],
     }))
     .slice(1); // Remove header
 

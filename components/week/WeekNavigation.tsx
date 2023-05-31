@@ -1,76 +1,62 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-import moment from 'moment';
 
+import useStore from '@/hooks/useStore';
 import useWeek from '@/hooks/week';
-import Day from '@/interfaces/day';
-import useStore from '@/stores/date';
+import moment from '@/libs/moment.config';
+import useDateStore from '@/stores/date';
 
 const WeekNavigation = () => {
   const { data: week } = useWeek();
 
-  const { weekNumber, setWeekNumber, day, setDay } = useStore();
-  const [previousWeekNumber, setPreviousWeekNumber] = useState(0);
+  const weekNumber = useStore(useDateStore, state => state.weekNumber);
+  const day = useStore(useDateStore, state => state.day);
+
+  const { setWeekNumber, setDay } = useDateStore();
 
   const isCurrentWeek = weekNumber === moment().week();
+  const isCurrentDay = day ? moment(day.date).isSame(moment(), 'day') : false;
 
-  const getCurrentDay = week?.days?.find((d: Day) =>
-    moment(d.date).isSame(moment(), 'day')
-  );
+  const findDayInTheWeek = (date?: Date) =>
+    week?.days?.find(d => moment(d.date).isSame(date, 'day'));
+
+  const storedDay = findDayInTheWeek(day?.date);
+  const currentDay = findDayInTheWeek(moment().toDate());
+
+  const showTodayButton = !isCurrentWeek || (!isCurrentDay && currentDay);
 
   useEffect(() => {
     if (!week) {
       return;
     }
 
-    if (weekNumber !== previousWeekNumber) {
-      const currentDay = isCurrentWeek ? getCurrentDay : week.days[0];
+    setDay(storedDay ?? currentDay ?? week.days[0]);
+  }, [week]);
 
-      setDay(currentDay ?? week.days[0]);
-    }
+  const canGoToPreviousWeek = weekNumber ? weekNumber - 1 > 0 : false;
 
-    setPreviousWeekNumber(weekNumber);
-  }, [
-    getCurrentDay,
-    isCurrentWeek,
-    previousWeekNumber,
-    setDay,
-    week,
-    weekNumber,
-  ]);
-
-  const isCurrentDay = moment(day?.date).isSame(moment(), 'day');
-
-  const canGoToPreviousWeek = weekNumber - 1 > 0;
-  const canGoToNextWeek = weekNumber + 1 <= moment(day?.date).weeksInYear();
-
-  const handleWeekNumberChange = (newWeekNumber: number) => {
-    setWeekNumber(newWeekNumber);
-  };
+  const canGoToNextWeek = weekNumber
+    ? weekNumber + 1 <= moment(day?.date).weeksInYear()
+    : false;
 
   const handlePreviousWeek = () => {
-    if (canGoToPreviousWeek) {
-      handleWeekNumberChange(weekNumber - 1);
+    if (weekNumber && canGoToPreviousWeek) {
+      setWeekNumber(weekNumber - 1);
     }
   };
 
   const handleNextWeek = () => {
-    if (canGoToNextWeek) {
-      handleWeekNumberChange(weekNumber + 1);
+    if (weekNumber && canGoToNextWeek) {
+      setWeekNumber(weekNumber + 1);
     }
   };
 
   const handleToday = () => {
-    if (isCurrentWeek) {
-      const currentDay = getCurrentDay;
-
-      if (currentDay) {
-        setDay(currentDay);
-      }
-      return;
+    if (week && isCurrentWeek) {
+      setDay(currentDay ?? week.days[0]);
+    } else {
+      setWeekNumber(moment().week());
     }
-
-    handleWeekNumberChange(moment().week());
   };
 
   return (
@@ -95,7 +81,7 @@ const WeekNavigation = () => {
         <div className="text flex flex-col gap-x-4 2xsm:flex-row">
           <span>Semaine {weekNumber}</span>
 
-          {!isCurrentDay && (
+          {showTodayButton && (
             <button
               type="button"
               onClick={handleToday}

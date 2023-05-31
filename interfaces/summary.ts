@@ -1,14 +1,19 @@
 export default interface Summary {
   name: string;
   email: string;
-  vacation: number;
+  workingPercent: number;
+
   formation: number;
-  formation_expenses: number;
-  justified_absence: number;
-  working_percent: number;
-  overtime_recovery: number;
-  overtime_remaining: number;
-  vacation_sold: number;
-  previous_year_vacation_sold: number;
-  remaining_days_to_take: number;
+  formationExpenses: string;
+
+  justifiedAbsence: number;
+
+  overtimeRecovery: number;
+  overtimeRemaining: number;
+
+  vacation: number;
+  vacationBalance: number;
+  previousYearVacationRemaining: number;
+
+  remainingDaysToTake: number;
 }
