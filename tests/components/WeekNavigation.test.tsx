@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import WeekNavigation from '@/components/WeekNavigation';
+import WeekNavigation from '@/components/week/WeekNavigation';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';

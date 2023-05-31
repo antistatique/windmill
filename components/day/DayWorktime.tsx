@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import debounce from 'lodash.debounce';
 
-import TimeEntry from '@/components/TimeEntry';
+import TimeEntry from '@/components/time/TimeEntry';
 import useStore from '@/hooks/useStore';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';

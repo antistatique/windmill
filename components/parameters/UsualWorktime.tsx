@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import CheckIcon from '@/components/icons/check';
-import TimeEntry from '@/components/TimeEntry';
+import TimeEntry from '@/components/time/TimeEntry';
 import compare from '@/helpers/array';
 import useParameterStore from '@/stores/parameters';
 

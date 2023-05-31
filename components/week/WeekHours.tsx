@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 
-import WeekJustification from '@/components/WeekJustification';
+import WeekJustification from '@/components/week/WeekJustification';
 import { hoursDoneOfWeek } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
 import useWeek from '@/hooks/week';

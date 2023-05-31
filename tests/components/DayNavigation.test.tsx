@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 
-import DaySelection from '@/components/DayNavigation';
+import DaySelection from '@/components/day/DayNavigation';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';

@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import WeekHours from '@/components/WeekHours';
+import WeekHours from '@/components/week/WeekHours';
 import useWeek from '@/hooks/week';
 import Week from '@/interfaces/week';
 import moment from '@/libs/moment.config';

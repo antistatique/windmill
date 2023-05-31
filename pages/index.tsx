@@ -1,9 +1,9 @@
 import Head from 'next/head';
 
-import DayNavigation from '@/components/DayNavigation';
-import DayWorktime from '@/components/DayWorktime';
-import WeekHours from '@/components/WeekHours';
-import WeekNavigation from '@/components/WeekNavigation';
+import DayNavigation from '@/components/day/DayNavigation';
+import DayWorktime from '@/components/day/DayWorktime';
+import WeekHours from '@/components/week/WeekHours';
+import WeekNavigation from '@/components/week/WeekNavigation';
 
 const Index = () => (
   <>

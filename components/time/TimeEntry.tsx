@@ -3,7 +3,7 @@
 import { useRouter } from 'next/router';
 
 import TrashIcon from '@/components/icons/trash';
-import TimeInput from '@/components/TimeInput';
+import TimeInput from '@/components/time/TimeInput';
 import useParameterStore from '@/stores/parameters';
 
 type Props = {

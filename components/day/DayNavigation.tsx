@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import DaySkeleton from '@/components/DaySkeleton';
+import DaySkeleton from '@/components/day/DaySkeleton';
 import { hoursDoneOfDay } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
 import useStore from '@/hooks/useStore';
