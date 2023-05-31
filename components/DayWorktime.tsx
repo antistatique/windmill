@@ -3,14 +3,16 @@ import { useMutation, useQueryClient } from 'react-query';
 import debounce from 'lodash.debounce';
 
 import TimeEntry from '@/components/TimeEntry';
+import useStore from '@/hooks/useStore';
 import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import moment from '@/libs/moment.config';
-import useStore from '@/stores/date';
+import useDateStore from '@/stores/date';
 
 const DayWorktime = () => {
   const { data: week } = useWeek();
-  const { day } = useStore();
+
+  const day = useStore(useDateStore, state => state.day);
 
   const [worktime, setWorktime] = useState<string[]>([]);
 

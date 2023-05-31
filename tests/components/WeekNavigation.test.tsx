@@ -6,11 +6,11 @@ import useWeek from '@/hooks/week';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 import moment from '@/libs/moment.config';
-import useStore from '@/stores/date';
+import useDateStore from '@/stores/date';
 
 import '@testing-library/jest-dom';
 
-const { setWeekNumber, setDay } = useStore.getState();
+const { setWeekNumber, setDay } = useDateStore.getState();
 
 const date = moment('2023-01-02');
 
