@@ -47,7 +47,7 @@ const UsualWorktime = () => {
             aria-label="Enregistrer une journée type"
             disabled={!canSave}
             onClick={handleSave}
-            className="w-full truncate rounded-lg bg-pink py-4 text-white shadow drop-shadow hover:bg-pink-dark disabled:opacity-50"
+            className="btn"
           >
             Enregistrer ma journée type
           </button>

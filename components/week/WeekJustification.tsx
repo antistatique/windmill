@@ -77,7 +77,7 @@ const HoursJustification = ({ onClose, value }: Props) => {
         onKeyDown={() => {}}
         tabIndex={0}
         role="button"
-        className="space-y-8 rounded-lg bg-white px-8 py-6"
+        className="space-y-6 rounded-lg bg-white px-4 py-6 sm:px-8"
       >
         <label htmlFor="justification" className="text-2xl font-semibold">
           Justifier vos heures
@@ -96,9 +96,7 @@ const HoursJustification = ({ onClose, value }: Props) => {
           onClick={handleSave}
           type="button"
           disabled={isLoading}
-          className={`relative flex w-full items-center justify-center rounded-lg py-3 font-semibold text-white ${
-            isLoading ? 'bg-pink-dark' : 'bg-pink'
-          }`}
+          className="btn relative flex items-center justify-center"
         >
           Valider
           {isLoading && (

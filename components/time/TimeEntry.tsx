@@ -150,7 +150,7 @@ const TimeEntry = ({
             type="button"
             onClick={handleUsualWorktime}
             aria-label="Appliquer l'horaire habituel"
-            className="grow rounded-lg bg-pink py-4 text-white drop-shadow hover:bg-pink-dark"
+            className="btn"
           >
             Horaire habituel
           </button>

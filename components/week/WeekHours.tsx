@@ -51,7 +51,7 @@ const WeekHours = () => {
           <button
             type="button"
             onClick={handleOpenJustifyModal}
-            className={`w-full rounded-lg px-5 py-1 text-xl font-semibold 2xsm:w-auto ${
+            className={`w-full rounded-lg px-5 py-2 font-semibold 2xsm:w-auto ${
               haveToJustify
                 ? 'bg-pink text-white hover:bg-pink-dark'
                 : 'bg-white outline-3 outline-westar hover:outline'
