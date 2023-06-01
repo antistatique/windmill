@@ -27,9 +27,36 @@ const HoursJustification = ({ onClose, value }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(justificationQuery, {
+    onMutate: async () => {
+      // Cancel any outgoing re fetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ['week'] });
+
+      // Snapshot the previous value
+      const previousWeek = queryClient.getQueryData(['week']);
+
+      // Optimistically update to the new value
+      if (!week) {
+        return { previousWeek };
+      }
+
+      week.justification = justification;
+      queryClient.setQueryData(['week'], week);
+
+      // Return a context object with the snapshotted value
+      return { previousWeek };
+    },
+    // If the mutation fails,
+    // use the context returned from onMutate to roll back
+    onError: (err, variables, context) => {
+      // Rollback to the previous value
+      queryClient.setQueryData(['week'], context?.previousWeek);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries('week');
       onClose();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['week'] });
     },
   });
 
