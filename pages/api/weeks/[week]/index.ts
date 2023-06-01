@@ -37,6 +37,7 @@ const handler = async (
     spreadsheetId: process.env.SHEET_ID,
     range: `${SHEET_NAME}!${startAt}:${endAt}`,
   });
+
   if (!response.data.values) {
     return res.status(404).json({ message: 'No data found' });
   }

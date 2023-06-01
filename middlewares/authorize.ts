@@ -12,10 +12,11 @@ interface CustomNextApiRequest extends NextApiRequest {
 const authorize =
   (handler: any) => async (req: CustomNextApiRequest, res: NextApiResponse) => {
     const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
     const user = jwt?.user as User;
     const accessToken = jwt?.accessToken as string;
 
-    if (!jwt || !user || !accessToken) {
+    if (!user || !accessToken) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
