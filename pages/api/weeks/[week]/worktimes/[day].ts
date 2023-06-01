@@ -29,7 +29,7 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
   const line = index + weekNumber - 1;
   const column = DAYS_COLUMN[day];
 
-  await client.spreadsheets.values.update({
+  const response = await client.spreadsheets.values.update({
     spreadsheetId: process.env.SHEET_ID,
     range: `${SHEET_NAME}!${column + line}`,
     valueInputOption: 'USER_ENTERED',
@@ -38,7 +38,11 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  return res.status(200);
+  if (response.status !== 200) {
+    return res.status(500).json({ message: 'Failed to update worktime' });
+  }
+
+  return res.status(200).json({ message: 'Worktime updated' });
 };
 
 export default authorize(indexHandler(weekHandler(handler)));
