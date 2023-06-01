@@ -32,7 +32,10 @@ const Parameters = () => {
   const { param } = router.query as { param: string };
   const { setTab } = useParameterStore();
 
-  const activeTab = tabs.find((t: Tab) => t.key === param) ?? tabs[0];
+  // Prevent showing first tab when param is not set yet
+  const activeTab = param
+    ? tabs.find((t: Tab) => t.key === param) ?? tabs[0]
+    : null;
 
   return (
     <>
