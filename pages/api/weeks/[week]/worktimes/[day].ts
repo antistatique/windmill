@@ -29,7 +29,7 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
   const line = index + weekNumber - 1;
   const column = DAYS_COLUMN[day];
 
-  const response = await client.spreadsheets.values.update({
+  await client.spreadsheets.values.update({
     spreadsheetId: process.env.SHEET_ID,
     range: `${SHEET_NAME}!${column + line}`,
     valueInputOption: 'USER_ENTERED',
@@ -38,7 +38,7 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  return res.status(200).json(response.data);
+  return res.status(200);
 };
 
 export default authorize(indexHandler(weekHandler(handler)));
