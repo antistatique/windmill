@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 
 import WeekJustification from '@/components/week/WeekJustification';
@@ -24,29 +23,6 @@ const WeekHours = () => {
     ? week.needJustification &&
       moment().week(week?.weekNumber).day(5).isSameOrBefore(moment())
     : false;
-
-  const justificationQuery = async (justification: string) => {
-    await fetch(`api/weeks/${week?.weekNumber}/justifications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ justification }),
-    });
-  };
-
-  const queryClient = useQueryClient();
-
-  const { mutate, isLoading } = useMutation(justificationQuery, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('week');
-      setIsModalOpen(false);
-    },
-  });
-
-  const onJustify = (justification: string) => {
-    mutate(justification);
-  };
 
   return (
     <>
@@ -88,9 +64,7 @@ const WeekHours = () => {
 
       {isModalOpen && (
         <WeekJustification
-          onJustify={onJustify}
           onClose={() => setIsModalOpen(false)}
-          isLoading={isLoading}
           value={week?.justification || ''}
         />
       )}

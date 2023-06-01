@@ -1,21 +1,41 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 
 import Spinner from '@/components/icons/spinner';
+import useWeek from '@/hooks/week';
 
 type Props = {
-  onJustify: (justification: string) => void;
   onClose: () => void;
-  isLoading: boolean;
   value: string;
 };
 
-const HoursJustification = ({
-  onJustify,
-  onClose,
-  isLoading,
-  value,
-}: Props) => {
+const HoursJustification = ({ onClose, value }: Props) => {
+  const { data: week } = useWeek();
+
   const [justification, setJustification] = useState(value);
+
+  const justificationQuery = async () => {
+    await fetch(`api/weeks/${week?.weekNumber}/justifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ justification }),
+    });
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useMutation(justificationQuery, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('week');
+      onClose();
+    },
+  });
+
+  const handleSave = () => {
+    mutate();
+  };
 
   return (
     <div
@@ -46,7 +66,7 @@ const HoursJustification = ({
         />
 
         <button
-          onClick={() => onJustify(justification)}
+          onClick={handleSave}
           type="button"
           disabled={isLoading}
           className={`relative flex w-full items-center justify-center rounded-lg py-3 font-semibold text-white ${
