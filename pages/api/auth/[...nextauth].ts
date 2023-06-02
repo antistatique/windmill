@@ -10,8 +10,6 @@ if (!id || !secret) {
 }
 
 const refreshAccessToken = async (payload: JWT) => {
-  console.log('REFRESHING TOKEN');
-
   try {
     const url = new URL('https://accounts.google.com/o/oauth2/token');
 
@@ -45,8 +43,6 @@ const refreshAccessToken = async (payload: JWT) => {
       refreshToken: payload.refreshToken,
     };
   } catch (error) {
-    console.error('ERR', error);
-
     return {
       ...payload,
       error: 'RefreshAccessTokenError',
@@ -88,8 +84,6 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
-        console.log('JWT', token, account, user);
-
         const now = new Date();
 
         return {

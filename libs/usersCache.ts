@@ -40,8 +40,6 @@ const getIndex = async (
     return index;
   }
 
-  console.log('User not found in cache, fetching from Google Sheets');
-
   const indexes = await fetchIndexes(client);
 
   indexes.forEach(async ({ index: i, email }) => {
