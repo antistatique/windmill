@@ -11,7 +11,6 @@ import useDateStore from '@/stores/date';
 
 const DayWorktime = () => {
   const { data: week } = useWeek();
-
   const day = useStore(useDateStore, state => state.day);
 
   const [worktime, setWorktime] = useState<string[]>([]);

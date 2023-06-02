@@ -8,10 +8,6 @@ body {
 	@apply bg-background text-blue font-inter tabular-nums;
 }
 
-.skeleton {
-	@apply animate-pulse bg-background-dark rounded-lg h-6;
-}
-
 input:focus {
 	@apply outline-none;
 }
@@ -20,3 +16,12 @@ input:focus {
 input[type="time"]::-webkit-calendar-picker-indicator {
 	display: none;
 }
+
+.btn {
+ 	@apply w-full truncate rounded-lg bg-pink py-4 text-white shadow drop-shadow hover:bg-pink-dark disabled:opacity-70;
+}
+
+.skeleton {
+	@apply animate-pulse bg-background-dark rounded-lg h-6;
+}
+

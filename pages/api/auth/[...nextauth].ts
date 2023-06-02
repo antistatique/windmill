@@ -1,4 +1,4 @@
-import NextAuth, { User } from 'next-auth';
+import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt/types';
 import GoogleProvider from 'next-auth/providers/google';
 
@@ -10,6 +10,8 @@ if (!id || !secret) {
 }
 
 const refreshAccessToken = async (payload: JWT) => {
+  console.log('REFRESHING TOKEN');
+
   try {
     const url = new URL('https://accounts.google.com/o/oauth2/token');
 
@@ -31,7 +33,6 @@ const refreshAccessToken = async (payload: JWT) => {
       throw refreshToken;
     }
 
-    // Give a 10 sec buffer
     const now = new Date();
     const accessTokenExpires = now.setSeconds(
       now.getSeconds() + refreshToken.expires_in - 10
@@ -52,6 +53,12 @@ const refreshAccessToken = async (payload: JWT) => {
     };
   }
 };
+
+const accessTokenHasExpired = (token: JWT) =>
+  Date.now() > (token.accessTokenExpires as number);
+
+const freshToken = async (token: JWT) =>
+  (accessTokenHasExpired(token) ? refreshAccessToken(token) : token) as JWT;
 
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
@@ -79,29 +86,23 @@ export default NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async session({ session, token }) {
-      session.user = token.user as User;
-
-      return { ...session, accessToken: token.accessToken as string };
-    },
-
     async jwt({ token, user, account }) {
       if (account && user) {
+        console.log('JWT', token, account, user);
+
+        const now = new Date();
+
         return {
           accessToken: account.access_token,
-          accessTokenExpires: Date.now() + account.expires_in * 1000,
+          accessTokenExpires: now.setSeconds(
+            now.getSeconds() + account.expires_in - 10
+          ),
           refreshToken: account.refresh_token,
           user,
         };
       }
 
-      // Return previous token if the access token has not expired yet
-      if (Date.now() < (token.accessTokenExpires as number)) {
-        return token;
-      }
-
-      // Access token has expired, try to update it
-      return refreshAccessToken(token);
+      return freshToken(token);
     },
 
     async redirect() {

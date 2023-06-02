@@ -1,21 +1,68 @@
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 
 import Spinner from '@/components/icons/spinner';
+import useWeek from '@/hooks/week';
 
 type Props = {
-  onJustify: (justification: string) => void;
   onClose: () => void;
-  isLoading: boolean;
   value: string;
 };
 
-const HoursJustification = ({
-  onJustify,
-  onClose,
-  isLoading,
-  value,
-}: Props) => {
+const HoursJustification = ({ onClose, value }: Props) => {
+  const { data: week } = useWeek();
+
   const [justification, setJustification] = useState(value);
+
+  const justificationQuery = async () => {
+    await fetch(`api/weeks/${week?.weekNumber}/justifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ justification }),
+    });
+  };
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useMutation(justificationQuery, {
+    onMutate: async () => {
+      // Cancel any outgoing re fetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ['week'] });
+
+      // Snapshot the previous value
+      const previousWeek = queryClient.getQueryData(['week']);
+
+      // Optimistically update to the new value
+      if (!week) {
+        return { previousWeek };
+      }
+
+      week.justification = justification;
+      queryClient.setQueryData(['week'], week);
+
+      // Return a context object with the snapshotted value
+      return { previousWeek };
+    },
+    // If the mutation fails,
+    // use the context returned from onMutate to roll back
+    onError: (err, variables, context) => {
+      // Rollback to the previous value
+      queryClient.setQueryData(['week'], context?.previousWeek);
+    },
+    onSuccess: () => {
+      onClose();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['week'] });
+    },
+  });
+
+  const handleSave = () => {
+    mutate();
+  };
 
   return (
     <div
@@ -30,7 +77,7 @@ const HoursJustification = ({
         onKeyDown={() => {}}
         tabIndex={0}
         role="button"
-        className="space-y-8 rounded-lg bg-white px-8 py-6"
+        className="space-y-6 rounded-lg bg-white px-4 py-6 sm:px-8"
       >
         <label htmlFor="justification" className="text-2xl font-semibold">
           Justifier vos heures
@@ -46,12 +93,10 @@ const HoursJustification = ({
         />
 
         <button
-          onClick={() => onJustify(justification)}
+          onClick={handleSave}
           type="button"
           disabled={isLoading}
-          className={`relative flex w-full items-center justify-center rounded-lg py-3 font-semibold text-white ${
-            isLoading ? 'bg-pink-dark' : 'bg-pink'
-          }`}
+          className="btn relative flex items-center justify-center"
         >
           Valider
           {isLoading && (

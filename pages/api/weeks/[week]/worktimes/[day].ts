@@ -38,7 +38,11 @@ const handler = async (req: CustomNextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  return res.status(200).json(response.data);
+  if (response.status !== 200) {
+    return res.status(500).json({ message: 'Failed to update worktime' });
+  }
+
+  return res.status(200).json({ message: 'Worktime updated' });
 };
 
 export default authorize(indexHandler(weekHandler(handler)));

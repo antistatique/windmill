@@ -37,6 +37,7 @@ const handler = async (
     spreadsheetId: process.env.SHEET_ID,
     range: `${SHEET_NAME}!${startAt}:${endAt}`,
   });
+
   if (!response.data.values) {
     return res.status(404).json({ message: 'No data found' });
   }
@@ -102,13 +103,14 @@ const handler = async (
 
   // Check data consistency
   if (week.email !== user.email || week.weekNumber !== weekNumber) {
-    // There is an error between the cached index and the spreadsheet index, we should update the cache here
-    const remoteIndex = await getIndex(client, user, true);
+    // Refresh the indexes
+    const newIndex = await getIndex(client, user, true);
 
-    // Verify is the index was truly wrong
-    if (index === remoteIndex) {
-      console.log('Error between the cached index and the spreadsheet');
-      return res.status(401).json({ message: 'Unauthorized' });
+    // Verify if the index was truly outdated
+    if (index === newIndex) {
+      return res.status(500).json({
+        message: 'Error between the cached index and the spreadsheet',
+      });
     }
 
     // Retry the request
