@@ -51,10 +51,10 @@ const refreshAccessToken = async (payload: JWT) => {
 };
 
 const accessTokenHasExpired = (token: JWT) =>
-  Date.now() > (token.accessTokenExpires as number);
+  Date.now() > Number(token.accessTokenExpires);
 
 const freshToken = async (token: JWT) =>
-  (accessTokenHasExpired(token) ? refreshAccessToken(token) : token) as JWT;
+  accessTokenHasExpired(token) ? refreshAccessToken(token) : token;
 
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
