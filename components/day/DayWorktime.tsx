@@ -4,7 +4,7 @@ import debounce from 'lodash.debounce';
 
 import TimeEntry from '@/components/time/TimeEntry';
 import useStore from '@/hooks/useStore';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import Day from '@/interfaces/day';
 import moment from '@/libs/moment.config';
 import useDateStore from '@/stores/date';

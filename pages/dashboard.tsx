@@ -8,7 +8,7 @@ import {
   HOURS_PER_DAY,
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
-import useSummary from '@/hooks/summary';
+import useSummary from '@/hooks/useSummary';
 
 const Dashboard = () => {
   const { data: summary, isLoading } = useSummary();

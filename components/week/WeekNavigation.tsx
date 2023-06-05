@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 
 import useStore from '@/hooks/useStore';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import moment from '@/libs/moment.config';
 import useDateStore from '@/stores/date';
 

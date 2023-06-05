@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
 import Spinner from '@/components/icons/spinner';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 
 type Props = {
   onClose: () => void;
