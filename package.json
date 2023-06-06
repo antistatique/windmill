@@ -10,6 +10,7 @@
     "lint:ts": "eslint --ext ts,tsx ./ --max-warnings=0",
     "fix:ts": "eslint --ext ts,tsx ./ --max-warnings=0 --fix",
     "test": "jest --watch",
+    "ci:test": "jest --ci",
     "coverage": "jest --coverage"
   },
   "dependencies": {
