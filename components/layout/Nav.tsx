@@ -10,7 +10,7 @@ import useParameterStore from '@/stores/parameters';
 const Nav = () => {
   const param = useStore(useParameterStore, state => state.tab) ?? 'nudge';
 
-  const router = useRouter();
+  const { asPath } = useRouter();
   const routes = [
     {
       path: '/',
@@ -38,7 +38,7 @@ const Nav = () => {
               href={route.path}
               aria-label={route.name}
               className={`flex h-12 w-12 items-center justify-center ${
-                router.pathname === route.path
+                route.path === asPath
                   ? 'cursor-default text-blue'
                   : 'text-gray hover:text-pink'
               }`}
