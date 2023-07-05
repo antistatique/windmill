@@ -13,12 +13,6 @@ import useSummary from '@/hooks/useSummary';
 const Dashboard = () => {
   const { data: summary, isLoading } = useSummary();
 
-  const remainingVacationDays = summary
-    ? summary.vacationBalance +
-      summary.previousYearVacationRemaining -
-      summary.vacation
-    : 0;
-
   const remainingOverTimeDays = summary
     ? summary.overtimeRemaining / HOURS_PER_DAY
     : 0;
@@ -47,7 +41,10 @@ const Dashboard = () => {
             </span>
 
             <div>
-              <p>{`${pluralize(remainingVacationDays, 'jour')} de vacances`}</p>
+              <p>{`${pluralize(
+                summary.vacationBalance,
+                'jour'
+              )} de vacances`}</p>
               <p>
                 {`${pluralize(
                   Number(remainingOverTimeDays.toFixed(2)),
