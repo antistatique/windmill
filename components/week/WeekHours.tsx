@@ -4,7 +4,7 @@ import Image from 'next/image';
 import WeekJustification from '@/components/week/WeekJustification';
 import { hoursDoneOfWeek } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import moment from '@/libs/moment.config';
 
 const WeekHours = () => {

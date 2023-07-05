@@ -4,7 +4,7 @@ import DaySkeleton from '@/components/day/DaySkeleton';
 import { hoursDoneOfDay } from '@/helpers/hoursDone';
 import { hoursToTime } from '@/helpers/time';
 import useStore from '@/hooks/useStore';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import moment from '@/libs/moment.config';
 import useDateStore from '@/stores/date';
 

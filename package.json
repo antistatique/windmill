@@ -1,6 +1,6 @@
 {
   "name": "windmill",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
     "lint:ts": "eslint --ext ts,tsx ./ --max-warnings=0",
     "fix:ts": "eslint --ext ts,tsx ./ --max-warnings=0 --fix",
     "test": "jest --watch",
+    "ci:test": "jest --ci",
     "coverage": "jest --coverage"
   },
   "dependencies": {

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import WeekNavigation from '@/components/week/WeekNavigation';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 import moment from '@/libs/moment.config';
@@ -26,7 +26,7 @@ const week: Week = {
 } as Week;
 
 const mockedUseWeek = useWeek as jest.Mock;
-jest.mock('../../hooks/week');
+jest.mock('../../hooks/useWeek');
 
 const renderComponent = () => {
   render(

@@ -8,19 +8,17 @@ import {
   HOURS_PER_DAY,
 } from '@/configs/dashboard';
 import pluralize from '@/helpers/pluralize';
-import useSummary from '@/hooks/summary';
+import useSummary from '@/hooks/useSummary';
 
 const Dashboard = () => {
   const { data: summary, isLoading } = useSummary();
 
-  const remainingVacationDays = summary
-    ? summary.vacationBalance +
-      summary.previousYearVacationRemaining -
-      summary.vacation
+  const remainingOverTimeDays = summary
+    ? Number((summary.overtimeRemaining / HOURS_PER_DAY).toFixed(2))
     : 0;
 
-  const remainingOverTimeDays = summary
-    ? summary.overtimeRemaining / HOURS_PER_DAY
+  const totalOvertimeRecoveryDays = summary
+    ? Number((summary.overtimeRecovery + summary.overtimePaid).toFixed(2))
     : 0;
 
   const currentYear = new Date().getFullYear();
@@ -47,12 +45,12 @@ const Dashboard = () => {
             </span>
 
             <div>
-              <p>{`${pluralize(remainingVacationDays, 'jour')} de vacances`}</p>
+              <p>{`${pluralize(
+                summary.vacationBalance,
+                'jour'
+              )} de vacances`}</p>
               <p>
-                {`${pluralize(
-                  Number(remainingOverTimeDays.toFixed(2)),
-                  'jour'
-                )} 
+                {`${pluralize(remainingOverTimeDays, 'jour')}
                 (${summary.overtimeRemaining}h) supplémentaires`}
               </p>
             </div>
@@ -65,17 +63,17 @@ const Dashboard = () => {
             items={[
               {
                 label: `Budget année en cours ${currentYear}`,
-                value: summary?.vacationBalance,
+                value: summary?.vacationCurrentYear,
                 metric: 'j',
               },
               {
                 label: `Solde année précedente ${currentYear - 1}`,
-                value: summary?.previousYearVacationRemaining,
+                value: summary?.vacationPreviousYearRemaining,
                 metric: 'j',
               },
               {
                 label: 'Heures supplémentaires totales',
-                value: summary?.overtimeRemaining,
+                value: summary?.overtime,
                 metric: 'h',
               },
             ]}
@@ -90,7 +88,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Jours supplémentaires récupérés',
-                value: summary?.overtimeRecovery,
+                value: totalOvertimeRecoveryDays,
                 metric: 'j',
               },
             ]}

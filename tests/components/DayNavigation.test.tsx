@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 
 import DaySelection from '@/components/day/DayNavigation';
-import useWeek from '@/hooks/week';
+import useWeek from '@/hooks/useWeek';
 import Day from '@/interfaces/day';
 import Week from '@/interfaces/week';
 import moment from '@/libs/moment.config';
@@ -23,7 +23,7 @@ const days = [
 ];
 
 const mockedUseWeek = useWeek as jest.Mock;
-jest.mock('../../hooks/week');
+jest.mock('../../hooks/useWeek');
 
 beforeEach(() => {
   mockedUseWeek.mockImplementation(() => ({
