@@ -2,7 +2,12 @@ import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
-import { RANGE_END, RANGE_START, SHEET_NAME } from '@/configs/dashboard';
+import {
+  HOURS_PER_DAY,
+  RANGE_END,
+  RANGE_START,
+  SHEET_NAME,
+} from '@/configs/dashboard';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import authorize from '@/middlewares/authorize';
@@ -36,13 +41,13 @@ const handler = async (
       formation: Number(row[3]),
       formationExpenses: row[4],
       justifiedAbsence: Number(row[5]),
-      workingPercent: Number(row[7]),
-      overtimeRecovery: Number(row[6]),
-      overtimeRemaining: Number(row[8]),
-      vacationBalance: Number(row[9]),
-      previousYearVacationRemaining: Number(row[10]),
-      remainingDaysToTake: Number(row[11]),
-      email: row[12],
+      workingPercent: Number(row[8]),
+      overtimeRecovery: Number(row[6]) + Number(row[7]) * HOURS_PER_DAY,
+      overtimeRemaining: Number(row[9]),
+      vacationBalance: Number(row[13]),
+      previousYearVacationRemaining: Number(row[11]),
+      remainingDaysToTake: Number(row[14]),
+      email: row[15],
     }))
     .slice(1); // Remove header
 
