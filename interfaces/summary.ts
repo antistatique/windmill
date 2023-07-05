@@ -8,12 +8,15 @@ export default interface Summary {
 
   justifiedAbsence: number;
 
+  overtime: number;
   overtimeRecovery: number;
+  overtimePaid: number;
   overtimeRemaining: number;
 
   vacation: number;
   vacationBalance: number;
-  previousYearVacationRemaining: number;
+  vacationPreviousYearRemaining: number;
+  vacationCurrentYear: number;
 
   remainingDaysToTake: number;
 }

@@ -17,6 +17,10 @@ const Dashboard = () => {
     ? summary.overtimeRemaining / HOURS_PER_DAY
     : 0;
 
+  const totalOvertimeRecoveryDays = summary
+    ? (summary.overtimeRemaining + summary.overtimePaid) / HOURS_PER_DAY
+    : 0;
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -62,17 +66,17 @@ const Dashboard = () => {
             items={[
               {
                 label: `Budget année en cours ${currentYear}`,
-                value: summary?.vacationBalance,
+                value: summary?.vacationCurrentYear,
                 metric: 'j',
               },
               {
                 label: `Solde année précedente ${currentYear - 1}`,
-                value: summary?.previousYearVacationRemaining,
+                value: summary?.vacationPreviousYearRemaining,
                 metric: 'j',
               },
               {
                 label: 'Heures supplémentaires totales',
-                value: summary?.overtimeRemaining,
+                value: summary?.overtime,
                 metric: 'h',
               },
             ]}
@@ -87,7 +91,7 @@ const Dashboard = () => {
               },
               {
                 label: 'Jours supplémentaires récupérés',
-                value: summary?.overtimeRecovery,
+                value: totalOvertimeRecoveryDays,
                 metric: 'j',
               },
             ]}
