@@ -2,12 +2,7 @@ import { sheets_v4 } from 'googleapis';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'next-auth';
 
-import {
-  HOURS_PER_DAY,
-  RANGE_END,
-  RANGE_START,
-  SHEET_NAME,
-} from '@/configs/dashboard';
+import { RANGE_END, RANGE_START, SHEET_NAME } from '@/configs/dashboard';
 import ApiError from '@/interfaces/apiError';
 import Summary from '@/interfaces/summary';
 import authorize from '@/middlewares/authorize';
@@ -43,7 +38,7 @@ const handler = async (
       formationExpenses: row[4],
       justifiedAbsence: Number(row[5]),
       overtimeRecovery: Number(row[6]),
-      overtimePaid: Number(row[7]) * HOURS_PER_DAY,
+      overtimePaid: Number(row[7]),
       workingPercent: Number(row[8]),
       overtimeRemaining: Number(row[9]),
       vacationPreviousYearRemaining: Number(row[11]),

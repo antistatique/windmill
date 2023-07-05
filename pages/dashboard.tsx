@@ -14,11 +14,11 @@ const Dashboard = () => {
   const { data: summary, isLoading } = useSummary();
 
   const remainingOverTimeDays = summary
-    ? summary.overtimeRemaining / HOURS_PER_DAY
+    ? Number((summary.overtimeRemaining / HOURS_PER_DAY).toFixed(2))
     : 0;
 
   const totalOvertimeRecoveryDays = summary
-    ? (summary.overtimeRemaining + summary.overtimePaid) / HOURS_PER_DAY
+    ? Number((summary.overtimeRecovery + summary.overtimePaid).toFixed(2))
     : 0;
 
   const currentYear = new Date().getFullYear();
@@ -50,10 +50,7 @@ const Dashboard = () => {
                 'jour'
               )} de vacances`}</p>
               <p>
-                {`${pluralize(
-                  Number(remainingOverTimeDays.toFixed(2)),
-                  'jour'
-                )} 
+                {`${pluralize(remainingOverTimeDays, 'jour')}
                 (${summary.overtimeRemaining}h) supplémentaires`}
               </p>
             </div>
