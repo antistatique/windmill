@@ -40,12 +40,13 @@ const handler = async (
       overtimeRecovery: Number(row[6]),
       overtimePaid: Number(row[7]),
       workingPercent: Number(row[8]),
-      overtimeRemaining: Number(row[9]),
-      vacationPreviousYearRemaining: Number(row[11]),
-      vacationCurrentYear: Number(row[12]),
-      vacationBalance: Number(row[13]),
-      remainingDaysToTake: Number(row[14]),
-      email: row[15],
+      overtimePreviousYearRemaining: Number(row[9]),
+      overtimeRemaining: Number(row[10]),
+      vacationPreviousYearRemaining: Number(row[12]),
+      vacationCurrentYear: Number(row[13]),
+      vacationBalance: Number(row[14]),
+      remainingDaysToTake: Number(row[15]),
+      email: row[16],
     }))
     .slice(1); // Remove header
 

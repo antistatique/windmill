@@ -11,6 +11,7 @@ export default interface Summary {
   overtime: number;
   overtimeRecovery: number;
   overtimePaid: number;
+  overtimePreviousYearRemaining: number;
   overtimeRemaining: number;
 
   vacation: number;
