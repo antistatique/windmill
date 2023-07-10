@@ -18,8 +18,14 @@ const Dashboard = () => {
     : 0;
 
   const totalOvertimeRecoveryDays = summary
-    ? Number((summary.overtimeRecovery + summary.overtimePaid).toFixed(2))
+    ? summary.overtimeRecovery + summary.overtimePaid
     : 0;
+
+  const totalOverTime = summary
+    ? summary.overtime + summary.overtimePreviousYearRemaining * HOURS_PER_DAY
+    : 0;
+
+  const totalOverTimeDays = Number((totalOverTime / HOURS_PER_DAY).toFixed(2));
 
   const currentYear = new Date().getFullYear();
 
@@ -62,19 +68,19 @@ const Dashboard = () => {
             label="Budget congés / vacances"
             items={[
               {
-                label: `Budget année en cours ${currentYear}`,
+                label: `Budget année en cours (${currentYear})`,
                 value: summary?.vacationCurrentYear,
                 metric: 'j',
               },
               {
-                label: `Solde année précedente ${currentYear - 1}`,
+                label: `Solde année précedente (${currentYear - 1})`,
                 value: summary?.vacationPreviousYearRemaining,
                 metric: 'j',
               },
               {
-                label: 'Heures supplémentaires totales',
-                value: summary?.overtime,
-                metric: 'h',
+                label: 'Heures supplémentaires cumulées',
+                value: totalOverTimeDays,
+                metric: 'j',
               },
             ]}
           />
