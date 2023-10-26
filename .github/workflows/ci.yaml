@@ -16,4 +16,4 @@ jobs:
       - name: Build project
         run: yarn install
       - name: Run jests
-        run: yarn ci:test
+        run: yarn test:ci

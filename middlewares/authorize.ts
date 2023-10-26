@@ -10,7 +10,8 @@ interface CustomNextApiRequest extends NextApiRequest {
   client: sheets_v4.Sheets;
 }
 const authorize =
-  (handler: any) => async (req: CustomNextApiRequest, res: NextApiResponse) => {
+  (handler: CallableFunction) =>
+  async (req: CustomNextApiRequest, res: NextApiResponse) => {
     const jwt = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
     const user = jwt?.user as User;

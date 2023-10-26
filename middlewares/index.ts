@@ -11,7 +11,8 @@ interface CustomNextApiRequest extends NextApiRequest {
 }
 
 const indexHandler =
-  (handler: any) => async (req: CustomNextApiRequest, res: NextApiResponse) => {
+  (handler: CallableFunction) =>
+  async (req: CustomNextApiRequest, res: NextApiResponse) => {
     const index = await getIndex(req.client, req.user);
 
     if (!index) {
